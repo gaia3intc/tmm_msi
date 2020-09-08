@@ -1,7 +1,12 @@
 % Set toplevel path to GCMs configuration
-base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
+%base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+base_path='~/TMM2/MITgcm_2.8deg';
+
+addpath(genpath('~/TMM2/tmm_matlab_code'));
+oceanCarbonBasePath='~/TMM2/OceanCarbon';
+atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
 
 periodicForcing=1
 periodicMatrix=1
@@ -19,8 +24,27 @@ READ_SWRAD=0
 useCarbon=1
 useAtmModel=1
 pCO2atm_ini=280.0
-useVirtualFlux=0
+useTimeVaryingPrescribedCO2=0
+useVirtualFlux=1
 empScaleFactor=1.0
+
+%-----------------------------------
+% Modified by Tatsuro Tanioka 200907 to allow for Atmospheric CO2 option
+
+% For a spin-up run, useTimeVaryingPrescribedCO2=0
+% For a prescribed pCO2 run, useTimeVaryingPrescribedCO2=1 and choose a scenario
+
+useTimeVaryingPrescribedCO2=1
+
+% Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
+co2Scenario='RCP85';
+%-----------------------------------
+
+
+if useTimeVaryingPrescribedCO2
+   useAtmModel = 0
+   useVirtualFlux = 0
+end
 
 % Set path names, etc.
 load(fullfile(base_path,'config_data'))
@@ -361,8 +385,23 @@ if writeFiles
   writePetscBin('dz.petsc',dzb)
   if useAtmModel
     write_binary('pCO2atm_ini.bin',pCO2atm_ini,'real*8')
-    write_binary('dA.bin',dab_surf,'real*8')    
-  end  
+    write_binary('dA.bin',dab_surf,'real*8') 
+  else
+    if useTimeVaryingPrescribedCO2
+%     Load atmospheric pCO2 history
+      if strcmp(co2Scenario,'historical')
+        co2File='co2_HG11_extrap.dat'; % historical data from Heather Graven
+      else
+        co2File=[co2Scenario '_CO2_conc.txt']; % other scenarios
+      end
+         [hdr,pCO2_atm]=hdrload(fullfile(atmosDataPath,co2File));
+         Tco2=pCO2_atm(:,1);
+         pCO2atm=pCO2_atm(:,2);
+         write_binary('TpCO2.bin',length(Tco2),'int')
+         write_binary('TpCO2.bin',Tco2,'real*8',1)
+         write_binary('pCO2atm.bin',pCO2atm,'real*8')
+    end
+  end
 % Profile data  
   if rearrangeProfiles
     if ~useCoarseGrainedMatrix
