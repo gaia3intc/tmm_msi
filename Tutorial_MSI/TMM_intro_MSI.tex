@@ -42,7 +42,7 @@
 \maketitle
 
 \begin{abstract}
-This document goes through how to use the Transport Matrix Model (TMM) using computational resources at the University of Minnesota's Minnesota Supercomputing Institution (MSI). All the source codes and documents (including this tutorial) is available at my github website (github.xxx).
+This document goes through how to use the Transport Matrix Model (TMM) using computational resources at the University of Minnesota's Minnesota Supercomputing Institution (MSI). All the source codes and documents (including this tutorial) that Tanioka made to TMM is available at my github website \url{(https://github.com/tanio003/tmm/tree/TT_Release)}.
 \end{abstract}
 
 \tableofcontents
@@ -127,13 +127,13 @@ Building process takes about 15-30 minutes. If you're very lucky it will go thro
  ...
 Completed test examples
 \end{lstlisting}
-If you get this far, you've managed to build the PETSc successfully and you're ready to go to the next step. If if failed, read the error messages, debug, and try again. \textbf{Building PETSc is harder than it looks} so you need to be patient. 
+If you get this far, you've managed to build the PETSc successfully and you're ready to go to the next step. If it failed, read the error messages, debug, and try again. \textbf{Building PETSc is harder than it looks} so you need to be patient. 
 
 \vspace{5mm}
 \noin As more of a technical note, the procedure above uses the Intel compilers and Intel MPI library. By loading the cmake, the PETSc build system can learn more about the host machine. In addition to taking advantage of compiler optimizations and vectorization, the procedure above builds PETSc against the Intel Math Kernel Library (MKL) for BLAS, LAPACK and ScaLAPACK which gives a performance gain over the reference implementations. For the FORTRAN compiler, we specifically need to use \verb/mpiifort/, and not \verb/mpif90/ (the default compiler), because TMM codes are written in both F77 and F90. Also, since we don't require C++ for TMM we put the flag in the config file, \verb/--with-cxx=0/. The reason we need to use MPI compilers, not regular gcc compilers, is because we want to run PETSc in a parallel mode (i.e., by using the command \verb/mpiexec/ in the runscript). For more details about building PETSc please check out \url{https://www.mcs.anl.gov/petsc/documentation/installation.html}. 
 
 \subsubsection{Step 2: Downloading all the scripts and transport matrices into your own local directory}
-
+We first need to install Transport Matrices:
 
 
 

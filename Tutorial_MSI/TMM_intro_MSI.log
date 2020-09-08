@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  8 SEP 2020 15:47
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  8 SEP 2020 16:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -931,6 +931,12 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <9> not available
 (Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 44.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 9.0pt on input line 44.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 9.0pt on input line 45.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 7.3pt on input line 45.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 5.5pt on input line 45.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 14.4pt on input line 48.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
@@ -953,12 +959,8 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 10.0pt on input line 1.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.0pt on input line 2.
-LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.3pt on input line 2.
-LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.5pt on input line 2.
 
-Overfull \hbox (25.34213pt too wide) in paragraph at lines 6--6
+Overfull \hbox (56.81212pt too wide) in paragraph at lines 6--6
  [][] [] [][]  
  []
 
@@ -1009,27 +1011,21 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
  (./TMM_intro_MSI.aux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 141.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
+Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
+(rerunfilecheck)             Checksum: A8CE4F5B1AE8EA00C7ACC977E474F344;498.
 
-
-Package rerunfilecheck Warning: File `TMM_intro_MSI.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `TMM_intro_MSI.out':
-(rerunfilecheck)             Before: F80EB8D32AE6D13C9136D1C860C5E911;490
-(rerunfilecheck)             After:  A8CE4F5B1AE8EA00C7ACC977E474F344;498.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
  ) 
 Here is how much of TeX's memory you used:
- 11979 strings out of 493223
- 169284 string characters out of 6144416
- 306176 words of memory out of 5000000
- 15779 multiletter control sequences out of 15000+600000
- 66310 words of font info for 115 fonts, out of 8000000 for 9000
+ 11989 strings out of 493223
+ 169426 string characters out of 6144416
+ 306184 words of memory out of 5000000
+ 15789 multiletter control sequences out of 15000+600000
+ 70399 words of font info for 125 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  33i,6n,56p,1050b,1136s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.dvi (3 pages, 27872 bytes).
+Output written on TMM_intro_MSI.dvi (3 pages, 28304 bytes).
