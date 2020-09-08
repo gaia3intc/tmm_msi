@@ -1,3 +1,9 @@
+This is Tatsuro Tanioka's forked version of TMM where he puts his code modifications 
+to the TMM source codes. There is also a Tutorial document for MSI users 
+(at the University of Minnesota) in the folder ("Tutorial_MSI").
+
+%%------------------------------------------------------------------------
+%% From Samar's Original README
 This is the Transport Matrix Method (TMM) code repository. It includes both 
 the core TMM time-stepping driver code (under driver/), as well as various 
 biogeochemical models (under models/) adapted to the TMM framework. The driver 
