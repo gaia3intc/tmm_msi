@@ -1,0 +1,163 @@
+\documentclass[a4paper]{article}
+\title{A Quick Introduction to TMM}
+\author{Tatsuro Tanioka}
+\date{\today}
+
+% Last edited 2015-12-31T22:17:14Z
+
+% Things that start with a % (percent sign) are ignored by LaTeX.  They are `comments' and are set off in blue on writeLaTeX.com.  They will never appear in the final output.
+\usepackage[margin=1.5in]{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\lstdefinestyle{DOS}
+{
+    backgroundcolor=\color{black},
+    basicstyle=\scriptsize\color{white}\ttfamily
+}
+\usepackage{mathtools,amsthm}    % some advanced mathematics notation
+\usepackage{graphicx}            % easy inclusion and manipulation of images
+\usepackage{microtype}           % just for fun: really hone in with the typography
+\usepackage{booktabs}            % nice looking tables that present the content first and foremost
+\usepackage{multicol}            % multiple columns in a local context
+\usepackage[hidelinks]{hyperref} % clickable references in the output, but hide them visually
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{newtxtext,newtxmath}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Sharelatex Example},
+    bookmarks=true,
+    pdfpagemode=FullScreen,
+    }
+    
+\urlstyle{same}
+
+\def\noin{\noindent }
+%%%%%%%%%%%%%----------------------------------------------------------
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document goes through how to use the Transport Matrix Model (TMM) using computational resources at the University of Minnesota's Minnesota Supercomputing Institution (MSI). All the source codes and documents (including this tutorial) is available at my github website (github.xxx).
+\end{abstract}
+
+\tableofcontents
+
+\section{Setting up}
+
+\subsection{Flow Chart}
+Before you do anything, read ``README.txt'' by Samar Khatiwala at the following website: \\ \url{https://github.com/samarkhatiwala/tmm}. I will go over each of these steps specifically aimed at audiences using the computational cluster \emph{Mesabi}.
+\begin{enumerate}
+\item Installing and configuring PETSc
+\item Downloading all the scripts and transport matrices into your own local directory
+\item Compiling the model (we use the BGC model \verb/MOPS2/ for this example)
+\item Running the model
+\item Processing the model outputs
+\item Displaying the model outputs
+\end{enumerate}
+
+\subsection{Steps}
+
+\subsubsection{Step 0: Logging into MSI and Mesabi}
+\noin Open the terminal (assuming that you have a MAC or Linux environment) on your computer and log in to MSI with your x500 account:
+\begin{lstlisting}[style=DOS]
+ $ ssh -Yt youremail@umn.edu
+\end{lstlisting}
+
+\noin Log in to Mesabi: 
+\begin{lstlisting}[style=DOS]
+ $ ssh -X mesabi
+\end{lstlisting}
+
+\noin Make a new directory called TMM2 in your home directory and enter into this directory. Everything related to TMM will go into this directory.
+\begin{lstlisting}[style=DOS]
+ $ mkdir TMM2
+ $ cd TMM2
+\end{lstlisting}
+
+\subsubsection{Step 1: Installing and configuring PETSc}
+
+\noin Download the latest version of PETSc and save it in your TMM2 directory and unzip this package. If opened properly, you should see the new directory petsc-3.13.5. 
+\begin{lstlisting}[style=DOS]
+ $ wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.13.5.tar.gz
+ $ tar -xvf petsc-lite-3.13.5.tar.gz
+ $ ls
+ petsc-3.13.5
+\end{lstlisting}
+
+\noin Import the required modules: (1) impi, (2) impi/intel, and (3) cmake. Also make sure that you are using python 3, not python 2 (= default for MSI). 
+\begin{lstlisting}[style=DOS]
+ $ module purge 
+ $ module load intel
+ $ module load impi/intel
+ $ module load cmake
+ $ module load python3
+ $ module list
+Currently Loaded Modulefiles:
+ 1) intel/2018.release(default)   4) cmake/3.10.2(default)
+ 2) intel/2018/release            5) python3/3.7.1_anaconda
+ 3) impi/intel(default)
+\end{lstlisting}
+
+\noin Set up \verb/$PETSC_DIR/ to your petsc-3.13.5 directory:
+\begin{lstlisting}[style=DOS]
+ $ export PETSC_DIR=$HOME/TMM2/petsc-3.13.5
+ $ echo $PETSC_DIR 
+ /.../TMM2/petsc-3.13.5
+\end{lstlisting}
+
+\noin Configure PETSc. Although this part is quite tricky you can copy and use my config file \\ ``\verb/reconfigure-arch-linux-c-opt.py/''. If the config file does not work properly, let me know and I can show you a way to compile without using this .py file. 
+\begin{lstlisting}[style=DOS]
+ $ cd petsc-3.13.5
+ $ cp ~/../tanio003/TMM2/petsc-3.13.5/config/reconfigure-arch-linux-c-opt.py config/
+ $ config/reconfigure-arch-linux-c-opt.py
+\end{lstlisting}
+
+\noin Don't worry about some warning signs. It takes few minutes to compile. If it's compiled properly you should see the notice ``Conifgure stage complete.'' Then build PETSc library:
+\begin{lstlisting}[style=DOS]
+ $ make all
+\end{lstlisting}
+Building process takes about 15-30 minutes. If you're very lucky it will go through in a single shot. But in most cases, it fails during the middle of the process. Don't worry if it fails the first time. Simply type ``\verb/$ make all/'' again and hopefully it will finish building from where it left off. If built properly, you should see the message ``Now to check if the libraries are working do:...''. Then type,
+\begin{lstlisting}[style=DOS]
+ $ make check
+ ...
+Completed test examples
+\end{lstlisting}
+If you get this far, you've managed to build the PETSc successfully and you're ready to go to the next step. If if failed, read the error messages, debug, and try again. \textbf{Building PETSc is harder than it looks} so you need to be patient. 
+
+\vspace{5mm}
+\noin As more of a technical note, the procedure above uses the Intel compilers and Intel MPI library. By loading the cmake, the PETSc build system can learn more about the host machine. In addition to taking advantage of compiler optimizations and vectorization, the procedure above builds PETSc against the Intel Math Kernel Library (MKL) for BLAS, LAPACK and ScaLAPACK which gives a performance gain over the reference implementations. For the FORTRAN compiler, we specifically need to use \verb/mpiifort/, and not \verb/mpif90/ (the default compiler), because TMM codes are written in both F77 and F90. Also, since we don't require C++ for TMM we put the flag in the config file, \verb/--with-cxx=0/. The reason we need to use MPI compilers, not regular gcc compilers, is because we want to run PETSc in a parallel mode (i.e., by using the command \verb/mpiexec/ in the runscript). For more details about building PETSc please check out \url{https://www.mcs.anl.gov/petsc/documentation/installation.html}. 
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
