@@ -22,7 +22,7 @@ writePCFiles=0
 
 READ_SWRAD=0
 useCarbon=1
-useAtmModel=1
+useAtmModel=0
 pCO2atm_ini=280.0
 useTimeVaryingPrescribedCO2=0
 useVirtualFlux=1
@@ -383,9 +383,10 @@ if writeFiles
   write_binary('drF.bin',nz,'int')  
   write_binary('drF.bin',dznom,'real*8',1)
   writePetscBin('dz.petsc',dzb)
+  write_binary('dA.bin',dab_surf,'real*8') 
   if useAtmModel
     write_binary('pCO2atm_ini.bin',pCO2atm_ini,'real*8')
-    write_binary('dA.bin',dab_surf,'real*8') 
+%    write_binary('dA.bin',dab_surf,'real*8') 
   else
     if useTimeVaryingPrescribedCO2
 %     Load atmospheric pCO2 history
