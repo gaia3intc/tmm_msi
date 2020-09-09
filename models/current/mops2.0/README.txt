@@ -1,3 +1,6 @@
+TT, 2020-09-09
+I've added several matlab files that are handy for processing output files to netcdf files.
+
 IK, 2016-03-09
 
 This  file documents MOPS-Version-2, for use within an optimization environment. 
