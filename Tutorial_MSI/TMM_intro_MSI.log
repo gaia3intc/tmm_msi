@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  8 SEP 2020 16:24
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  11 SEP 2020 16:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -750,76 +750,76 @@ LaTeX Info: Redefining \not on input line 2322.
 LaTeX Info: Redefining \textsquare on input line 2352.
 LaTeX Info: Redefining \openbox on input line 2354.
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 35.
+Package hyperref Info: Option `colorlinks' set `true' on input line 33.
 
 
 Package hyperref Warning: Option `bookmarks' has already been used,
-(hyperref)                setting the option has no effect on input line 35.
+(hyperref)                setting the option has no effect on input line 33.
 
-LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 41
+LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 39
 .
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 File: t1ntxtlf.fd 2015/01/17 v1.0 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 41.
+(Font)              scaled to size 10.0pt on input line 39.
 
 (./TMM_intro_MSI.aux)
 \openout1 = `TMM_intro_MSI.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 41.
-LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 41
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 39.
+LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 39
 .
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 41.
-LaTeX Font Info:    Try loading font information for U+ntxexa on input line 41.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 39.
+LaTeX Font Info:    Try loading font information for U+ntxexa on input line 39.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for JY1/mc/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for JT1/mc/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 41.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for JY1/mc/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for JT1/mc/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 39.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 39.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 41.
-LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 41
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 39.
+LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 39
 .
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 41.
-LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 4
-1.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 39.
+LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 3
+9.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    ... okay on input line 39.
 
 (I search kanjifont definition file: . . )
 *geometry* driver: auto-detecting
@@ -858,7 +858,7 @@ LaTeX Font Info:    ... okay on input line 41.
 
 \c@lstlisting=\count155
 \AtBeginShipoutBox=\box74
-Package hyperref Info: Link coloring ON on input line 41.
+Package hyperref Info: Link coloring ON on input line 39.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
@@ -867,9 +867,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count156
 )
-LaTeX Info: Redefining \ref on input line 41.
-LaTeX Info: Redefining \pageref on input line 41.
-LaTeX Info: Redefining \nameref on input line 41.
+LaTeX Info: Redefining \ref on input line 39.
+LaTeX Info: Redefining \pageref on input line 39.
+LaTeX Info: Redefining \nameref on input line 39.
 
 (./TMM_intro_MSI.out) (./TMM_intro_MSI.out)
 \@outlinefile=\write3
@@ -878,75 +878,75 @@ LaTeX Info: Redefining \nameref on input line 41.
 \c@mv@tabular=\count157
 \c@mv@boldtabular=\count158
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 17.28pt on input line 43.
+(Font)              scaled to size 17.28pt on input line 41.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 43.
+(Font)              scaled to size 12.0pt on input line 41.
 LaTeX Font Info:    Try loading font information for OT1+ntxtlf on input line 4
-3.
+1.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ot1ntxtlf.fd
 File: ot1ntxtlf.fd 2015/01/17 v1.0 font definition file for OT1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 43.
+(Font)              scaled to size 12.0pt on input line 41.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.8pt on input line 43.
+(Font)              scaled to size 8.8pt on input line 41.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.6pt on input line 43.
-LaTeX Font Info:    Try loading font information for U+msa on input line 43.
+(Font)              scaled to size 6.6pt on input line 41.
+LaTeX Font Info:    Try loading font information for U+msa on input line 41.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 43.
+LaTeX Font Info:    Try loading font information for U+msb on input line 41.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+ntxmia on input line 43.
+LaTeX Font Info:    Try loading font information for U+ntxmia on input line 41.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxmia.fd
 File: untxmia.fd 2018/04/14 Fontinst v1.933 font definitions for U/ntxmia.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsym on input line 43.
+LaTeX Font Info:    Try loading font information for U+ntxsym on input line 41.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxsym.fd
 File: untxsym.fd 2015/03/20 Fontinst v1.933 font definitions for U/ntxsym.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 43.
+LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 41.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 44.
+(Font)              scaled to size 9.0pt on input line 42.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <9> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 44.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 42.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <9> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 44.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 42.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <9> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 44.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 42.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 9.0pt on input line 44.
+(Font)              scaled to size 9.0pt on input line 42.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 45.
+(Font)              scaled to size 9.0pt on input line 43.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.3pt on input line 45.
+(Font)              scaled to size 7.3pt on input line 43.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.5pt on input line 45.
+(Font)              scaled to size 5.5pt on input line 43.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 14.4pt on input line 48.
+(Font)              scaled to size 14.4pt on input line 46.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 48.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 46.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 48.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 46.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 48.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 46.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 14.4pt on input line 48.
+(Font)              scaled to size 14.4pt on input line 46.
 
 (./TMM_intro_MSI.toc
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10> not available
@@ -959,73 +959,68 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 10.0pt on input line 1.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.0pt on input line 2.
-
-Overfull \hbox (56.81212pt too wide) in paragraph at lines 6--6
- [][] [] [][]  
- []
-
 )
 \tf@toc=\write4
 \openout4 = `TMM_intro_MSI.toc'.
 
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 52.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 50.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 52.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 50.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <12> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 52.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 50.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 12.0pt on input line 52.
+(Font)              scaled to size 12.0pt on input line 50.
 
 
 LaTeX Font Warning: Font shape `JT1/gt/m/it' undefined
-(Font)              using `JT1/gt/m/n' instead on input line 53.
+(Font)              using `JT1/gt/m/n' instead on input line 51.
 
 
 LaTeX Font Warning: Font shape `JY1/gt/m/it' undefined
-(Font)              using `JY1/gt/m/n' instead on input line 53.
+(Font)              using `JY1/gt/m/n' instead on input line 51.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.0pt on input line 53.
+(Font)              scaled to size 10.0pt on input line 51.
 (I search kanjifont definition file: . . ) (I search font definition file: . .
 . . . . . . . . . )
-LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 57.
+LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 55.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtt.fd
 File: t1ntxtt.fd 2012/04/20 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 10.0pt on input line 57.
+(Font)              scaled to size 10.0pt on input line 55.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.0pt on input line 67.
+(Font)              scaled to size 7.0pt on input line 65.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 7.0pt on input line 67.
+(Font)              scaled to size 7.0pt on input line 65.
  [1
 
 ] [2]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 155.
 
 [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 155.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 141.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 155.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 155.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
-(rerunfilecheck)             Checksum: A8CE4F5B1AE8EA00C7ACC977E474F344;498.
+(rerunfilecheck)             Checksum: 94AF19B4B35711235775CD4D39CCF1C3;468.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 155.
  ) 
 Here is how much of TeX's memory you used:
  11989 strings out of 493223
  169426 string characters out of 6144416
- 306184 words of memory out of 5000000
+ 306154 words of memory out of 5000000
  15789 multiletter control sequences out of 15000+600000
  70399 words of font info for 125 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 33i,6n,56p,1050b,1136s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 33i,6n,56p,1050b,1215s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.dvi (3 pages, 28304 bytes).
+Output written on TMM_intro_MSI.dvi (3 pages, 32732 bytes).
