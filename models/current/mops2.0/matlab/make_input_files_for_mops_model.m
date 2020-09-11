@@ -30,11 +30,7 @@ empScaleFactor=1.0
 
 %-----------------------------------
 % Modified by Tatsuro Tanioka 200907 to allow for Atmospheric CO2 option
-
-% For a spin-up run, useTimeVaryingPrescribedCO2=0
-% For a prescribed pCO2 run, useTimeVaryingPrescribedCO2=1 and choose a scenario
-
-useTimeVaryingPrescribedCO2=1
+% For a prescribed pCO2 run, set, useTimeVaryingPrescribedCO2=1 and choose a scenario
 
 % Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
 co2Scenario='RCP85';
