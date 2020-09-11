@@ -4,3 +4,5 @@
 \BOOKMARK [3][-]{subsubsection.1.2.1}{Step 0: Logging into MSI and Mesabi}{subsection.1.2}% 4
 \BOOKMARK [3][-]{subsubsection.1.2.2}{Step 1: Installing and configuring PETSc}{subsection.1.2}% 5
 \BOOKMARK [3][-]{subsubsection.1.2.3}{Step 2: Downloading all the scripts and transport matrices}{subsection.1.2}% 6
+\BOOKMARK [3][-]{subsubsection.1.2.4}{Step 3: Compiling the model}{subsection.1.2}% 7
+\BOOKMARK [3][-]{subsubsection.1.2.5}{Step 4: Running the model}{subsection.1.2}% 8

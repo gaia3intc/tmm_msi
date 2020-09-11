@@ -175,7 +175,122 @@ Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tuto
 \end{lstlisting}
 \end{enumerate}
 
+\subsubsection{Step 3: Compiling the model}
+\noin Here, let's try compiling biogeochemical MOPS. 
 
+\begin{enumerate}
+\item For each model there is model-specific source codes (in \verb|$TMMROOT/models/current/mops2/src/|); Matlab script(s) in \verb|$TMMROOT/models/current/mops2/matlab/| to generate input data and read model output; and run scripts and other runtime data such as namelists in runscripts/. 
+
+\noin First, we create a new ``Run directory''. I call it \verb|Runs| and copy here all the files needed.
+
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ mkdir Runs
+ $ cd Runs 
+ $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
+ $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
+ $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
+\end{lstlisting}
+
+\item Compile mops. Make sure that all the modules are loaded.
+\begin{lstlisting}[style=DOS]
+ $ module load intel
+ $ module load impi/intel
+ $ module load cmake
+ $ make clean all
+ $ make mops
+\end{lstlisting}
+
+\noin If compiled properly, you'd find an executable ``mops'' created along with a bunch of objective .o files. 
+\lstset{emph={mops,runscript_msi,Makefile}, emphstyle=\color{green}}
+\begin{lstlisting}[style=DOS]
+ $ ls
+ BGC_INI.o                           n7fluxes28.m
+ BGC_MODEL.o                         n7physics.m
+ CAR_CHEM.o                          n7tracers28.m
+ CAR_INI.o                           n7tracersavg28.m
+ external_forcing_mops_biogeochem.o  perry1996-runoff-noarctic_noname.txt
+ insolation.o                        perry1996-runoff_noname.txt
+ load_output.m                       petsc_matvec_utils.o
+ load_output_time_avg.m              petsc_signal_utils.o
+ load_pco2.m                         process_output.m
+ Makefile                            runscript
+ make_input_files_for_mops_model.m   runscript_msi
+ make_rivers.m                       tmm_external_bc.o
+ misfit_mops_biogeochem.o            tmm_forcing_utils.o
+ mops                                tmm_forward_step.o
+ mops_biogeochem_copy_data.o         tmm_main.o
+ mops_biogeochem_diagnostics.o       tmm_monitor.o
+ mops_biogeochem_ini.o               tmm_profile_utils.o
+ mops_biogeochem_misfit.o            tmm_timer.o
+ mops_biogeochem_model.o             tmm_write.o
+ mops_biogeochem_set_params.o
+\end{lstlisting}
+\lstset{emph={}, emphstyle=\color{green}}
+
+\item Edit the file \ \verb/make_input_files_for_mops_model.m/. Make sure that variable \verb/base_path/ point to the right directory for the TMM configuration.
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+ % make_input_files_for_mops_model.m
+ 
+ % Set toplevel path to GCMs configuration
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+ % base_path='~/TMM2/MITgcm_2.8deg';
+ 
+ addpath(genpath('~/TMM2/tmm_matlab_code'));% add tmm_matlab_code to the search path
+ oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceaanCarbon to the search path
+ atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
+\end{lstlisting}
+\noin In the same matlab file, there are different switches with 0's and 1's. For this spin-up exercise, we \textbf{couple MOPS to a simple OCMIP-like carbon model} and a \textbf{fix atmospheric $\mathrm{pCO_{2}}$ at 280 ppm}. So set the switches as following:
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+ % make_input_files_for_mops_model.m
+ ...
+ periodicForcing=1 
+ periodicMatrix=1
+ 
+ dt=43200; % time step to use (43200s for ECCO and MIT2.8; 28800s for any other TMMs)
+ 
+ rearrangeProfiles=1
+ bigMat=0
+ writeFiles=1
+ writeTMs=1
+ useCoarseGrainedMatrix=0
+ writePCFiles=0
+ 
+ READ_SWRAD=0                    % Read short-wave radiation?
+ useCarbon=1                     % Use simple inorganic carbon model?
+ useAtmModel=0                   % Use prognostic 1-box atmosphere?
+ pCO2atm_ini=280.0               % Initial pco2?
+ useTimeVaryingPrescribedCO2=0   % Use prescribed pco2 pathway?
+ useVirtualFlux=1                % Use DIC and Alk to calculate E-P?
+ empScaleFactor=1.0              % Scaling factor for E-P (default = 1)
+ %-----------------------------------
+ % Modified by Tatsuro Tanioka 200907 to allow for Atmospheric CO2 option
+ % For a prescribed pCO2 run, useTimeVaryingPrescribedCO2=1 and choose a scenario
+ 
+ % Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
+ co2Scenario='RCP85';
+ %-----------------------------------
+\end{lstlisting}
+\noin Then open MATLAB and run \verb/make_input_files_for_mops_model.m/
+\begin{lstlisting}[style=DOS]
+ $ module load matlab
+ $ matlab -nodesktop
+                                    < M A T L A B (R) >
+                          Copyright 1984-2019 The MathWorks, Inc.
+                     R2019a Update 5 (9.6.0.1174912) 64-bit (glnxa64)
+                                      July 31, 2019
+To get started, type doc.
+For product information, visit www.mathworks.com.
+
+>> make_input_files_for_mops_model
+\end{lstlisting}
+\noin This creates a bunch of periodic forcing files (\verb|xxx_01, xxx_02,...|), initial tracer concentrations (\verb|po4ini.petsc, no3ini.petsc,...|), and binary files (.bin and .petsc) related to model geometry and forcing.
+\end{enumerate}
+
+\subsubsection{Step 4: Running the model}
 
 
 \end{document}
