@@ -2,7 +2,7 @@ function petsc2netcdf(netcdfFileName);
 % Function for postprocessing petsc2 snapshot of tracers to netcdf
 % Edited by Tatsuro Tanioka (Jan-28-2020)
 % To run this script, type in MATLAB command line
-% > n7tracer28('test.nc')
+% > n7tracers28('test.nc')
 % Units: most chemical tracers in mmol m-3. PHYTO, ZOO and DETRITUS in mmol P m-3.  
 
 %%%% Options for output

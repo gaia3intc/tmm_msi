@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#PBS -l walltime=03:00:00,nodes=1:ppn=24,pmem=2580mb
+#PBS -l walltime=06:00:00,nodes=1:ppn=24,pmem=2580mb
 #PBS -m abe
 #PBS -j oe
 #PBS -M tatsurobkkuk@gmail.com
@@ -28,6 +28,7 @@ mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \
         -burial_sum_steps 720 \
         -periodic_matrix \
         -pco2atm_history TpCO2.bin,pCO2atm.bin \
+        -use_virtual_flux \
         -matrix_cycle_period 1.0 -matrix_num_per_period 12 \
         -periodic_biogeochem_forcing \
         -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
