@@ -2,7 +2,7 @@
 #PBS -l walltime=06:00:00,nodes=1:ppn=24,pmem=2580mb
 #PBS -m abe
 #PBS -j oe
-#PBS -M tatsurobkkuk@gmail.com
+#PBS -M youemailxxx@umn.edu
 
 cd $PBS_O_WORKDIR 
 
@@ -26,6 +26,10 @@ mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \
         -nzeuph 2 \
         -biogeochem_deltat 43200.0 -days_per_year 360.0 \
         -burial_sum_steps 720 \
+<<<<<<< HEAD
+=======
+        -periodic_matrix \
+>>>>>>> b2268405e4126f975245f0cece294a909f86d90a
         -pco2atm 280.0 \
         -use_virtual_flux \
         -periodic_matrix \
