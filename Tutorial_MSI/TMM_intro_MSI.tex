@@ -315,7 +315,7 @@ For product information, visit www.mathworks.com.
 
 The two lines containing \verb|#PBS -m abe|, and \verb|#PBS -M tatsurobkkuk@gmail.com|. are both commands having to do with sending message emails to the user.  The first of these lines instructs the PBS system to send a message email when the job aborts, begins, or ends.  The second command specifies the email address to be used.  Using the message emails is recommended because the reason for a job failure can often be determined using information in the emails. The seventh line sets the directory at which commands are executed and the lines 8-11 loads the necessary software modules. 
 
-The follwing lines (12$\sim$) contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments. For more information on different options available, read ``HOWTO.txt'' by S. Khatiwala in \verb|$TMMROOT|. 
+The follwing lines (14$\sim$) contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments. For more information on different options available, read ``HOWTO.txt'' by S. Khatiwala in \verb|$TMMROOT|. 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  # 360 days per year with a time step of 2 steps per day:
  14 mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \   # number of cores, models
@@ -359,7 +359,7 @@ Currently BGC model writes the following 7 diagnostics into the different files:
 \item \verb|fbgc1.petsc|: primary production in each box [mmol P/m3/oceantimestep]
 \item \verb|fbgc2.petsc|: zooplankton grazing in each box [mmol P/m3/oceantimestep]
 \item \verb|fbgc3.petsc|: detritus sedimentation through upper boundary of \\ each box [mmol P/m2/oceantimestep]
-\item \verb|fbgc4.petsc|: remineralization of detrius and DIP in each box [mmol P/m3/oceantimestep]
+\item \verb|fbgc4.petsc|: remineralization of detrius and DOP in each box [mmol P/m3/oceantimestep]
 \item \verb|fbgc5.petsc|: river runoff [mmol P/m3/oceantimestep]
 \item \verb|fbgc6.petsc|: nitrogen fixation [mmol N/m3/oceantimestep]
 \item \verb|fbgc7.petsc|: denitrification [mmol P/m3/oceantimestep]
@@ -372,37 +372,37 @@ Currently BGC model writes the following 7 diagnostics into the different files:
 \vspace{5mm}
 \noin (Option 1, recommmended): To convert to \textbf{.nc} files you are going to use 5 scripts:
 \begin{enumerate}
-\item \verb|n7tracers28.m|: This file converts each tracer snapshot .petsc file (e.g., po4put.petsc) into a single to .nc file. The MATLAB syntax is:
+\item \verb|n7tracers28.m|: This file converts each tracer snapshot .petsc file (e.g., po4put.petsc) into a single .nc file. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
  >> n7tracers28('filename1.nc')
 \end{lstlisting}
 Make sure to set the basepath correctly and useCarbon=1 (when carbon model is used) and make sure that there is no .nc file with the same name already in the directory.
 
-\item\verb|n7tracersavg28.m|: This file converts each tracer avg .petsc file (e.g., po4avg.petsc) into a single to .nc file. The MATLAB syntax is:
+\item\verb|n7tracersavg28.m|: This file converts each tracer time-averaged .petsc file (e.g., po4avg.petsc) into a single .nc file. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
  >> n7tracersavg28('filename2.nc')
 \end{lstlisting}
 Make sure to set the basepath correctly and useCarbon=1 (when carbon model is used) and make sure that there is no .nc file with the same name already in the directory.
 
-\item\verb|n7fluxes28.m|: This file converts each diagnostic flux .petsc file (e.g., fbgc1.petsc) into a single to .nc file. The MATLAB syntax is:
+\item\verb|n7fluxes28.m|: This file converts each diagnostic flux .petsc file (e.g., fbgc1.petsc) into a single .nc file. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
  >> n7fluxes28('filename3.nc')
 \end{lstlisting}
 Make sure to set the basepath correctly and make sure that there is no .nc file with the same name already in the directory.
 
-\item\verb|n7physics.m|: This file makes monthly mean temperature and salinity files. The MATLAB syntax is:
+\item\verb|n7physics.m|: This file makes single .c files with monthly mean temperature and salinity. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
  >> n7physics('filename4.nc')
 \end{lstlisting}
 Make sure to set the basepath correctly and make sure that there is no .nc file with the same name already in the directory.
 
-\item\verb|load_pco2.m|: This file makes a global mean atmospheric $\mathrm{pCO_{2}}$ file (``pco2.nc'') and surface $\mathrm{CO_{2}}$ air-sea flux file (``co2airseaflux.nc''). $\mathrm{pCO_{2}}$ is in ppm and $\mathrm{CO_{2}}$ air-sea flux is in mmol C/m2/timestep (positive flux means $\mathrm{CO_{2}}$ is going into the sea from air). The MATLAB syntax is 
+\item\verb|load_pco2.m|: This file makes a global mean atmospheric $\mathrm{pCO_{2}}$ file (``pco2.nc'') and surface $\mathrm{CO_{2}}$ air-sea flux file (``co2airseaflux.nc''). $\mathrm{CO_{2}}$ is in ppm and $\mathrm{CO_{2}}$ air-sea flux is in [mmol C/m2/timestep] (positive flux means $\mathrm{CO_{2}}$ is going into the sea from air). The MATLAB syntax is 
 \begin{lstlisting}[style=DOS]
  >> load_pco2
 \end{lstlisting}
 Make sure to set the basepath and the $\mathrm{CO_{2}}$ run options correctly.
 
-\item\verb|process_output.m| (optinal): To run all 5 scripts at once, edit and use this file. THe MATLAB syntax is 
+\item\verb|process_output.m| (optinal): To run all 5 scripts at once, edit and use this file. The MATLAB syntax is 
 \begin{lstlisting}[style=DOS]
  >> process_output
 \end{lstlisting}
@@ -414,12 +414,12 @@ Make sure to set the basepath and the $\mathrm{CO_{2}}$ run options correctly.
 
 \item \verb|load_output.m|: This file converts each tracer snapshot .petsc file (e.g., po4put.petsc) to .mat file. Make sure to edit the \verb|base_path| and add \verb|tmm_matlab_code| to search path in lines 2 and 3.
 \item \verb|load_output_time_avg.m|: This file converts each tracer average concentration .petsc file (e.g., po4avg.petsc) to .mat file. Make sure to edit the \verb|base_path| and search path correctly.
-\item Unfortunately I don't have scripts for diagnostic flux .petsc files, physics files, and $\mathrm{CO_{2}}$ files. But this should not be too hard to do and all you have to do is to modify other .m files.
+\item Unfortunately I don't have scripts for diagnostic flux files, physics files, and $\mathrm{CO_{2}}$ files. But this should not be too hard to do and all you have to do is to modify other .m files.
 
 \end{enumerate}
 
 \subsubsection{Step 6: Displaying the model outputs}
-\noin (Option 1): To view .nc files, I recommend the software Ferret developed by NOAA. It is already installed in MSI and to launch Ferret, type on the command line:
+\noin (Option 1): To view .nc files, I recommend the software \emph{Ferret} developed by NOAA. It is already installed in MSI, and to launch Ferret, type on the command line:
 \begin{lstlisting}[style=DOS]
  $ ls *.nc
  filename1.nc filename2.nc filename3.nc filename4.nc co2airseaflux.nc pco2.nc
@@ -445,10 +445,10 @@ yes? sho d
  DIC                                       1:360     1:160     1:15      1:6
  ALK                                       1:360     1:160     1:15      1:6
 \end{lstlisting}
-I won't go into too much detail here but to learn more about Ferret, visit NOAA's website and take the tutorial at \url{https://ferret.pmel.noaa.gov/Ferret/documentation/ferret-tutorials}. You can make all kinds of graphs and figures.
+I won't go into too much detail here but to learn more about Ferret, visit NOAA's website and take a tutorial at \url{https://ferret.pmel.noaa.gov/Ferret/documentation/ferret-tutorials}. You can make all kinds of graphs and figures with Ferret.
 
 \vspace{5mm}
-\noin (Option 2): If you want to visualize .mat files I recommend the MATLAB package \verb|m_map|. Again I would not go into much detail here but if you want to learn about it, download this package and take the tutorial from the developer's website: \url{https://www.eoas.ubc.ca/~rich/map.html}. Compared to Ferret, you have more freedom for customizing graphs but but the downside is that you are going to have to write much longer codes.
+\noin (Option 2): If you want to visualize .mat files, I recommend the MATLAB package \verb|m_map|. Again, I would not go into much detail here but if you want to learn about it, download the package and take the tutorial from the developer's website: \url{https://www.eoas.ubc.ca/~rich/map.html}. Compared to Ferret, you have more freedom for customizing graphs but the downside is that you are going to have to write much longer codes.
 
 \end{document}
 
