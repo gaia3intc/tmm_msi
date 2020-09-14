@@ -3,9 +3,7 @@
 \author{Tatsuro Tanioka}
 \date{\today}
 
-% Last edited 2015-12-31T22:17:14Z
 
-% Things that start with a % (percent sign) are ignored by LaTeX.  They are `comments' and are set off in blue on writeLaTeX.com.  They will never appear in the final output.
 \usepackage[margin=1.5in]{geometry}
 \usepackage{xcolor}
 \usepackage{listings}
@@ -129,14 +127,328 @@ Completed test examples
 \end{lstlisting}
 If you get this far, you've managed to build the PETSc successfully and you're ready to go to the next step. If it failed, read the error messages, debug, and try again. \textbf{Building PETSc is harder than it looks} so you need to be patient. 
 
+As more of a technical note, the procedure above uses the Intel compilers and Intel MPI library. By loading the cmake, the PETSc build system can learn more about the host machine. In addition to taking advantage of compiler optimizations and vectorization, the procedure above builds PETSc against the Intel Math Kernel Library (MKL) for BLAS, LAPACK and ScaLAPACK which gives a performance gain over the reference implementations. For the FORTRAN compiler, we specifically need to use \verb/mpiifort/, and not \verb/mpif90/ (the default compiler), because TMM codes are written in both F77 and F90. Also, since we don't require C++ for TMM we put the flag in the config file, \verb/--with-cxx=0/. The reason we need to use MPI compilers, not regular gcc compilers, is because we want to run PETSc in a parallel mode (i.e., by using the command \verb/mpiexec/ in the runscript). For more details about building PETSc please check out \url{https://www.mcs.anl.gov/petsc/documentation/installation.html}. 
+
+\subsubsection{Step 2: Downloading all the scripts and transport matrices}
+\begin{enumerate}
+\item First download Matlab scripts from \\ 
+\url{http://kelvin.earth.ox.ac.uk/spk/Research/TMM/tmm_matlab_code.tar.gz} and put into the first level of your TMM2 folder Path. You could also get my copy.
+\begin{lstlisting}[style=DOS]
+ $ cp -r ~/../tanio003/TMM2/tmm_matlab_code $HOME/TMM2/
+\end{lstlisting}
+\item Download transport matrices and related data for the model of your choice: \\ \url{http://kelvin.earth.ox.ac.uk/spk/Research/TMM/TransportMatrixConfigs/} and put into he first level of your TMM2 folder Path. You can download all 6 configurations but I warn you that \verb|MITgcm_ECCO_v4| and \verb|UVicKielIncrIsopycDiffTransient| take a very long time. For the ones that I have you could also grab my copy (e.g., to copy \verb|MITgcm_ECCO|):
+\begin{lstlisting}[style=DOS]
+ $ cp -r ~/../tanio003/TMM2/MITgcm_ECCO $HOME/TMM2/
+\end{lstlisting}
+\item Download miscellaneous data called OceanCarbon from \\ 
+\url{http://kelvin.earth.ox.ac.uk/spk/Research/TMM/MiscData/}. You can get my copy by:
+\begin{lstlisting}[style=DOS]
+ $ cp -r ~/../tanio003/TMM2/OceanCarbon $HOME/TMM2/
+\end{lstlisting}
+\item Download source codes for TMM and models:
+\begin{lstlisting}[style=DOS]
+ $ git clone https://github.com/tanio003/tmm
+\end{lstlisting}
+ This directory (\verb|/TMM2/tmm|) contains the source codes from Khatiwala's master branch (``\verb|master|'') and my public release branch (``\verb|TT_Release|''). For our exercise, we will be using some of my new codes so you need to switch from the master branch to my branch in the newly created tmm directory:
+\begin{lstlisting}[style=DOS]
+ $ cd tmm
+ (master) $ ls
+ driver  HOWTO.txt  LICENSE.txt  models  README.txt
+ (master) $ git checkout TT_Release
+ (TT_Release) $ ls
+ driver  HOWTO.txt  LICENSE.txt  models  README.txt  Tutorial_MSI
+\end{lstlisting}
+Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tutorial_MSI|, which was not present in the master branch. 
+
+(Optional) If you want to make start changing your own changes, I would suggest making a new branch in your local computer (e.g.., \verb|yournewrepo|), and leave \verb|master| and \verb|TT_Release| untouched.
+\begin{lstlisting}[style=DOS]
+ (TT_Release) $ git checkout -b yournewrepo
+ (yournewrepo) $ git branch --show-current
+ yournewrepo
+\end{lstlisting}
+\item Set the environment variable TMMROOT to point to the top level of the TMM directory.
+\begin{lstlisting}[style=DOS]
+ (TT_Release) $ export TMMROOT=$HOME/TMM2/tmm
+ (TT_Release) $ echo $TMMROOT
+ /home/.../TMM2/tmm
+\end{lstlisting}
+\end{enumerate}
+
+\subsubsection{Step 3: Compiling the model}
+\noin Here, let's try compiling biogeochemical MOPS. 
+
+\begin{enumerate}
+\item For each model there are model-specific source codes \\ (\verb|$TMMROOT/models/current/mops2/src/|); Matlab scripts \\ (\verb|$TMMROOT/models/current/mops2/matlab/|) to generate input data and read model output; and run scripts and other runtime data such as namelists in \\ 
+\verb|$TMMROOT/models/current/mops2/runscripts/|. 
+
+First, we create a new ``Run directory''. I make a new base directory \verb|Runs| and in that directory, I make subdirectories for specific experiments. I call it \verb|Runs/MOPS/Test_spinup| and copy here all the files needed.
+
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ mkdir -p Runs/MOPS/TMM_spinup
+ $ cd Runs/MOPS/TMM_spinup
+ $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
+ $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
+ $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
+\end{lstlisting}
+
+\item Compile mops. Make sure that all the modules are loaded before you compile mops.
+\begin{lstlisting}[style=DOS]
+ $ module load intel
+ $ module load impi/intel
+ $ module load cmake
+ $ make clean all
+ $ make mops
+\end{lstlisting}
+
+\noin If compiled properly, you'd find a new executable ``mops'' created along with a bunch of objective .o files. 
+\lstset{emph={mops,runscript_msi,Makefile}, emphstyle=\color{green}}
+\begin{lstlisting}[style=DOS]
+ $ ls
+ BGC_INI.o                           n7fluxes28.m
+ BGC_MODEL.o                         n7physics.m
+ CAR_CHEM.o                          n7tracers28.m
+ CAR_INI.o                           n7tracersavg28.m
+ external_forcing_mops_biogeochem.o  perry1996-runoff-noarctic_noname.txt
+ insolation.o                        perry1996-runoff_noname.txt
+ load_output.m                       petsc_matvec_utils.o
+ load_output_time_avg.m              petsc_signal_utils.o
+ load_pco2.m                         process_output.m
+ Makefile                            runscript
+ make_input_files_for_mops_model.m   runscript_msi
+ make_rivers.m                       tmm_external_bc.o
+ misfit_mops_biogeochem.o            tmm_forcing_utils.o
+ mops                                tmm_forward_step.o
+ mops_biogeochem_copy_data.o         tmm_main.o
+ mops_biogeochem_diagnostics.o       tmm_monitor.o
+ mops_biogeochem_ini.o               tmm_profile_utils.o
+ mops_biogeochem_misfit.o            tmm_timer.o
+ mops_biogeochem_model.o             tmm_write.o
+ mops_biogeochem_set_params.o
+\end{lstlisting}
+\lstset{emph={}, emphstyle=\color{green}}
+
+\item Edit the file \ \verb/make_input_files_for_mops_model.m/. First thing to do is to make sure that variable \verb/base_path/ point to the right directory for the TMM configuration.
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mops_model.m
+ 
+ % Set toplevel path to GCMs configuration
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+ base_path='~/TMM2/MITgcm_2.8deg';
+ 
+ addpath(genpath('~/TMM2/tmm_matlab_code'));% add tmm_matlab_code to the search path
+ oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceanCarbon to the search path
+ atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
+\end{lstlisting}
+\noin In the same matlab file, there are different switches with 0's and 1's. For this spin-up exercise, we \textbf{couple MOPS to a simple OCMIP-like carbon model} and \textbf{fix atmospheric $\mathrm{pCO_{2}}$ at 280 ppm}. So set the switches as following:
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mops_model.m
+ ...
+ periodicForcing=1 
+ periodicMatrix=1
+ 
+ dt=43200; % time step to use (43200s for ECCO and MIT2.8; 28800s for any other TMMs)
+ 
+ rearrangeProfiles=1
+ bigMat=0
+ writeFiles=1
+ writeTMs=1
+ useCoarseGrainedMatrix=0
+ writePCFiles=0
+ 
+ READ_SWRAD=0                    % Read short-wave radiation?
+ useCarbon=1                     % Use simple inorganic carbon model?
+ useAtmModel=0                   % Use prognostic 1-box atmosphere?
+ pCO2atm_ini=280.0               % Initial pco2?
+ useTimeVaryingPrescribedCO2=0   % Use prescribed pco2 pathway?
+ useVirtualFlux=1                % Use DIC and Alk to calculate E-P?
+ empScaleFactor=1.0              % Scaling factor for E-P (default = 1)
+ %-----------------------------------
+ % Modified by Tatsuro Tanioka 200907 to allow for Atmospheric CO2 option
+ % For a prescribed pCO2 run, useTimeVaryingPrescribedCO2=1 and choose a scenario
+ 
+ % Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
+ co2Scenario='RCP85';
+ %-----------------------------------
+\end{lstlisting}
+\noin Then open MATLAB and run \verb/make_input_files_for_mops_model.m/
+\begin{lstlisting}[style=DOS]
+ $ module load matlab
+ $ matlab -nodesktop
+                                    < M A T L A B (R) >
+                          Copyright 1984-2019 The MathWorks, Inc.
+                     R2019a Update 5 (9.6.0.1174912) 64-bit (glnxa64)
+                                      July 31, 2019
+To get started, type doc.
+For product information, visit www.mathworks.com.
+
+>> make_input_files_for_mops_model
+\end{lstlisting}
+\noin This creates a bunch of periodic forcing files (\verb|xxx_01, xxx_02,...|), initial tracer concentrations (\verb|po4ini.petsc, no3ini.petsc,...|), and binary files (.bin and .petsc) related to model geometry and forcing.
+\end{enumerate}
+
+\subsubsection{Step 4: Running the model}
+\noin MSI systems use job queues to efficiently and fairly manage when computations are executed. The queuing system at MSI is called PBS (Portable Batch System) and to submit a job to a PBS queue users create PBS job scripts. PBS script contains information on the resources requested for calculation, as well as the commands for executing the calculation. 
+
 \vspace{5mm}
-\noin As more of a technical note, the procedure above uses the Intel compilers and Intel MPI library. By loading the cmake, the PETSc build system can learn more about the host machine. In addition to taking advantage of compiler optimizations and vectorization, the procedure above builds PETSc against the Intel Math Kernel Library (MKL) for BLAS, LAPACK and ScaLAPACK which gives a performance gain over the reference implementations. For the FORTRAN compiler, we specifically need to use \verb/mpiifort/, and not \verb/mpif90/ (the default compiler), because TMM codes are written in both F77 and F90. Also, since we don't require C++ for TMM we put the flag in the config file, \verb/--with-cxx=0/. The reason we need to use MPI compilers, not regular gcc compilers, is because we want to run PETSc in a parallel mode (i.e., by using the command \verb/mpiexec/ in the runscript). For more details about building PETSc please check out \url{https://www.mcs.anl.gov/petsc/documentation/installation.html}. 
+\noin Below is the custom PBS script for submitting a new job to run MOPS2 using Mesabi. It's called \verb|runscript_msi| and should be in the current directory already. Here is the first 11 lines:
 
-\subsubsection{Step 2: Downloading all the scripts and transport matrices into your own local directory}
-We first need to install Transport Matrices:
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+ 1 #!/bin/bash -l
+ 2 #PBS -l walltime=06:00:00,nodes=1:ppn=24,pmem=2580mb
+ 3 #PBS -m abe
+ 4 #PBS -j oe
+ 5 #PBS -M tatsurobkkuk@gmail.com
+ 6
+ 7 cd $PBS_O_WORKDIR
+ 8
+ 9 module load intel
+ 10 module load impi/intel
+ 11 module load cmake
+ \end{lstlisting}
 
+\noin The first line defines which type of shell the script will be read. Here we will use the \verb|bash|. The second line contains the PBS resource request. The current job will require about 6 hours, 1 node each with 24 processor cores (ppn), and 2580 megabytes of memory per core (pmem). 
 
+The two lines containing \verb|#PBS -m abe|, and \verb|#PBS -M tatsurobkkuk@gmail.com|. are both commands having to do with sending message emails to the user.  The first of these lines instructs the PBS system to send a message email when the job aborts, begins, or ends.  The second command specifies the email address to be used.  Using the message emails is recommended because the reason for a job failure can often be determined using information in the emails. The seventh line sets the directory at which commands are executed and the lines 8-11 loads the necessary software modules. 
 
+The follwing lines (12$\sim$) contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments. For more information on different options available, read ``HOWTO.txt'' by S. Khatiwala in \verb|$TMMROOT|. 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ # 360 days per year with a time step of 2 steps per day:
+ 14 mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \   # number of cores, models
+ 15   -numtracers 9 \   # number of tracers (i.e. state variables)
+ 16   -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,
+ no3ini.petsc,dicini.petsc,alkini.petsc \ # files for initialization of BGC state variables
+ 17   -me Ae \   # the name of the explicit transport matrix
+ 18   -mi Ai \   # the name of the implicit transport matrix
+ 19   -t0 0.0 -iter0 0 \ # starting time[years] starting time[timesteps]: for initial run
+ 20   -deltat_clock 0.0013888888888889 \  # ocean timestep length[years]: 2 timesteps/day
+ 21   -max_steps 2160000 \   # total number of timesteps to be evaluated (here 3000 yrs)
+ 22   -write_time_steps 72000 \ # output frequency(in timesteps, here every 100 yrs)
+ 23   -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,
+ no3out.petsc,dicout.petsc,alkout.petsc \ # files for output of 9 BGC state variables
+ 24   -external_forcing \ # calculate BGC explicitly
+ 25   -use_profiles \
+ 26   -nzeuph 2 \   # number of layers in euphotic zone (2 for MIT2.8, 6 for ECCO)
+ 27   -biogeochem_deltat 43200.0 -days_per_year 360.0 \ # ocean timestep[seconds]
+ 28   -burial_sum_steps 720 \   # sum burial over a period of 720 timesteps = 1 yr
+ 29   -pco2atm 280.0 \   # use fixed pCO2 of 280 ppm
+ 30   -use_virtual_flux \ # use the global surface mean DIC and Alk to calculate E-P
+ 31   -periodic_matrix \  # use of periodic transport matrix
+ 32   -matrix_cycle_period 1.0 -matrix_num_per_period 12 \ # the unit of time is year and 
+ # circulation has a periodicity of 1 year; monthly mean tranport matrix (12 TMs/year)
+ 33   -periodic_biogeochem_forcing \  # periodic biogeochemical forcing
+ 34   -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
+ 35   -num_biogeochem_steps_per_ocean_step 8 \ # the number of BGC timestep per ocean step
+ 36   -separate_biogeochem_time_stepping \  # timestep BGC model separately from ocean step
+ 37   -time_avg -avg_start_time_step 2159281 -avg_time_steps 60 \ 
+ # initial timestep for avg concentrations (for final year); avg over 60 timestep = 1 month
+ 38   -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,
+ detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc \   # avg file names
+ 39   -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \
+ # initial timestep for diagnostic fluxes (for final year); avg over 60 timesteps = 1 month
+ 40   -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,
+ fbgc7.petsc \ # diagnsotic flux files names
+ 41     > log   # outputting to logfile
+\end{lstlisting}
+Currently BGC model writes the following 7 diagnostics into the different files:
+\begin{enumerate}
+\item \verb|fbgc1.petsc|: primary production in each box [mmol P/m3/oceantimestep]
+\item \verb|fbgc2.petsc|: zooplankton grazing in each box [mmol P/m3/oceantimestep]
+\item \verb|fbgc3.petsc|: detritus sedimentation through upper boundary of \\ each box [mmol P/m2/oceantimestep]
+\item \verb|fbgc4.petsc|: remineralization of detrius and DIP in each box [mmol P/m3/oceantimestep]
+\item \verb|fbgc5.petsc|: river runoff [mmol P/m3/oceantimestep]
+\item \verb|fbgc6.petsc|: nitrogen fixation [mmol N/m3/oceantimestep]
+\item \verb|fbgc7.petsc|: denitrification [mmol P/m3/oceantimestep]
+\end{enumerate}
+
+\subsubsection{Step 5: Processing the model outputs}
+
+\noin To check that the run has finished, you should've received the email from MSI (if you set it so in the runscript) and you should see at the bottom of the log file the ``Wall clock time''. As the output files are binary and cannot be opened on its own, we have to convert from the binary format into either netcdf (.nc) or Matlab (.mat) files using Matlab scripts.
+
+\vspace{5mm}
+\noin (Option 1, recommmended): To convert to \textbf{.nc} files you are going to use 5 scripts:
+\begin{enumerate}
+\item \verb|n7tracers28.m|: This file converts each tracer snapshot .petsc file (e.g., po4put.petsc) into a single to .nc file. The MATLAB syntax is:
+\begin{lstlisting}[style=DOS]
+ >> n7tracers28('filename1.nc')
+\end{lstlisting}
+Make sure to set the basepath correctly and useCarbon=1 (when carbon model is used) and make sure that there is no .nc file with the same name already in the directory.
+
+\item\verb|n7tracersavg28.m|: This file converts each tracer avg .petsc file (e.g., po4avg.petsc) into a single to .nc file. The MATLAB syntax is:
+\begin{lstlisting}[style=DOS]
+ >> n7tracersavg28('filename2.nc')
+\end{lstlisting}
+Make sure to set the basepath correctly and useCarbon=1 (when carbon model is used) and make sure that there is no .nc file with the same name already in the directory.
+
+\item\verb|n7fluxes28.m|: This file converts each diagnostic flux .petsc file (e.g., fbgc1.petsc) into a single to .nc file. The MATLAB syntax is:
+\begin{lstlisting}[style=DOS]
+ >> n7fluxes28('filename3.nc')
+\end{lstlisting}
+Make sure to set the basepath correctly and make sure that there is no .nc file with the same name already in the directory.
+
+\item\verb|n7physics.m|: This file makes monthly mean temperature and salinity files. The MATLAB syntax is:
+\begin{lstlisting}[style=DOS]
+ >> n7physics('filename4.nc')
+\end{lstlisting}
+Make sure to set the basepath correctly and make sure that there is no .nc file with the same name already in the directory.
+
+\item\verb|load_pco2.m|: This file makes a global mean atmospheric $\mathrm{pCO_{2}}$ file (``pco2.nc'') and surface $\mathrm{CO_{2}}$ air-sea flux file (``co2airseaflux.nc''). $\mathrm{pCO_{2}}$ is in ppm and $\mathrm{CO_{2}}$ air-sea flux is in mmol C/m2/timestep (positive flux means $\mathrm{CO_{2}}$ is going into the sea from air). The MATLAB syntax is 
+\begin{lstlisting}[style=DOS]
+ >> load_pco2
+\end{lstlisting}
+Make sure to set the basepath and the $\mathrm{CO_{2}}$ run options correctly.
+
+\item\verb|process_output.m| (optinal): To run all 5 scripts at once, edit and use this file. THe MATLAB syntax is 
+\begin{lstlisting}[style=DOS]
+ >> process_output
+\end{lstlisting}
+
+\end{enumerate}
+
+\noin (Option 2): To convert to \textbf{.mat} files you are going to run 2 scripts:
+\begin{enumerate}
+
+\item \verb|load_output.m|: This file converts each tracer snapshot .petsc file (e.g., po4put.petsc) to .mat file. Make sure to edit the \verb|base_path| and add \verb|tmm_matlab_code| to search path in lines 2 and 3.
+\item \verb|load_output_time_avg.m|: This file converts each tracer average concentration .petsc file (e.g., po4avg.petsc) to .mat file. Make sure to edit the \verb|base_path| and search path correctly.
+\item Unfortunately I don't have scripts for diagnostic flux .petsc files, physics files, and $\mathrm{CO_{2}}$ files. But this should not be too hard to do and all you have to do is to modify other .m files.
+
+\end{enumerate}
+
+\subsubsection{Step 6: Displaying the model outputs}
+\noin (Option 1): To view .nc files, I recommend the software Ferret developed by NOAA. It is already installed in MSI and to launch Ferret, type on the command line:
+\begin{lstlisting}[style=DOS]
+ $ ls *.nc
+ filename1.nc filename2.nc filename3.nc filename4.nc co2airseaflux.nc pco2.nc
+ $ module load ferret
+ $ ferret
+ 	NOAA/PMEL TMAP
+ 	FERRET v6.82
+ 	Linux 2.6.32-279.1.1.el6.x86_64 64-bit - 08/03/12
+ 	14-Sep-20 14:49
+
+yes? load filename1.nc
+yes? sho d
+     currently SET data sets:
+    1> ./filename1.nc  (default)
+ name     title                             I         J         K         L
+ PO4                                       1:360     1:160     1:15      1:6
+ DOP                                       1:360     1:160     1:15      1:6
+ OXYGEN                                    1:360     1:160     1:15      1:6
+ PHYTO                                     1:360     1:160     1:15      1:6
+ ZOO                                       1:360     1:160     1:15      1:6
+ DET                                       1:360     1:160     1:15      1:6
+ NO3                                       1:360     1:160     1:15      1:6
+ DIC                                       1:360     1:160     1:15      1:6
+ ALK                                       1:360     1:160     1:15      1:6
+\end{lstlisting}
+I won't go into too much detail here but to learn more about Ferret, visit NOAA's website and take the tutorial at \url{https://ferret.pmel.noaa.gov/Ferret/documentation/ferret-tutorials}. You can make all kinds of graphs and figures.
+
+\vspace{5mm}
+\noin (Option 2): If you want to visualize .mat files I recommend the MATLAB package \verb|m_map|. Again I would not go into much detail here but if you want to learn about it, download this package and take the tutorial from the developer's website: \url{https://www.eoas.ubc.ca/~rich/map.html}. Compared to Ferret, you have more freedom for customizing graphs but but the downside is that you are going to have to write much longer codes.
 
 \end{document}
 
