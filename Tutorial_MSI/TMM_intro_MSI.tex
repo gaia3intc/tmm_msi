@@ -127,8 +127,7 @@ Completed test examples
 \end{lstlisting}
 If you get this far, you've managed to build the PETSc successfully and you're ready to go to the next step. If it failed, read the error messages, debug, and try again. \textbf{Building PETSc is harder than it looks} so you need to be patient. 
 
-\vspace{5mm}
-\noin As more of a technical note, the procedure above uses the Intel compilers and Intel MPI library. By loading the cmake, the PETSc build system can learn more about the host machine. In addition to taking advantage of compiler optimizations and vectorization, the procedure above builds PETSc against the Intel Math Kernel Library (MKL) for BLAS, LAPACK and ScaLAPACK which gives a performance gain over the reference implementations. For the FORTRAN compiler, we specifically need to use \verb/mpiifort/, and not \verb/mpif90/ (the default compiler), because TMM codes are written in both F77 and F90. Also, since we don't require C++ for TMM we put the flag in the config file, \verb/--with-cxx=0/. The reason we need to use MPI compilers, not regular gcc compilers, is because we want to run PETSc in a parallel mode (i.e., by using the command \verb/mpiexec/ in the runscript). For more details about building PETSc please check out \url{https://www.mcs.anl.gov/petsc/documentation/installation.html}. 
+As more of a technical note, the procedure above uses the Intel compilers and Intel MPI library. By loading the cmake, the PETSc build system can learn more about the host machine. In addition to taking advantage of compiler optimizations and vectorization, the procedure above builds PETSc against the Intel Math Kernel Library (MKL) for BLAS, LAPACK and ScaLAPACK which gives a performance gain over the reference implementations. For the FORTRAN compiler, we specifically need to use \verb/mpiifort/, and not \verb/mpif90/ (the default compiler), because TMM codes are written in both F77 and F90. Also, since we don't require C++ for TMM we put the flag in the config file, \verb/--with-cxx=0/. The reason we need to use MPI compilers, not regular gcc compilers, is because we want to run PETSc in a parallel mode (i.e., by using the command \verb/mpiexec/ in the runscript). For more details about building PETSc please check out \url{https://www.mcs.anl.gov/petsc/documentation/installation.html}. 
 
 \subsubsection{Step 2: Downloading all the scripts and transport matrices}
 \begin{enumerate}
@@ -179,14 +178,14 @@ Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tuto
 \noin Here, let's try compiling biogeochemical MOPS. 
 
 \begin{enumerate}
-\item For each model there is model-specific source codes (in \verb|$TMMROOT/models/current/mops2/src/|); Matlab script(s) in \verb|$TMMROOT/models/current/mops2/matlab/| to generate input data and read model output; and run scripts and other runtime data such as namelists in runscripts/. 
+\item For each model there is model-specific source codes \\ (\verb|$TMMROOT/models/current/mops2/src/|); Matlab script(s) in \\ \verb|$TMMROOT/models/current/mops2/matlab/| to generate input data and read model output; and run scripts and other runtime data such as namelists in runscripts/. 
 
-\noin First, we create a new ``Run directory''. I call it \verb|Runs| and copy here all the files needed.
+First, we create a new ``Run directory''. I make a new base directory \verb|Runs| and in that directory, I make subdirectories for specific experiments. I call it \verb|Runs/MOPS/Test_spinup| and copy here all the files needed.
 
 \begin{lstlisting}[style=DOS]
  $ cd ~/TMM2
- $ mkdir Runs
- $ cd Runs 
+ $ mkdir -p Runs/MOPS/TMM_spinup
+ $ cd Runs/MOPS/TMM_spinup
  $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
  $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
  $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
@@ -201,7 +200,7 @@ Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tuto
  $ make mops
 \end{lstlisting}
 
-\noin If compiled properly, you'd find an executable ``mops'' created along with a bunch of objective .o files. 
+\noin If compiled properly, you'd find a new executable ``mops'' created along with a bunch of objective .o files. 
 \lstset{emph={mops,runscript_msi,Makefile}, emphstyle=\color{green}}
 \begin{lstlisting}[style=DOS]
  $ ls
@@ -228,23 +227,23 @@ Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tuto
 \end{lstlisting}
 \lstset{emph={}, emphstyle=\color{green}}
 
-\item Edit the file \ \verb/make_input_files_for_mops_model.m/. Make sure that variable \verb/base_path/ point to the right directory for the TMM configuration.
+\item Edit the file \ \verb/make_input_files_for_mops_model.m/. First thing to do is to make sure that variable \verb/base_path/ point to the right directory for the TMM configuration.
 \lstset{language=matlab} 
-\begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  % make_input_files_for_mops_model.m
  
  % Set toplevel path to GCMs configuration
  % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
  % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
  % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
- % base_path='~/TMM2/MITgcm_2.8deg';
+ base_path='~/TMM2/MITgcm_2.8deg';
  
  addpath(genpath('~/TMM2/tmm_matlab_code'));% add tmm_matlab_code to the search path
  oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceaanCarbon to the search path
  atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
 \end{lstlisting}
 \noin In the same matlab file, there are different switches with 0's and 1's. For this spin-up exercise, we \textbf{couple MOPS to a simple OCMIP-like carbon model} and a \textbf{fix atmospheric $\mathrm{pCO_{2}}$ at 280 ppm}. So set the switches as following:
-\begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  % make_input_files_for_mops_model.m
  ...
  periodicForcing=1 
@@ -291,6 +290,86 @@ For product information, visit www.mathworks.com.
 \end{enumerate}
 
 \subsubsection{Step 4: Running the model}
+\noin MSI systems use job queues to efficiently and fairly manage when computations are executed. The queuing system at MSI is called PBS (Portable Batch System) and to submit a job to a PBS queue users create PBS job scripts. PBS script contains information on the resources requested for calculation, as well as the commands for executing the calculation. 
+
+\vspace{5mm}
+\noin Below is the custom PBS script for submitting a new job to run MOPS2 using Mesabi. It's called \verb|runscript_msi| and should be in the current directory already. Here is the first 11 lines:
+
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+ 1 #!/bin/bash -l
+ 2 #PBS -l walltime=01:00:00,nodes=1:ppn=24,pmem=2580mb
+ 3 #PBS -m abe
+ 4 #PBS -j oe
+ 5 #PBS -M tatsurobkkuk@gmail.com
+ 6
+ 7 cd $PBS_O_WORKDIR
+ 8
+ 9 module load intel
+ 10 module load impi/intel
+ 11 module load cmake
+ \end{lstlisting}
+
+\noin The first line defines which type of shell the script will be read. Here we will use the \verb|bash|. The second line contains the PBS resource request. The current job wull require 1 hour, 1 nodes each with 24 processor cores (ppn), and 2580 megabytes of memory per core (pmem). 
+
+The two lines containing \verb|#PBS -m abe|, and \verb|#PBS -M tatsurobkkuk@gmail.com|. are both commands having to do with sending message emails to the user.  The first of these lines instructs the PBS system to send a message email when the job aborts, begins, or ends.  The second command specifies the email address to be used.  Using the message emails is recommended because the reason for a job failure can often be determined using information in the emails. The seventh line sets the directory at which commands are executed and the lines 8-11 loads the necessary software modules. 
+
+The follwing lines (12$\sim$) contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments.
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ # 360 days per year with a time step of 2 steps per day:
+ 14 mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \   # number of cores, models
+ 15   -numtracers 9 \   # number of tracers (i.e. state variables)
+ 16   -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,
+ no3ini.petsc,dicini.petsc,alkini.petsc \ # files for initialization of BGC state variables
+ 17   -me Ae \   # the name of the explicit transport matrix
+ 18   -mi Ai \   # the name of the implicit transport matrix
+ 19   -t0 0.0 -iter0 0 \ # starting time[years] starting time[timesteps]: for initial run
+ 20   -deltat_clock 0.0013888888888889 \  # ocean timestep length[years]: 2 timesteps/day
+ 21   -max_steps 2160000 \   # total number of timesteps to be evaluated (here 3000 yrs)
+ 22   -write_time_steps 72000 \ # output frequency(in timesteps, here every 100 yrs)
+ 23   -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,
+ no3out.petsc,dicout.petsc,alkout.petsc \ # files for output of 9 BGC state variables
+ 24   -external_forcing \ # calculate BGC explicitly
+ 25   -use_profiles \
+ 26   -nzeuph 2 \   # number of layers in euphotic zone (2 for MIT2.8, 6 for ECCO)
+ 27   -biogeochem_deltat 43200.0 -days_per_year 360.0 \ # ocean timestep[seconds]
+ 28   -burial_sum_steps 720 \   # sum burial over a period of 720 timesteps = 1 yr
+ 29   -pco2atm 280.0 \   # use fixed pCO2 of 280 ppm
+ 30   -use_virtual_flux \ # use the global surface mean DIC and Alk to calculate E-P
+ 31   -periodic_matrix \  # use of periodic transport matrix
+ 32   -matrix_cycle_period 1.0 -matrix_num_per_period 12 \ # the unit of time is year and 
+ # circulation has a periodicity of 1 year; monthly mean tranport matrix (12 TMs/year)
+ 33   -periodic_biogeochem_forcing \  # periodic biogeochemical forcing
+ 34   -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
+ 35   -num_biogeochem_steps_per_ocean_step 8 \ # the number of BGC timestep per ocean step
+ 36   -separate_biogeochem_time_stepping \  # timestep BGC model separately from ocean step
+ 37   -time_avg -avg_start_time_step 2159281 -avg_time_steps 60 \ 
+ # initial timestep for avg concentrations (for final year); average over 60 timesteps =1 mo
+ 38   -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,
+ detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc \   # avg file names
+ 39   -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \
+ # initial timestep for diagnostic fluxes (for final year); average over 60 timesteps =1 mo
+ 40   -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,
+ fbgc7.petsc \ # diagnsotic flux files names
+ 41     > log   # outputting to logfile
+\end{lstlisting}
+Currently BGC model writes the following 7 diagnostics into the different files:
+\begin{enumerate}
+\item \verb|fbgc1.petsc|	primary production in each box [mmol P/m3/oceantimestep]
+\item \verb|fbgc2.petsc|	zooplankton grazing in each box [mmol P/m3/oceantimestep]
+\item \verb|fbgc3.petsc|	detritus sedimentation through upper boundary of \\ each box [mmol P/m2/oceantimestep]
+\item \verb|fbgc4.petsc|	remineralization of detrius and DIP in each box [mmol P/m3/oceantimestep]
+\item \verb|fbgc5.petsc|	river runoff [mmol P/m3/oceantimestep]
+\item \verb|fbgc6.petsc|	nitrogen fixation [mmol N/m3/oceantimestep]
+\item \verb|fbgc7.petsc|	denitrification [mmol P/m3/oceantimestep]
+\end{enumerate}
+
+
+
+
+
+
+
 
 
 \end{document}
