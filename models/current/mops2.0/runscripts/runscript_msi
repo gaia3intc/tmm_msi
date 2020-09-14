@@ -27,7 +27,7 @@ mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \
         -biogeochem_deltat 43200.0 -days_per_year 360.0 \
         -burial_sum_steps 720 \
         -periodic_matrix \
-        -pco2atm_history TpCO2.bin,pCO2atm.bin \
+        -pco2atm 280.0 \
         -use_virtual_flux \
         -matrix_cycle_period 1.0 -matrix_num_per_period 12 \
         -periodic_biogeochem_forcing \
