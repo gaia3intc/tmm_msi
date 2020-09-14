@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  14 SEP 2020 12:22
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  14 SEP 2020 15:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1003,89 +1003,90 @@ LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
 [4]
-Overfull \hbox (1.30579pt too wide) in paragraph at lines 252--254
+Overfull \hbox (1.30579pt too wide) in paragraph at lines 253--255
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <7> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 278.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 279.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <7> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 278.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 279.
 LaTeX Font Info:    Font shape `T1/ntxtt/bx/n' will be
-(Font)              scaled to size 7.0pt on input line 278.
+(Font)              scaled to size 7.0pt on input line 279.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 ) [5]
 
 LaTeX Font Warning: Font shape `JT1/mc/m/it' undefined
-(Font)              using `JT1/mc/m/n' instead on input line 300.
+(Font)              using `JT1/mc/m/n' instead on input line 301.
 
 
 LaTeX Font Warning: Font shape `JY1/mc/m/it' undefined
-(Font)              using `JY1/mc/m/n' instead on input line 300.
+(Font)              using `JY1/mc/m/n' instead on input line 301.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 7.0pt on input line 300.
+(Font)              scaled to size 7.0pt on input line 301.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <7> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 306.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 307.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 7.0pt on input line 306.
+(Font)              scaled to size 7.0pt on input line 307.
 
-Overfull \hbox (1.50601pt too wide) in paragraph at lines 323--324
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 324--325
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (1.50601pt too wide) in paragraph at lines 345--346
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 346--347
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (5.70605pt too wide) in paragraph at lines 347--348
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 348--349
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
-[][][][][][][][][][][][][][][][][][][][] 
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (1.50601pt too wide) in paragraph at lines 351--352
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 352--353
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
-[][][][][][][][][][][][][][][][][][][][] 
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [6]
-Overfull \hbox (0.45038pt too wide) in paragraph at lines 361--362
-[][]\T1/ntxtt/m/n/10 fbgc4.petsc []\T1/ntxtlf/m/n/10 rem-iner-al-iza-tion of de
--trius and DIP in each box [mmol P/m3/oceantimestep] 
+Overfull \hbox (4.84041pt too wide) in paragraph at lines 362--363
+[][]\T1/ntxtt/m/n/10 fbgc4.petsc[]\T1/ntxtlf/m/n/10 : rem-iner-al-iza-tion of d
+e-trius and DIP in each box [mmol P/m3/oceantimestep] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 375.
 [7]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 375.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 453.
+ [8]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 453.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 375.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 375.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 453.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 453.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
-(rerunfilecheck)             Checksum: ABEB348C67BC20A74A8134D65DE339D8;638.
+(rerunfilecheck)             Checksum: 5713DEBFABBBE2474EAFC85B3F01DC36;829.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 375.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 453.
  ) 
 Here is how much of TeX's memory you used:
- 12944 strings out of 493223
- 181384 string characters out of 6144416
- 571514 words of memory out of 5000000
- 16737 multiletter control sequences out of 15000+600000
+ 13029 strings out of 493223
+ 182255 string characters out of 6144416
+ 571512 words of memory out of 5000000
+ 16822 multiletter control sequences out of 15000+600000
  76322 words of font info for 128 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 34i,6n,72p,1046b,2652s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,6n,72p,1046b,2642s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.dvi (7 pages, 129120 bytes).
+Output written on TMM_intro_MSI.dvi (8 pages, 150596 bytes).
