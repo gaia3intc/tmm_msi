@@ -354,7 +354,8 @@ The follwing lines (14$\sim$) contain the commands to execute and start a specif
  fbgc7.petsc \ # diagnsotic flux files names
  41     > log   # outputting to logfile
 \end{lstlisting}
-Currently BGC model writes the following 7 diagnostics into the different files:
+
+\noin Currently BGC model writes the following 7 diagnostics into the different files:
 \begin{enumerate}
 \item \verb|fbgc1.petsc|: primary production in each box [mmol P/m3/oceantimestep]
 \item \verb|fbgc2.petsc|: zooplankton grazing in each box [mmol P/m3/oceantimestep]
@@ -364,6 +365,12 @@ Currently BGC model writes the following 7 diagnostics into the different files:
 \item \verb|fbgc6.petsc|: nitrogen fixation [mmol N/m3/oceantimestep]
 \item \verb|fbgc7.petsc|: denitrification [mmol P/m3/oceantimestep]
 \end{enumerate}
+
+\noin To submit the job to the queue, type on the command line:
+\begin{lstlisting}[style=DOS]
+ $ chmod u+x runscript_msi
+ $ qsub runscript_msi
+\end{lstlisting}
 
 \subsubsection{Step 5: Processing the model outputs}
 
