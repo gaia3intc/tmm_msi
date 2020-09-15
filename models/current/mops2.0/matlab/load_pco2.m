@@ -7,7 +7,7 @@ basepath='~/TMM2/MITgcm_2.8deg';
 addpath(genpath('~/TMM2/tmm_matlab_code'));
 oceanCarbonBasePath='~/TMM2/OceanCarbon';
 %---------------------------------------------------------------------------
-% Option to get pco2 based on Prognostic (useTimeVaryingPrescribed=0) or Prescibed CO2 (useTimeVaryingPrescribed=1)
+% Option to get pco2 based on Prescibed CO2 (useTimeVaryingPrescribed=1) or otherwise (useTimeVaryingPrescribed=0)
 useTimeVaryingPrescribedCO2=1
 
 % Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
@@ -25,7 +25,7 @@ load(boxFile,'izBox','nb');
 load(profilesFile,'Irr');
 
 if ~useTimeVaryingPrescribedCO2
-    if exist('atm_output_time.txt', 'file') == 2;
+    if exist('atm_output_time.txt', 'file') == 2;   % For prognositc pCO2 
        timeFile='atm_output_time.txt';
        [hdr,tdat]=hdrload(timeFile);
        T = tdat(:,2);
