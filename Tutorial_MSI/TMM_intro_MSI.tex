@@ -101,7 +101,7 @@ Currently Loaded Modulefiles:
  3) impi/intel(default)
 \end{lstlisting}
 
-\noin Set up \verb/$PETSC_DIR/ to your petsc-3.13.5 directory:
+\noin Set up \verb/$PETSC_DIR/ to your petsc-3.13.5 directory. For your future uses, I would advise you to set \verb|$PETSC_DIR| in your \verb|.bashrc| as well. 
 \begin{lstlisting}[style=DOS]
  $ export PETSC_DIR=$HOME/TMM2/petsc-3.13.5
  $ echo $PETSC_DIR 
@@ -140,6 +140,13 @@ As more of a technical note, the procedure above uses the Intel compilers and In
 \begin{lstlisting}[style=DOS]
  $ cp -r ~/../tanio003/TMM2/MITgcm_ECCO $HOME/TMM2/
 \end{lstlisting}
+
+\noin Alternatively, you can get download these TMM files from the web directly (e.g., to download \verb|MITgcm_ECCO|):
+\begin{lstlisting}[style=DOS]
+ $ wget kelvin.earth.ox.ac.uk/spk/Research/TMM/TransportMatrixConfigs/MITgcm_ECCO.tar
+ $ tar -xvf MITgcm_ECCO.tar
+\end{lstlisting}
+
 \item Download miscellaneous data called OceanCarbon from \\ 
 \url{http://kelvin.earth.ox.ac.uk/spk/Research/TMM/MiscData/}. You can get my copy by:
 \begin{lstlisting}[style=DOS]
@@ -160,7 +167,7 @@ As more of a technical note, the procedure above uses the Intel compilers and In
 \end{lstlisting}
 Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tutorial_MSI|, which was not present in the master branch. 
 
-(Optional) If you want to make start changing your own changes, I would suggest making a new branch in your local computer (e.g.., \verb|yournewrepo|), and leave \verb|master| and \verb|TT_Release| untouched.
+(Optional) If you want to make start making your own changes to the source codes, I would suggest making a new branch in your local computer (e.g.., \verb|yournewrepo|), and leave \verb|master| and \verb|TT_Release| untouched.
 \begin{lstlisting}[style=DOS]
  (TT_Release) $ git checkout -b yournewrepo
  (yournewrepo) $ git branch --show-current
@@ -172,16 +179,18 @@ Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tuto
  (TT_Release) $ echo $TMMROOT
  /home/.../TMM2/tmm
 \end{lstlisting}
+
+For your future convenience, I would advise you to set \verb|$TMMROOT| in your \verb|.bashrc| as well so you don't need to set the variable every time you log in to MSI. 
 \end{enumerate}
 
 \subsubsection{Step 3: Compiling the model}
-\noin Here, let's try compiling biogeochemical MOPS. 
+\noin Here, let's try compiling the biogeochemical MOPS. If you want to learn about the basic architecture of MOPS, read the model description paper by Kriest and Oschlies (2015) at \url{https://gmd.copernicus.org/articles/8/2929/2015/}. 
 
 \begin{enumerate}
 \item For each model there are model-specific source codes \\ (\verb|$TMMROOT/models/current/mops2/src/|); Matlab scripts \\ (\verb|$TMMROOT/models/current/mops2/matlab/|) to generate input data and read model output; and run scripts and other runtime data such as namelists in \\ 
 \verb|$TMMROOT/models/current/mops2/runscripts/|. 
 
-First, we create a new ``Run directory''. I make a new base directory \verb|Runs| and in that directory, I make subdirectories for specific experiments. I call it \verb|Runs/MOPS/Test_spinup| and copy here all the files needed.
+First, we create a new run directory. I make a new base directory called ``\verb|Runs|'' and in that directory, I make subdirectories for specific experiments. I call it \verb|Runs/MOPS/Test_spinup| and copy here all the files needed.
 
 \begin{lstlisting}[style=DOS]
  $ cd ~/TMM2
@@ -192,7 +201,7 @@ First, we create a new ``Run directory''. I make a new base directory \verb|Runs
  $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
 \end{lstlisting}
 
-\item Compile mops. Make sure that all the modules are loaded before you compile mops.
+\item Compile mops. Make sure that all the modules are loaded and \verb|$PETSC_DIR| is set correctly before you compile mops.
 \begin{lstlisting}[style=DOS]
  $ module load intel
  $ module load impi/intel
@@ -243,7 +252,7 @@ First, we create a new ``Run directory''. I make a new base directory \verb|Runs
  oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceanCarbon to the search path
  atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
 \end{lstlisting}
-\noin In the same matlab file, there are different switches with 0's and 1's. For this spin-up exercise, we \textbf{couple MOPS to a simple OCMIP-like carbon model} and \textbf{fix atmospheric $\mathrm{pCO_{2}}$ at 280 ppm}. So set the switches as following:
+\noin In the same matlab file, there are different switches (0 = no and 1 = yes). For this spin-up exercise, we \textbf{couple MOPS to a simple OCMIP-like carbon model} and \textbf{fix atmospheric $\mathrm{pCO_{2}}$ at 280 ppm}. So set the switches as following:
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  % make_input_files_for_mops_model.m
  ...
@@ -293,29 +302,28 @@ For product information, visit www.mathworks.com.
 \subsubsection{Step 4: Running the model}
 \noin MSI systems use job queues to efficiently and fairly manage when computations are executed. The queuing system at MSI is called PBS (Portable Batch System) and to submit a job to a PBS queue users create PBS job scripts. PBS script contains information on the resources requested for calculation, as well as the commands for executing the calculation. 
 
-\vspace{5mm}
-\noin Below is the custom PBS script for submitting a new job to run MOPS2 using Mesabi. It's called \verb|runscript_msi| and should be in the current directory already. Here is the first 11 lines:
+Below is the custom PBS script for submitting a new job to run MOPS2 using Mesabi. It's called \verb|runscript_msi| and should be in the current directory already. Here is the first 11 lines:
 
 \lstset{language=sh} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
- 1 #!/bin/bash -l
- 2 #PBS -l walltime=06:00:00,nodes=1:ppn=24,pmem=2580mb
- 3 #PBS -m abe
- 4 #PBS -j oe
- 5 #PBS -M tatsurobkkuk@gmail.com
+ 1  #!/bin/bash -l
+ 2  #PBS -l walltime=06:00:00,nodes=1:ppn=24,pmem=2580mb
+ 3  #PBS -m abe
+ 4  #PBS -j oe
+ 5  #PBS -M tatsurobkkuk@gmail.com
  6
- 7 cd $PBS_O_WORKDIR
+ 7  cd $PBS_O_WORKDIR
  8
- 9 module load intel
+ 9  module load intel
  10 module load impi/intel
  11 module load cmake
  \end{lstlisting}
 
 \noin The first line defines which type of shell the script will be read. Here we will use the \verb|bash|. The second line contains the PBS resource request. The current job will require about 6 hours, 1 node each with 24 processor cores (ppn), and 2580 megabytes of memory per core (pmem). 
 
-The two lines containing \verb|#PBS -m abe|, and \verb|#PBS -M tatsurobkkuk@gmail.com|. are both commands having to do with sending message emails to the user.  The first of these lines instructs the PBS system to send a message email when the job aborts, begins, or ends.  The second command specifies the email address to be used.  Using the message emails is recommended because the reason for a job failure can often be determined using information in the emails. The seventh line sets the directory at which commands are executed and the lines 8-11 loads the necessary software modules. 
+The two lines containing \verb|#PBS -m abe|, and \verb|#PBS -M tatsurobkkuk@gmail.com|. are both commands having to do with sending message emails to the user.  The first of these lines instructs the PBS system to send a message email when the job aborts, begins, or ends. The second command specifies the email address to be used.  Using the message emails is recommended because the reason for a job failure can often be determined using information in the emails. The seventh line sets the directory at which commands are executed and the lines 8-11 loads the necessary software modules. 
 
-The follwing lines (14$\sim$) contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments. For more information on different options available, read ``HOWTO.txt'' by S. Khatiwala in \verb|$TMMROOT|. 
+The follwing lines (14$\sim$) contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments. For more information on different options available, read ``HOWTO.txt'' by S. Khatiwala located in \verb|$TMMROOT|. 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  # 360 days per year with a time step of 2 steps per day:
  14 mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \   # number of cores, models
@@ -372,12 +380,17 @@ The follwing lines (14$\sim$) contain the commands to execute and start a specif
  $ qsub runscript_msi
 \end{lstlisting}
 
+\noin To check your job status at MSI, type:
+\begin{lstlisting}[style=DOS]
+ $ showq -u yourusername
+\end{lstlisting}
+
 \subsubsection{Step 5: Processing the model outputs}
 
-\noin To check that the run has finished, you should've received the email from MSI (if you set it so in the runscript) and you should see at the bottom of the log file the ``Wall clock time''. As the output files are binary and cannot be opened on its own, we have to convert from the binary format into either netcdf (.nc) or Matlab (.mat) files using Matlab scripts.
+\noin When the run is completed, you should receive an email from MSI (if you set it so in the runscript). You should also check you log file and the bottom of the log file should say ``Wall clock time xxx seconds''. As the output files are binary and cannot be opened on its own, we have to convert from the binary format into either netcdf (.nc) or Matlab (.mat) files using Matlab scripts.
 
 \vspace{5mm}
-\noin (Option 1, recommmended): To convert to \textbf{.nc} files you are going to use 5 scripts:
+\noin (Option 1, recommmended): To convert to \textbf{.nc} files you are going to use the following 5 scripts:
 \begin{enumerate}
 \item \verb|n7tracers28.m|: This file converts each tracer snapshot .petsc file (e.g., po4put.petsc) into a single .nc file. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
@@ -421,7 +434,7 @@ Make sure to set the basepath and the $\mathrm{CO_{2}}$ run options correctly.
 
 \item \verb|load_output.m|: This file converts each tracer snapshot .petsc file (e.g., po4put.petsc) to .mat file. Make sure to edit the \verb|base_path| and add \verb|tmm_matlab_code| to search path in lines 2 and 3.
 \item \verb|load_output_time_avg.m|: This file converts each tracer average concentration .petsc file (e.g., po4avg.petsc) to .mat file. Make sure to edit the \verb|base_path| and search path correctly.
-\item Unfortunately I don't have scripts for diagnostic flux files, physics files, and $\mathrm{CO_{2}}$ files. But this should not be too hard to do and all you have to do is to modify other .m files.
+\item Unfortunately I don't have scripts for creating .mat diagnostic flux files, physics files, and $\mathrm{CO_{2}}$ files. But this should not be too hard to do and all you have to do is to modify other .m files.
 
 \end{enumerate}
 

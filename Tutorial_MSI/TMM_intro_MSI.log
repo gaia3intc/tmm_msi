@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  14 SEP 2020 17:26
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  15 SEP 2020 15:29
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -999,100 +999,109 @@ LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
  [1
 
 ] [2]
-[3] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+Overfull \hbox (1.30579pt too wide) in paragraph at lines 146--147
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[3]
+Overfull \hbox (7.13596pt too wide) in paragraph at lines 193--194
+\T1/ntxtlf/m/n/10 di-rec-tory, I make sub-di-rec-to-ries for spe-cific ex-per-i
+-ments. I call it []\T1/ntxtt/m/n/10 Runs/MOPS/Test_spinup
+ []
+
+[4] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
-[4]
-Overfull \hbox (1.30579pt too wide) in paragraph at lines 253--255
+Overfull \hbox (1.30579pt too wide) in paragraph at lines 262--264
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <7> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 279.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 288.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <7> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 279.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 288.
 LaTeX Font Info:    Font shape `T1/ntxtt/bx/n' will be
-(Font)              scaled to size 7.0pt on input line 279.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+(Font)              scaled to size 7.0pt on input line 288.
+[5] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
-) [5]
+)
 
 LaTeX Font Warning: Font shape `JT1/mc/m/it' undefined
-(Font)              using `JT1/mc/m/n' instead on input line 301.
+(Font)              using `JT1/mc/m/n' instead on input line 309.
 
 
 LaTeX Font Warning: Font shape `JY1/mc/m/it' undefined
-(Font)              using `JY1/mc/m/n' instead on input line 301.
+(Font)              using `JY1/mc/m/n' instead on input line 309.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 7.0pt on input line 301.
+(Font)              scaled to size 7.0pt on input line 309.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <7> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 307.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 315.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 7.0pt on input line 307.
+(Font)              scaled to size 7.0pt on input line 315.
 
-Overfull \hbox (1.50601pt too wide) in paragraph at lines 324--325
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 332--333
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (1.50601pt too wide) in paragraph at lines 346--347
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 354--355
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
-Overfull \hbox (1.50601pt too wide) in paragraph at lines 348--349
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
-[][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (1.50601pt too wide) in paragraph at lines 352--353
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
-[][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
 [6]
-Overfull \hbox (8.73041pt too wide) in paragraph at lines 363--364
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 356--357
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (1.50601pt too wide) in paragraph at lines 360--361
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (8.73041pt too wide) in paragraph at lines 371--372
 [][]\T1/ntxtt/m/n/10 fbgc4.petsc[]\T1/ntxtlf/m/n/10 : rem-iner-al-iza-tion of d
 e-trius and DOP in each box [mmol P/m3/oceantimestep] 
  []
 
 
-Overfull \hbox (20.38133pt too wide) in paragraph at lines 388--389
+Overfull \hbox (20.38133pt too wide) in paragraph at lines 401--402
 [][]\T1/ntxtt/m/n/10 n7tracersavg28.m[]\T1/ntxtlf/m/n/10 : This file con-verts 
 each tracer time-averaged .petsc file (e.g., po4avg.petsc)
  []
 
-[7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 460.
- [8]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 460.
+[7] [8]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 473.
+ [9]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 473.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 460.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 460.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 473.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 473.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
 (rerunfilecheck)             Checksum: 5713DEBFABBBE2474EAFC85B3F01DC36;829.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 460.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 473.
  ) 
 Here is how much of TeX's memory you used:
- 13038 strings out of 493223
- 182335 string characters out of 6144416
- 571512 words of memory out of 5000000
- 16831 multiletter control sequences out of 15000+600000
+ 13042 strings out of 493223
+ 182389 string characters out of 6144416
+ 541603 words of memory out of 5000000
+ 16835 multiletter control sequences out of 15000+600000
  76322 words of font info for 128 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 34i,6n,72p,1046b,2642s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,6n,72p,1044b,2060s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.dvi (8 pages, 151568 bytes).
+Output written on TMM_intro_MSI.dvi (9 pages, 155524 bytes).
