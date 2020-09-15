@@ -39,7 +39,6 @@ co2Scenario='RCP85';
 
 if useTimeVaryingPrescribedCO2
    useAtmModel = 0
-   useVirtualFlux = 0
 end
 
 % Set path names, etc.
