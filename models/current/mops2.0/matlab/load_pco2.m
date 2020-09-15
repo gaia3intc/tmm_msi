@@ -25,7 +25,7 @@ load(boxFile,'izBox','nb');
 load(profilesFile,'Irr');
 
 if ~useTimeVaryingPrescribedCO2
-    if exist('atm_output_time.txt', 'file') == 1;
+    if exist('atm_output_time.txt', 'file') == 2;
        timeFile='atm_output_time.txt';
        [hdr,tdat]=hdrload(timeFile);
        T = tdat(:,2);
@@ -56,7 +56,7 @@ if exist('pCO2atm','var') == 1; %
    netcdf.close(ncid);
 end
 % Making co2 airsea flux 2D data 
-if exist('time_average_output_time.txt', 'file') == 1;
+if exist('time_average_output_time.txt', 'file') == 2;
    avg_timeFile='time_average_output_time.txt';
    [hdravg,diagnostic_output_time]=hdrload(avg_timeFile);
    Tavg = diagnostic_output_time(:,2);
