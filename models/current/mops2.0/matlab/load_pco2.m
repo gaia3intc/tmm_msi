@@ -1,6 +1,7 @@
 % File to convert pCO2 binary file to .nc file
 % By Tatsuro Tanioka
 % co2 air sea flux is in mmolC/m2/timestep (postive flux means CO2 is going into Sea from Air)
+% Note that pco2.nc will not be created when doing a constant pco2 run
 
 %basepath='~/TMM2/MITgcm_ECCO';
 basepath='~/TMM2/MITgcm_2.8deg';
