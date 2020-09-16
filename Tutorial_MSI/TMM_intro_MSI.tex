@@ -485,7 +485,7 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
 
 \section{Case Studies}
 \subsection{Study 1: Postindustrial $\mathrm{CO_{2}}$ uptake with MOPS+MIT2.8}
-\noin In the first case study, we will simulate postindustrial $\mathrm{CO_{2}}$ uptake using MOPS and MITgcm2.8 under IPCC's RCP8.5 scenario from 1765 to 2265. We are going to do the continuous run from the spinup run (Section 1) so make sure that you have completetd that run before you proceed.
+\noin In the first case study, we will simulate postindustrial $\mathrm{CO_{2}}$ uptake using MOPS and MITgcm2.8 under IPCC's RCP8.5 scenario from 1765 to 2265. We are going to do the continuous run from the spinup run (Section 1) so make sure that you have completed that run before you proceed.
 \begin{enumerate}
 
 \item Update source codes in your \verb|tmm| directly by doing \verb|git pull| from the remote repository.
@@ -560,7 +560,7 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  >> make_input_files_for_mops_model
 \end{lstlisting}
 
-\item Edit \verb|runscript_msi|. Important changes are commented with blue. You can manually edit the script or copy my script from \\ \verb|~/../tanio003/TMM2/Runs/MOPS/Test_co2historyRCP85|.
+\item Edit \verb|runscript_msi|. Important changes are commented with blue. You can manually edit the script or copy my script from \verb|~/../tanio003/TMM2/Runs/MOPS/Test_co2historyRCP85|.
 \lstset{language=sh} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
   1 #!/bin/bash -l
