@@ -181,6 +181,14 @@ Notice that in the branch \verb|TT_Release|, there is a new directory \verb|Tuto
 \end{lstlisting}
 
 For your future convenience, I would advise you to set \verb|$TMMROOT| in your \verb|.bashrc| as well so you don't need to set the variable every time you log in to MSI. 
+
+\item To synchronize your \verb|tmm| folder with the remote repository (e.g., syncing \verb|TT_Release| with my updates), use the git pull command your terminal. I suggest you do this regularly to keep your files up to date.
+\begin{lstlisting}[style=DOS]
+ $ cd $TMMROOT
+ $ git checkout TT_Release
+ $ git pull origin TT_Release
+\end{lstlisting}
+
 \end{enumerate}
 
 \subsubsection{Step 3: Compiling the model}
