@@ -9,4 +9,4 @@
 \contentsline {subsubsection}{\numberline {1.2.6}Step 5: Processing the model outputs}{6}{subsubsection.1.2.6}% 
 \contentsline {subsubsection}{\numberline {1.2.7}Step 6: Displaying the model outputs}{7}{subsubsection.1.2.7}% 
 \contentsline {section}{\numberline {2}Case Studies}{8}{section.2}% 
-\contentsline {subsection}{\numberline {2.1}Study 1: Postindustrial $\mathrm {CO_{2}}$ uptake}{8}{subsection.2.1}% 
+\contentsline {subsection}{\numberline {2.1}Study 1: Postindustrial $\mathrm {CO_{2}}$ uptake with MOPS+MIT2.8}{8}{subsection.2.1}% 
