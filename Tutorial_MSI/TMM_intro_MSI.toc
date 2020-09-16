@@ -8,3 +8,5 @@
 \contentsline {subsubsection}{\numberline {1.2.5}Step 4: Running the model}{6}{subsubsection.1.2.5}% 
 \contentsline {subsubsection}{\numberline {1.2.6}Step 5: Processing the model outputs}{7}{subsubsection.1.2.6}% 
 \contentsline {subsubsection}{\numberline {1.2.7}Step 6: Displaying the model outputs}{8}{subsubsection.1.2.7}% 
+\contentsline {section}{\numberline {2}Case Studies}{9}{section.2}% 
+\contentsline {subsection}{\numberline {2.1}Postindustrial $\mathrm {CO_{2}}$ uptake}{9}{subsection.2.1}% 

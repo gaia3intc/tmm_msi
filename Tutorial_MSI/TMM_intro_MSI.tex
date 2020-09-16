@@ -478,6 +478,75 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
 \vspace{5mm}
 \noin (Option 2): If you want to visualize .mat files, I recommend the MATLAB package \verb|m_map|. Again, I would not go into much detail here but if you want to learn about it, download the package and take the tutorial from the developer's website: \url{https://www.eoas.ubc.ca/~rich/map.html}. Compared to Ferret, you have more freedom for customizing graphs but the downside is that you are going to have to write much longer codes.
 
+\section{Case Studies}
+\subsection{Postindustrial $\mathrm{CO_{2}}$ uptake}
+\noin In the first case study, we will simulate postindustrial $\mathrm{CO_{2}}$ uptake using MOPS and MITgcm2.8 under IPCC's RCP8.5 scenario from 1765 to 2265. \textbf{We are going to do the continuous run from the spinup run (Section 1) so make sure that you have completetd that run before you proceed.}
+\begin{enumerate}
+\item Make a new run directory. Let's call it \verb|Test_co2historyRCP85| and copy all the files needed into this directory.
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ mkdir -p Runs/MOPS/TMM_co2historyRCP85
+ $ cd Runs/MOPS/TMM_co2historyRCP85
+ $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
+ $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
+ $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
+\end{lstlisting}
+
+\item As we are not editing source files, we can compile mops as we have done in the spinup run. Don't forget to load modules and make sure that environmental variables \verb|$TMMROOT| and \verb|PETSC_DIR| are set up properly.
+\begin{lstlisting}[style=DOS]
+ $ make clean all
+ $ make mops
+\end{lstlisting}
+
+\item Copy the output .petsc file (\verb|pickup.petsc|) from the spinup run into the current working directory. This petsc files contains the tracer concentrations from the final year of the run and is required for the continuous run.
+\begin{lstlisting}[style=DOS]
+ $ cp ../Test_spinup/pickup.petsc .
+\end{lstlisting}
+
+\item Edit the input generation file (\verb|make_input_files_for_mops_model.m|). The key here is to set \verb|useTimeVaryingPrescribedCO2=1| and choosing the appropriate \verb|co2Scenario|.
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mops_model.m
+ 
+ % Set toplevel path to GCMs configuration
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+ base_path='~/TMM2/MITgcm_2.8deg';
+ 
+ addpath(genpath('~/TMM2/tmm_matlab_code'));% add tmm_matlab_code to the search path
+ oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceanCarbon to the search path
+ atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
+ ...
+  
+ READ_SWRAD=0                    % Read short-wave radiation?
+ useCarbon=1                     % Use simple inorganic carbon model?
+ useAtmModel=0                   % Use prognostic 1-box atmosphere?
+ pCO2atm_ini=280.0               % Initial pco2? (will be ignored as useAtmModel=0)
+ useTimeVaryingPrescribedCO2=1   % Use prescribed pco2 pathway?
+ useVirtualFlux=1                % Use DIC and Alk to calculate E-P?
+ empScaleFactor=1.0              % Scaling factor for E-P (default = 1)
+ %-----------------------------------
+ % Modified by Tatsuro Tanioka 200907 to allow for Atmospheric CO2 option
+ % For a prescribed pCO2 run, useTimeVaryingPrescribedCO2=1 and choose a scenario
+ 
+ % Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
+ co2Scenario='RCP85';
+ %-----------------------------------
+\end{lstlisting}
+
+\item Open Matlab and make input files:
+\begin{lstlisting}[style=DOS]
+ $ matlab -nodesktop
+ ...
+ >> make_input_files_for_mops_model
+\end{lstlisting}
+
+\item Edit \verb|runscript_msi|:
+
+
+\end{enumerate}
+
 \end{document}
 
 

@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  16 SEP 2020 10:00
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.5.8)  16 SEP 2020 10:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -992,13 +992,14 @@ File: t1ntxtt.fd 2012/04/20 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 (Font)              scaled to size 10.0pt on input line 55.
+ [1
+
+]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 7.0pt on input line 65.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 (Font)              scaled to size 7.0pt on input line 65.
- [1
-
-] [2]
+ [2]
 Overfull \hbox (1.30579pt too wide) in paragraph at lines 146--147
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
@@ -1081,27 +1082,40 @@ each tracer time-averaged .petsc file (e.g., po4avg.petsc)
  []
 
 [7] [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 481.
- [9]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 481.
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 482.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 482.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 482.
+
+[9]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 550.
+ [10]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 550.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 481.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 481.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 550.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 550.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
-(rerunfilecheck)             Checksum: 5713DEBFABBBE2474EAFC85B3F01DC36;829.
+(rerunfilecheck)             Checksum: CCCD696A09337ADFDBCA5DB23A55DE66;952.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 481.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 550.
  ) 
 Here is how much of TeX's memory you used:
- 13042 strings out of 493223
- 182389 string characters out of 6144416
- 536933 words of memory out of 5000000
- 16835 multiletter control sequences out of 15000+600000
+ 13080 strings out of 493223
+ 182815 string characters out of 6144416
+ 536936 words of memory out of 5000000
+ 16873 multiletter control sequences out of 15000+600000
  76322 words of font info for 128 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  34i,6n,72p,1044b,2097s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.dvi (9 pages, 157108 bytes).
+Output written on TMM_intro_MSI.dvi (10 pages, 186520 bytes).
