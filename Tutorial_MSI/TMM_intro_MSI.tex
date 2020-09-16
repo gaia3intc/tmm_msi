@@ -478,6 +478,166 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
 \vspace{5mm}
 \noin (Option 2): If you want to visualize .mat files, I recommend the MATLAB package \verb|m_map|. Again, I would not go into much detail here but if you want to learn about it, download the package and take the tutorial from the developer's website: \url{https://www.eoas.ubc.ca/~rich/map.html}. Compared to Ferret, you have more freedom for customizing graphs but the downside is that you are going to have to write much longer codes.
 
+\section{Case Studies}
+\subsection{Study 1: Postindustrial $\mathrm{CO_{2}}$ uptake}
+\noin In the first case study, we will simulate postindustrial $\mathrm{CO_{2}}$ uptake using MOPS and MITgcm2.8 under IPCC's RCP8.5 scenario from 1765 to 2265. We are going to do the continuous run from the spinup run (Section 1) so make sure that you have completetd that run before you proceed.
+\begin{enumerate}
+
+\item Update source codes in your \verb|tmm| directly by doing \verb|git pull| from the remote repository.
+\begin{lstlisting}[style=DOS]
+ $ cd $TMMROOT
+ $ git checkout TT_Release
+ $ git pull origin TT_Release
+\end{lstlisting}
+
+\item Make a new run directory. Let's call it \verb|Test_co2historyRCP85| and copy all the files needed into this directory.
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ mkdir -p Runs/MOPS/TMM_co2historyRCP85
+ $ cd Runs/MOPS/TMM_co2historyRCP85
+ $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
+ $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
+ $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
+\end{lstlisting}
+
+\item Compile mops as we have done in the spinup run. Don't forget to load modules and make sure that environmental variables \verb|$TMMROOT| and \verb|$PETSC_DIR| are set up properly.
+\begin{lstlisting}[style=DOS]
+ $ make clean all
+ $ make mops
+\end{lstlisting}
+
+\item Copy the file \verb|pickup.petsc| from the spinup run directory into the current working directory. This petsc files contains the tracer concentrations from the final year of the run and is required for the continuous run.
+\begin{lstlisting}[style=DOS]
+ $ cp ../Test_spinup/pickup.petsc .
+\end{lstlisting}
+
+\noin Also, copy the file \verb|pickup_runoff.bin| from the spinup run directory. This binary file contains the global sedimentation from the final year of the previous run.
+\begin{lstlisting}[style=DOS]
+ $ cp ../Test_spinup/pickup_runoff.bin .
+\end{lstlisting}
+
+\item Edit the input generation file (\verb|make_input_files_for_mops_model.m|). The key here is to set \verb|useTimeVaryingPrescribedCO2=1| and choosing the appropriate \verb|co2Scenario|, in this case RCP85. 
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mops_model.m
+ 
+ % Set toplevel path to GCMs configuration
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
+ % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+ base_path='~/TMM2/MITgcm_2.8deg';
+ 
+ addpath(genpath('~/TMM2/tmm_matlab_code'));% add tmm_matlab_code to the search path
+ oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceanCarbon to the search path
+ atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
+ ...
+  
+ READ_SWRAD=0                    % Read short-wave radiation?
+ useCarbon=1                     % Use simple inorganic carbon model?
+ useAtmModel=0                   % Use prognostic 1-box atmosphere?
+ pCO2atm_ini=280.0               % Initial pco2? (will be ignored as useAtmModel=0)
+ useTimeVaryingPrescribedCO2=1   % Use prescribed pco2 pathway?
+ useVirtualFlux=1                % Use DIC and Alk to calculate E-P?
+ empScaleFactor=1.0              % Scaling factor for E-P (default = 1)
+ %-----------------------------------
+ % Modified by Tatsuro Tanioka 200907 to allow for Atmospheric CO2 option
+ % For a prescribed pCO2 run, useTimeVaryingPrescribedCO2=1 and choose a scenario
+ 
+ % Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
+ co2Scenario='RCP85';
+ %-----------------------------------
+\end{lstlisting}
+
+\item Open Matlab and make input files:
+\begin{lstlisting}[style=DOS]
+ $ matlab -nodesktop
+ ...
+ >> make_input_files_for_mops_model
+\end{lstlisting}
+
+\item Edit \verb|runscript_msi|. Important changes are commented with blue. You can manually edit the script or copy my script from \\ \verb|~/../tanio003/TMM2/Runs/MOPS/Test_co2historyRCP85|.
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+  1 #!/bin/bash -l
+  2 #PBS -l walltime=01:00:00,nodes=1:ppn=24,pmem=2580mb
+  3 #PBS -m abe
+  4 #PBS -j oe
+  5 #PBS -M tatsurobkkuk@gmail.com
+  6
+  7 cd $PBS_O_WORKDIR
+  8
+  9 module load intel
+ 10 module load impi/intel
+ 11 module load cmake
+ 12
+ 13 # 360 days per year with a time step of 2 steps per day:
+ 14 mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \
+ 15   -numtracers 9 \
+ 16   -pickup pickup.petsc \   # read initial values from file
+ 17   -me Ae \
+ 18   -mi Ai \
+ 19   -t0 1765.0 -iter0 0 \   # start from year 1765
+ 20   -deltat_clock 0.0013888888888889 \   
+ 21   -max_steps 360000 \  # run for 720*500 timesteps = 500 years
+ 22   -write_time_steps 7200 \   # output every 720*10 timestep = 10 years
+ 23   -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,
+ detout.petsc,no3out.petsc,dicout.petsc,alkout.petsc \
+ 24   -external_forcing \
+ 25   -use_profiles \
+ 26   -nzeuph 2 \
+ 27   -biogeochem_deltat 43200.0 -days_per_year 360.0 \
+ 28   -burial_sum_steps 720 \
+ 29   -runoff_ini_file pickup_runoff.bin \ # read global sedimentation of previous run
+ 30   -periodic_matrix \
+ 31   -pco2atm_history TpCO2.bin,pCO2atm.bin \ # read prescribed pCO2 and time
+ 32   -use_virtual_flux \
+ 33   -matrix_cycle_period 1.0 -matrix_num_per_period 12 \
+ 34   -periodic_biogeochem_forcing \
+ 35   -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
+ 36   -num_biogeochem_steps_per_ocean_step 8 \
+ 37   -separate_biogeochem_time_stepping \
+ 38   -time_avg -avg_start_time_step 169199 -avg_time_steps 720 \ 
+ # output annual avg. from year 2000 (235 years after 1765)
+ 39   -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,
+ detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc \
+ 40   -calc_diagnostics -diag_start_time_step 169199 -diag_time_steps 720 \ 
+ # output annual mean fluxes from 2000 (235 years after 1765)
+ 41   -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,
+ fbgc6.petsc,fbgc7.petsc \
+ 42   > log
+\end{lstlisting}
+
+\item Submit the job to MSI queue.
+\begin{lstlisting}[style=DOS]
+ $ qsub runscript_msi
+\end{lstlisting}
+
+\item Processing and outputting results. Use 5 Matlab scripts \\ (\verb|n7tracers28.m,n7tracersavg28.m,n7fluxes28.m,n7physics.m,load_pco2.m|) to create .nc files. Here, I will show you how to plot $\mathrm{CO_{2}}$ timeseries and global annual mean air-sea flux of $\mathrm{CO_{2}}$ using Ferret.
+\begin{lstlisting}[style=DOS]
+ $ ferret
+  	NOAA/PMEL TMAP
+ 	PyFerret v7.5 (optimized)
+ 	Linux 4.15.0-1071-azure - 03/31/20
+ 	16-Sep-20 14:49
+ yes? use pco2
+ yes? load 
+ yes? set w 1;plot/d=1/hlimits=1800:2120/vlimits=200:1200/title="pCO2 RCP8.5" pco2
+ yes? ppl XLAB Year
+ yes? ppl YLAB pCO2 (ppm)
+ yes? set w 2 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=10]*2*360/1000*(-1);
+ go fland
+ yes? set w 3 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=100]*2*360/1000*(-1);
+ go fland
+ yes? set w 4; plot/d=2/hlimits=2000:2100/vlimits=-7:0/
+ title="Ocean-atmosphere CO2 flux (PgC yr-1)" 
+ co2airseaflux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
+\end{lstlisting}
+
+
+\end{enumerate}
+
 \end{document}
 
 
