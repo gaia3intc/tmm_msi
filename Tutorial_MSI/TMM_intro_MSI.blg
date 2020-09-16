@@ -1,0 +1,47 @@
+This is pBibTeX, Version 0.99d-j0.33 (utf8.euc) (TeX Live 2019)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: TMM_intro_MSI.aux
+The style file: apalike.bst
+Database file #1: reference.bib
+You've used 4 entries,
+            1935 wiz_defined-function locations,
+            509 strings with 4860 characters,
+and the built_in function-call counts, 2264 in all, are:
+= -- 205
+> -- 157
+< -- 1
++ -- 60
+- -- 58
+* -- 228
+:= -- 406
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 47
+chr.to.int$ -- 4
+cite$ -- 4
+duplicate$ -- 56
+empty$ -- 122
+format.name$ -- 64
+if$ -- 417
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 4
+newline$ -- 23
+num.names$ -- 12
+pop$ -- 38
+preamble$ -- 1
+purify$ -- 47
+quote$ -- 0
+skip$ -- 44
+stack$ -- 0
+substring$ -- 152
+swap$ -- 4
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 24
+warning$ -- 0
+while$ -- 15
+width$ -- 0
+write$ -- 54
+is.kanji.str$ -- 0

@@ -3,8 +3,7 @@
 \author{Tatsuro Tanioka}
 \date{\today}
 
-
-\usepackage[margin=1.5in]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage{xcolor}
 \usepackage{listings}
 \lstdefinestyle{DOS}
@@ -12,8 +11,12 @@
     backgroundcolor=\color{black},
     basicstyle=\scriptsize\color{white}\ttfamily
 }
+\usepackage{natbib}
 \usepackage{mathtools,amsthm}    % some advanced mathematics notation
 \usepackage{graphicx}            % easy inclusion and manipulation of images
+\graphicspath{ {./Figures_tutorial/} }
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{float}
 \usepackage{microtype}           % just for fun: really hone in with the typography
 \usepackage{booktabs}            % nice looking tables that present the content first and foremost
 \usepackage{multicol}            % multiple columns in a local context
@@ -27,14 +30,16 @@
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=cyan,
-    pdftitle={Sharelatex Example},
-    bookmarks=true,
-    pdfpagemode=FullScreen,
+    citecolor=black,
+%    pdftitle={Sharelatex Example},
+%    bookmarks=true,
+%    pdfpagemode=FullScreen,
     }
     
 \urlstyle{same}
 
 \def\noin{\noindent }
+\def\CO{$\mathrm{CO_{2}}$ }
 %%%%%%%%%%%%%----------------------------------------------------------
 \begin{document}
 \maketitle
@@ -192,7 +197,7 @@ For your future convenience, I would advise you to set \verb|$TMMROOT| in your \
 \end{enumerate}
 
 \subsubsection{Step 3: Compiling the model}
-\noin Here, let's try compiling the biogeochemical MOPS. If you want to learn about the basic architecture of MOPS, read the model description paper by Kriest and Oschlies (2015) at \url{https://gmd.copernicus.org/articles/8/2929/2015/}. 
+\noin Here, let's try compiling the biogeochemical MOPS. If you want to learn about the basic architecture of MOPS, read the model description paper by \citet{Kriest15} at \url{https://gmd.copernicus.org/articles/8/2929/2015/}. 
 
 \begin{enumerate}
 \item For each model there are model-specific source codes \\ (\verb|$TMMROOT/models/current/mops2/src/|); Matlab scripts \\ (\verb|$TMMROOT/models/current/mops2/matlab/|) to generate input data and read model output; and run scripts and other runtime data such as namelists in \\ 
@@ -635,9 +640,62 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  co2airseaflux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
 \end{lstlisting}
 
+\begin{figure}[b!]   % Insert Figure 1 here
+   \centering
+   \includegraphics[width=10cm]{pco2RCP85.pdf}
+   \caption[]{$\mathrm{CO_2}$ concentration pathway under RCP8.5 scenario \citep{Meinshausen11}.}
+   \label{fig:pco2RCP85}
+\end{figure}
+
+Figure \ref{fig:pco2RCP85} shows the change in $\mathrm{CO_2}$ under RCP8.5 scenario. There is a rapid increase in \CO concenctration from the late 1990s. 
+
+Figure \ref{fig:airseamap} compares annual mean $\mathrm{CO_2}$ flux in 2010 and 2100. Notice that in 2010, large parts of the equatorial regions are net source of $\mathrm{CO_2}$ but in 2100, larger parts are becoming sink. Also, greater part of the Southern Ocean is also expected to absorb more  $\mathrm{CO_2}$ in 2100 compared to 2010. 
+
+Figure \ref{fig:airseamapWoolf} is a $\mathrm{CO_2}$ flux in 2010 from a study by \cite{Woolf19} who used Surface $\mathrm{CO_2}$ atlas. If you compare with the left panel of Figure  \ref{fig:airseamap}, you can see that our MOPS model does a quite good job in reproducing the large scale pattern.
+
+\begin{figure}[h!]   % Insert Figure 2 here
+   \centering
+   \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{airseaflux2010.pdf}
+   \end{minipage}
+   \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{airseaflux2100.pdf}
+   \end{minipage}
+   \caption[]{Modeled map of annual $\mathrm{CO_{2}}$ flux in 2010 for 2010 (Left) and 2100 (Right). Upward fluxes are defined as positive.}
+   \label{fig:airseamap}
+\end{figure}
+
+\begin{figure}[h!]   % Insert Figure 3 here
+   \centering
+   \includegraphics[scale=0.1]{Woolf19_GBC_Fig1.jpg}
+   \caption[]{Map of annual $\mathrm{CO_{2}}$ flux in 2010 \citep{Woolf19}. Compare this with Figure \ref{fig:airseamap}.}
+   \label{fig:airseamapWoolf}
+\end{figure}
+
+Figure \ref{fig:airseatimeseries} is a globally integrated sea-air $\mathrm{CO_2}$ flux projections under RCP8.5 scenario.The negative value means net uptake of $\mathrm{CO_2}$ by ocean. For a comparison, we show the similar projection using the CMIP5 (Figure \ref{fig:airseatimeseries_cmip5}a-b.) from \cite{Lovenduski16}. Again, notice that MOPS's result is largely consistent in terms of the magnitude. 
+
+\begin{figure}[H]   % Insert Figure 4 here
+   \centering
+   \includegraphics[scale=0.35]{airseaflux_timeseries2000to2100.pdf}
+   \caption[]{Modeled annual-mean globally integrated sea-air $\mathrm{CO_2}$ flux projections.}
+   \label{fig:airseatimeseries}
+\end{figure}
+
+\begin{figure}[H]   % Insert Figure 5 here
+   \centering
+   \includegraphics[trim=0 760 0 0,clip,scale=0.3]{Lovenduski16_GBC_Fig2.jpg}
+   \caption[]{Modeled annual-mean globally integrated sea-air $\mathrm{CO_2}$ flux projections \citep{Lovenduski16}. Compare this with Figure \ref{fig:airseatimeseries}.}
+   \label{fig:airseatimeseries_cmip5}
+\end{figure}
 
 \end{enumerate}
 
+
+\clearpage
+\bibliography{reference} 
+\bibliographystyle{apalike}
 \end{document}
 
 
