@@ -13,8 +13,11 @@
     basicstyle=\scriptsize\color{white}\ttfamily
 }
 \usepackage{natbib}
+\usepackage{bibentry}
+\nobibliography*
 \usepackage{mathtools,amsthm}    % some advanced mathematics notation
-\usepackage{graphicx}            % easy inclusion and manipulation of images
+%\usepackage{graphicx}            % easy inclusion and manipulation of images
+\usepackage[draft]{graphicx}            % for draft- not displaying figures
 \graphicspath{ {./Figures_tutorial/} }
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{float}
@@ -24,6 +27,7 @@
 \usepackage[hidelinks]{hyperref} % clickable references in the output, but hide them visually
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage[version=3]{mhchem}
 \usepackage{newtxtext,newtxmath}
 \usepackage{hyperref}
 \hypersetup{
@@ -692,7 +696,133 @@ Figure \ref{fig:airseatimeseries} (\emph{Ferret:w 4}) is a globally integrated s
 
 \end{enumerate}
 
+\subsection{Study 2: Using MOBI+UVic to simulate isotope dynamics}
 
+For this study, we will explore ocean biogeochemical dynamics using the second version of MOBI (Model of Ocean Biogeochemistry and Isotopes). MOBI includes:
+\begin{itemize}
+\item \ce{NO3}, \ce{PO4}, and DFe as interactive nutrients.
+\item 3 Phytoplankton classes (diazotrophs, coccolithophores, and other phytoplankton).
+\item Zooplankton.
+\item Detritus (dead POM).
+\item \ce{CaCO3} is a prognostic variable and its production is calculated as a fraction of the detrirus produced by coccolithophores and zooplankton and it is sinking into the deep ocean where it dissolves.
+\item Nitrogen (\ce{^15N}) and carbon (\ce{^13C}) isotopes are included in all compartments.
+\item Radiocarbon (\ce{^14C}) is included only in the DIC compartment.
+\item Dissolved \ce{O2} controls the water column denitrification. Benthic denitrification is calculated considerting subgridscale bathymetry.
+\item DOM is calculated separately for C, N, and P (DOC, DON, DOP).
+\item The most complex configuration has a total of 30 prognostic tracers.
+\end{itemize}
+
+\noin To learn different configurations of MOBI, refer to the primer by A. Schmittner (\url{https://github.com/tanio003/tmm/blob/TT_Release/Tutorial_MSI/MOBI2.0_Schmittner.pdf}). Also there are several key references for MOBI:
+\begin{itemize}
+\item \bibentry{Khatiwala19}
+\item \bibentry{Muglia17}
+\item \bibentry{Somes17}
+\item \bibentry{Kvale15}
+\item \bibentry{Yamamoto15}
+\end{itemize}
+
+\noin \textbf{In our exercise, we will try conducting a spin-up run for 3000 yrs using 30 prognostic tracers. Instructions will mostly follow that of S. Khatiwala.}
+
+\begin{enumerate}
+
+\item Download the compatible versions of UVic ESCM 2.9 in the first level of your TMM directory
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ git clone https://github.com/your_github_username/UVic2.9
+\end{lstlisting}
+
+\item Download the TMM called \verb|UVicOSUpicdefault|. Although you can download the original TMM from the Samar's repository, I found out when I did the preliminary test that the original TMM does not have the flow field for river discharge. Therefore, I had to import the ``foreign'' river discharge field from another TMM called  \verb|UVicKielIncrIsopycDiff| (\emph{Maybe we could contact Samar to ask for the full configuration for} \verb|UVicOSUpicdefault| \emph{with river discharge?}). To copy my TMM, 
+\begin{lstlisting}[style=DOS]
+ $ cp -r ~/../tanio003/TMM2/UVicOSUpicdefault_with_discharge $HOME/TMM2/
+\end{lstlisting}
+
+\noin Currently, MOBI can only be coupled to this TMM configuration (\verb|UVicOSUpicdefault_with_discharge|) because other TMMs like MITgcm models do not have bathymetry profile and hydrothermal Fe input masks.
+
+\item Make a Run directory for TMM-MOBI. For this run, I call it \verb|Runs/MOBI/Test_spinup|. Copy \\ \verb|mobi2.0/src/Makefile| and \verb|mobi2.0/src/MOBI_TMM_OPTIONS.h| to this directory. 
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ mkdir -p Runs/MOBI/TMM_spinup
+ $ cd Runs/MOBI/TMM_spinup
+ $ cp -p $TMMROOT/models/current/mobi2.0/src/Makefile .
+ $ cp -p $TMMROOT/models/current/mobi2.0/src/MOBI_TMM_OPTIONS.h . 
+\end{lstlisting}
+\noin Also, following the instructions at the top of Makefile, set the environmenta variable \verb|$UVICESCMROOT| to point to the top level of the UVic ESCM 2.9. Add this to your \verb|.bashrc| for cd your future convenience.
+\begin{lstlisting}[style=DOS]
+ $ export UVICESCMROOT=$HOME/TMM2/UVic2.9
+ echo $UVICESCMROOT
+ /home/...//TMM2/UVic2.9
+\end{lstlisting}
+
+\item Copy the contents (including the subdirectories) of \verb|mobi2.0/matlab| and  \verb|mobi2.0/runscripts| to the test directory.
+\lstset{emph={runscript,runscript_msi}, emphstyle=\color{green},emph={[2]InitialConditionProfiles}, emphstyle={[2]\color{blue}}}
+\begin{lstlisting}[style=DOS]
+ $ cp -p -R $TMMROOT/models/current/mobi2.0/matlab/* .
+ $ cp -p $TMMROOT/models/current/mobi2.0/runscripts/* .
+ $ ls
+ control.in                Makefile
+ get_mobi_diagnostic.m     make_input_files_for_mobi_model.m
+ InitialConditionProfiles  make_input_files_for_mobi_model_write_ic.m
+ load_diagnostics.m        MOBI_TMM_OPTIONS.h
+ load_output.m             MOBI_tracer_names.txt
+ load_output_sed.m         runscript
+ load_output_time_avg.m    runscript_msi
+\end{lstlisting}
+\lstset{emph={}, emphstyle=\color{green},emph={[2]}, emphstyle={[2]\color{blue}}} % reset coloring
+
+\item Edit \verb|control.in|. See the appendix for what each of these options mean.
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+\section{Appendix}
+\noin (Variables listed in MOBI \verb|control.in|):-> Eventually turn it into a Table
+
+\begin{itemize}
+\item \textbf{npzd}: (1) $k1n$ = half saturation constant for \ce{NO3 uptake} in [$\mu$M]?, (2) $capr$ = (3) $abio\verb|_|P$ = , (4) $alpha$ = , (5) $nup$ = quadratic mortality term of phytoplantkon in [-]?, (6) $nupt$ = linear mortality term of phytoplankton in [d-1] ?, 
+(7) $redctn$ = Redfield C:N ratio [molar], (8) $geZ$ = ?, (9) Redfield \ce{-O2}:\ce{N} [molar], (10) $kfemin$ = ?, (11) $kfemax$ = ?, 
+(12) $kfemin\verb|_|C$ = ?, (13) $kfemax\verb|_|C$ = ?, (14) $kfe\verb|_|D$ = ?, 
+(15) $zprefC$ = ?, (16) $zprefP$ = ?, (17) $dissk0$ = ?, 
+(18) $gbio$ = linear grazing rate [-]?, (19) $wd0$ = ?, (20) $nuz$ = quadratic mortality rate of zooplankton ?, (21) $jdiar$ = photosynthetic paramter?, (22) $nud0$ = ?, (23) $sgbdfac$ = ?, 
+(24) $diazntp$ = ?, (25) $nup\verb|_|D$ = , (26) $abio\verb|_|C$ = ?, (27) $k1n\verb|_|C$ = ?, (28) $alpha\verb|_|C$ = ?, 
+(29) $nuct0$ = ?, (30) $nupt0\verb|_|D$ = something with mortality, (31) $dfr$ = ?, (32) $dfrt$ = ?, (33) $dtnpzd$ = ?, 
+(34) $hdop$ = ?, (35) $nudop0$ = ?, (36) $nudon0$ = ?, (37) $eps\verb|_|assim$ = ?, 
+(38) $eps\verb|_|excr$ = something with excretion?, (39) $eps\verb|_|recy$ = something with remin?, (40) $eps\verb|_|wcdeni$ = something with water column denit?, (41) $eps\verb|_|bdeni$ something with benthic denit?, 
+(42) $epx\verb|_|nfix$ = something with nfix?, (43) $mwz$ = ?, (44) mw = ?
+
+\item \textbf{contrl}:
+\item \textbf{tsteps}:
+\item \textbf{riglid}:
+\item \textbf{mixing}:
+\item \textbf{diagn}:
+\item \textbf{io}:
+\item \textbf{ictime}:
+\item \textbf{blmix}:
+\item \textbf{hlmix}:
+\item \textbf{isopyc}:
+\item \textbf{ppmix}:
+\item \textbf{smagnl}:
+\item \textbf{embm}:
+\item \textbf{carbon}:
+\item \textbf{paleo}:
+\item \textbf{ice}:
+\item \textbf{veg}:
+\item \textbf{mtlm}:
+\item \textbf{sed}:
+
+\end{itemize}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Reference
 \clearpage
 \bibliography{reference} 
 \bibliographystyle{apalike}

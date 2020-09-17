@@ -1,10 +1,22 @@
 \begin{thebibliography}{}
 
+\bibitem[Khatiwala et~al., 2019]{Khatiwala19}
+Khatiwala, S., Schmittner, A., and Muglia, J. (2019).
+\newblock Air-sea disequilibrium enhances ocean carbon storage during glacial
+  periods.
+\newblock {\em Science advances}, 5(6):eaaw4981.
+
 \bibitem[Kriest and Oschlies, 2015]{Kriest15}
 Kriest, I. and Oschlies, A. (2015).
 \newblock Mops-1.0: modelling the regulation of the global oceanic nitrogen
   budget by marine biogeochemical processes.
 \newblock {\em Geoscientific Model Development}, 8:2929--2957.
+
+\bibitem[Kvale et~al., 2015]{Kvale15}
+Kvale, K.~F., Meissner, K., Keller, D., Eby, M., and Schmittner, A. (2015).
+\newblock Explicit planktic calcifiers in the university of victoria earth
+  system climate model, version 2.9.
+\newblock {\em Atmosphere-Ocean}, 53(3):332--350.
 
 \bibitem[Lovenduski et~al., 2016]{Lovenduski16}
 Lovenduski, N.~S., McKinley, G.~A., Fay, A.~R., Lindsay, K., and Long, M.~C.
@@ -21,11 +33,30 @@ Meinshausen, M., Smith, S.~J., Calvin, K., Daniel, J.~S., Kainuma, M.,
   to 2300.
 \newblock {\em Climatic change}, 109(1-2):213.
 
+\bibitem[Muglia et~al., 2017]{Muglia17}
+Muglia, J., Somes, C.~J., Nickelsen, L., and Schmittner, A. (2017).
+\newblock Combined effects of atmospheric and seafloor iron fluxes to the
+  glacial ocean.
+\newblock {\em Paleoceanography}, 32(11):1204--1218.
+
+\bibitem[Somes et~al., 2017]{Somes17}
+Somes, C.~J., Schmittner, A., Muglia, J., and Oschlies, A. (2017).
+\newblock A three-dimensional model of the marine nitrogen cycle during the
+  last glacial maximum constrained by sedimentary isotopes.
+\newblock {\em Frontiers in Marine Science}, 4:108.
+
 \bibitem[Woolf et~al., 2019]{Woolf19}
 Woolf, D.~K., Shutler, J.~D., Goddijn-Murphy, L., Watson, A., Chapron, B.,
   Nightingale, P.~D., Donlon, C.~J., Piskozub, J., Yelland, M., Ashton, I.,
   et~al. (2019).
 \newblock Key uncertainties in the recent air-sea flux of co2.
 \newblock {\em Global Biogeochemical Cycles}, 33(12):1548--1563.
+
+\bibitem[Yamamoto et~al., 2015]{Yamamoto15}
+Yamamoto, A., Abe-Ouchi, A., Shigemitsu, M., Oka, A., Takahashi, K., Ohgaito,
+  R., and Yamanaka, Y. (2015).
+\newblock Global deep ocean oxygenation by enhanced ventilation in the southern
+  ocean under long-term global warming.
+\newblock {\em Global Biogeochemical Cycles}, 29(10):1801--1815.
 
 \end{thebibliography}
