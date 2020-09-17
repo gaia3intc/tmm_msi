@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  16 SEP 2020 19:04
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  16 SEP 2020 19:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -967,14 +967,6 @@ File: lstlang1.sty 2019/02/27 1.8b listings language file
 LaTeX Font Info:    Font shape `T1/ntxtt/bx/n' will be
 (Font)              scaled to size 7.0pt on input line 301.
 
-Overfull \hbox (124.13068pt too wide) in paragraph at lines 312--313
-\T1/ntxtlf/m/n/10 This cre-ates a bunch of pe-ri-odic forc-ing files ([][]\T1/n
-txtt/m/n/10 xxx_01, xxx_02,...[]\T1/ntxtlf/m/n/10 ), ini-tial tracer con-cen-tr
-a-tions ([][]\T1/ntxtt/m/n/10 po4ini.petsc, no3ini.petsc,...[]\T1/ntxtlf/m/n/10
- ),
- []
-
-
 Overfull \hbox (3.89648pt too wide) in paragraph at lines 318--319
 []\T1/ntxtlf/m/n/10 Below is the cus-tom PBS script for sub-mit-ting a new job 
 to run MOPS2 us-ing Mesabi. It's called [][]\T1/ntxtt/m/n/10 runscript_msi
@@ -1062,7 +1054,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 698.
 Here is how much of TeX's memory you used:
  18025 strings out of 492916
  262619 string characters out of 6133346
- 618320 words of memory out of 5000000
+ 618306 words of memory out of 5000000
  21834 multiletter control sequences out of 15000+600000
  73107 words of font info for 104 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
