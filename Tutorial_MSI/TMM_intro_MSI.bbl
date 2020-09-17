@@ -1,5 +1,11 @@
 \begin{thebibliography}{}
 
+\bibitem[Giraud et~al., 2000]{Giraud00}
+Giraud, X., Bertrand, P., Dadou, I., et~al. (2000).
+\newblock Modeling $\delta$15n evolution: First palaeoceanographic applications
+  in a coastal upwelling system.
+\newblock {\em Journal of marine research}, 58(4):609--630.
+
 \bibitem[Khatiwala et~al., 2019]{Khatiwala19}
 Khatiwala, S., Schmittner, A., and Muglia, J. (2019).
 \newblock Air-sea disequilibrium enhances ocean carbon storage during glacial
@@ -38,6 +44,25 @@ Muglia, J., Somes, C.~J., Nickelsen, L., and Schmittner, A. (2017).
 \newblock Combined effects of atmospheric and seafloor iron fluxes to the
   glacial ocean.
 \newblock {\em Paleoceanography}, 32(11):1204--1218.
+
+\bibitem[Oschlies and Gar{\c{c}}on, 1999]{Oschlies99}
+Oschlies, A. and Gar{\c{c}}on, V. (1999).
+\newblock An eddy-permitting coupled physical-biological model of the north
+  atlantic: 1. sensitivity to advection numerics and mixed layer physics.
+\newblock {\em Global Biogeochemical Cycles}, 13(1):135--160.
+
+\bibitem[Schartau and Oschlies, 2003]{Schartau03}
+Schartau, M. and Oschlies, A. (2003).
+\newblock Simultaneous data-based optimization of a 1d-ecosystem model at three
+  locations in the north atlantic: Part i―method and parameter estimates.
+\newblock {\em Journal of Marine Research}, 61(6):765--793.
+
+\bibitem[Schmittner et~al., 2005]{Schmittner05}
+Schmittner, A., Oschlies, A., Giraud, X., Eby, M., and Simmons, H. (2005).
+\newblock A global model of the marine ecosystem for long-term simulations:
+  Sensitivity to ocean mixing, buoyancy forcing, particle sinking, and
+  dissolved organic matter cycling.
+\newblock {\em Global Biogeochemical Cycles}, 19(3).
 
 \bibitem[Somes et~al., 2017]{Somes17}
 Somes, C.~J., Schmittner, A., Muglia, J., and Oschlies, A. (2017).

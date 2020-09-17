@@ -3,45 +3,45 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: TMM_intro_MSI.aux
 The style file: apalike.bst
 Database file #1: reference.bib
-You've used 9 entries,
+You've used 13 entries,
             1935 wiz_defined-function locations,
-            549 strings with 6033 characters,
-and the built_in function-call counts, 4639 in all, are:
-= -- 429
-> -- 287
-< -- 1
-+ -- 108
-- -- 104
-* -- 461
-:= -- 823
-add.period$ -- 27
-call.type$ -- 9
-change.case$ -- 95
-chr.to.int$ -- 9
-cite$ -- 9
-duplicate$ -- 126
-empty$ -- 272
-format.name$ -- 115
-if$ -- 864
+            579 strings with 7025 characters,
+and the built_in function-call counts, 6319 in all, are:
+= -- 594
+> -- 364
+< -- 3
++ -- 138
+- -- 130
+* -- 618
+:= -- 1116
+add.period$ -- 39
+call.type$ -- 13
+change.case$ -- 127
+chr.to.int$ -- 13
+cite$ -- 13
+duplicate$ -- 181
+empty$ -- 383
+format.name$ -- 149
+if$ -- 1183
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 9
-newline$ -- 48
-num.names$ -- 27
-pop$ -- 76
+missing$ -- 13
+newline$ -- 68
+num.names$ -- 39
+pop$ -- 98
 preamble$ -- 1
-purify$ -- 95
+purify$ -- 127
 quote$ -- 0
-skip$ -- 94
+skip$ -- 138
 stack$ -- 0
-substring$ -- 334
-swap$ -- 9
+substring$ -- 461
+swap$ -- 13
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 54
+type$ -- 78
 warning$ -- 0
-while$ -- 33
+while$ -- 47
 width$ -- 0
-write$ -- 119
+write$ -- 171
 is.kanji.str$ -- 0
