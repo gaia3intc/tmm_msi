@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  16 SEP 2020 18:52
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  16 SEP 2020 19:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1042,27 +1042,27 @@ File: ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf Graphic file (type
 File: ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg Graphic file (type bmp)
 <./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg>
 
-Overfull \hbox (12.78545pt too wide) in paragraph at lines 689--690
+Overfull \hbox (12.78545pt too wide) in paragraph at lines 687--688
  [][] 
  []
 
 [11] (./TMM_intro_MSI.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 700.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 698.
  [12
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 700.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 698.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 700.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 700.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 698.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 698.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
 (rerunfilecheck)             Checksum: 902963497082F502123FF905909F1DBA.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 700.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 698.
  ) 
 Here is how much of TeX's memory you used:
  18025 strings out of 492916
  262619 string characters out of 6133346
- 617320 words of memory out of 5000000
+ 618320 words of memory out of 5000000
  21834 multiletter control sequences out of 15000+600000
  73107 words of font info for 104 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191

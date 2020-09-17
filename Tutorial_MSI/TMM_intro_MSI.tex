@@ -617,29 +617,27 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  $ qsub runscript_msi
 \end{lstlisting}
 
-\item Processing and outputting results. Use 5 Matlab scripts \\ (\verb|n7tracers28.m,n7tracersavg28.m,n7fluxes28.m,n7physics.m,load_pco2.m|) to create .nc files. Here, I will show you how to plot $\mathrm{CO_{2}}$ timeseries and global annual mean air-sea flux of $\mathrm{CO_{2}}$ using Ferret. The script is also at \verb|~/../tanio003/TMM2/Runs/MOPS/Test_co2historyRCP85/analyzeoutput.jnl|. (Actually, I'm using the new version of the Ferret called PyFerret here and some of the commands may not be compatible with the Ferret that is pre-installed at MSI. To install PyFerret at MSI in your directory, visit \url{https://github.com/NOAA-PMEL/PyFerret/} and follow instructions. \emph{I highly recommend PyFerret.})
+\item Processing and outputting results. Use 5 Matlab scripts \\ (\verb|n7tracers28.m,n7tracersavg28.m,n7fluxes28.m,n7physics.m,load_pco2.m|) to create .nc files. Here, I will show you how to plot $\mathrm{CO_{2}}$ timeseries and global annual mean air-sea flux of $\mathrm{CO_{2}}$ using Ferret. The script is also at \verb|~/../tanio003/TMM2/Runs/MOPS/Test_co2historyRCP85/analyzeoutput.jnl|. 
 \begin{lstlisting}[style=DOS]
  $ ferret
   	NOAA/PMEL TMAP
  	PyFerret v7.5 (optimized)
  	Linux 4.15.0-1071-azure - 03/31/20
  	16-Sep-20 14:49
- yes? use pco2
+ yes? use pco2.nc
  yes? use co2airseaflux.nc
  yes? set w 1;plot/d=1/hlimits=1800:2120/vlimits=200:1200/title="pCO2 RCP8.5" pco2
  yes? ppl XLAB Year
  yes? ppl YLAB pCO2 (ppm)
  yes? ppl PLOT
  yes? set w 2 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
- title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=10]*2*360/1000*(-1);
- go fland
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=10]*2*360/1000*(-1);go fland
  yes? set w 3 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
- title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=100]*2*360/1000*(-1);
- go fland
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=100]*2*360/1000*(-1);go fland
  yes? set w 4; plot/d=2/hlimits=2000:2100/vlimits=-7:0/
- title="Ocean-atmosphere CO2 flux (PgC yr-1)" 
- co2airseaflux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
+ title="Ocean-atmosphere CO2 flux (PgC yr-1)" co2airseaflux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
 \end{lstlisting}
+(Note: Here, I'm actually using the new version of the Ferret called PyFerret and some of the commands may not be compatible with the older version that is pre-installed at MSI. To install PyFerret in your MSI directory, visit \url{https://github.com/NOAA-PMEL/PyFerret/} and follow instructions. \emph{I highly recommend PyFerret.})
 
 \begin{figure}[b!]   % Insert Figure 1 here
    \centering
@@ -648,9 +646,9 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
    \label{fig:pco2RCP85}
 \end{figure}
 
-Figure \ref{fig:pco2RCP85} shows the change in $\mathrm{CO_2}$ under RCP8.5 scenario. There is a rapid increase in \CO concenctration from the late 1990s. 
+Figure \ref{fig:pco2RCP85} (\emph{Ferret:w 1}) shows the change in $\mathrm{CO_2}$ under RCP8.5 scenario. There is a rapid increase in \CO concenctration from the late 1990s. 
 
-Figure \ref{fig:airseamap} compares annual mean $\mathrm{CO_2}$ flux in 2010 and 2100. Notice that in 2010, large parts of the equatorial regions are net source of $\mathrm{CO_2}$ but in 2100, larger parts are becoming sink. Also, greater part of the Southern Ocean is also expected to absorb more  $\mathrm{CO_2}$ in 2100 compared to 2010. 
+Figure \ref{fig:airseamap} compares annual mean $\mathrm{CO_2}$ flux in 2010 (\emph{Ferret:w 2}) and 2100 (\emph{Ferret:w 3}). Notice that in 2010, large parts of the equatorial regions are net source of $\mathrm{CO_2}$ but in 2100, larger parts are becoming sink. Also, greater part of the Southern Ocean is also expected to absorb more  $\mathrm{CO_2}$ in 2100 compared to 2010. 
 
 Figure \ref{fig:airseamapWoolf} is a $\mathrm{CO_2}$ flux in 2010 from a study by \cite{Woolf19} who used Surface $\mathrm{CO_2}$ atlas and wind data. If you compare with the left panel of Figure  \ref{fig:airseamap}, you can see that our MOPS model does a quite good job in reproducing the large scale pattern.
 
@@ -675,7 +673,7 @@ Figure \ref{fig:airseamapWoolf} is a $\mathrm{CO_2}$ flux in 2010 from a study b
    \label{fig:airseamapWoolf}
 \end{figure}
 
-Figure \ref{fig:airseatimeseries} is a globally integrated sea-air $\mathrm{CO_2}$ flux projections under RCP8.5 scenario.The negative value means net uptake of $\mathrm{CO_2}$ by ocean. For a comparison, we show the similar projection using the CESM and CMIP5 (Figure \ref{fig:airseatimeseries_cmip5}a-b.) from \cite{Lovenduski16}. Again, notice that MOPS's result is largely consistent in terms of the magnitude. 
+Figure \ref{fig:airseatimeseries} (\emph{Ferret:w 4}) is a globally integrated sea-air $\mathrm{CO_2}$ flux projections under RCP8.5 scenario.The negative value means net uptake of $\mathrm{CO_2}$ by ocean. For a comparison, we show the similar projection using the CESM and CMIP5 (Figure \ref{fig:airseatimeseries_cmip5}a-b.) from \cite{Lovenduski16}. Again, notice that MOPS's result is largely consistent in terms of the magnitude. 
 
 \begin{figure}[H]   % Insert Figure 4 here
    \centering
