@@ -12,5 +12,6 @@
 \contentsline {subsection}{\numberline {2.1}Study 1: Postindustrial $\mathrm {CO_{2}}$ uptake with MOPS+MIT2.8}{8}{subsection.2.1}% 
 \contentsline {subsection}{\numberline {2.2}Study 2: Using MOBI+UVic to simulate isotope dynamics}{12}{subsection.2.2}% 
 \contentsline {section}{\numberline {3}Appendix}{13}{section.3}% 
-\contentsline {subsection}{\numberline {3.1}General reference for MOPS and MOBI}{13}{subsection.3.1}% 
-\contentsline {subsection}{\numberline {3.2}Paramters for MOBI (listed at control.in)}{13}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.1}Downloading PyFerret on MSI}{13}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {3.2}General reference for MOPS and MOBI}{13}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.3}Paramters for MOBI (listed at control.in)}{14}{subsection.3.3}% 

@@ -575,7 +575,7 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
   4 #PBS -j oe
   5 #PBS -M tatsurobkkuk@gmail.com
   6
-  7 cd $PBS_O_WORKDIR
+  7 cd $PBS_O_WORKDIRP
   8
   9 module load intel
  10 module load impi/intel
@@ -643,7 +643,7 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  yes? set w 4; plot/d=2/hlimits=2000:2100/vlimits=-7:0/
  title="Ocean-atmosphere CO2 flux (PgC yr-1)" co2airseaflux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
 \end{lstlisting}
-(Note: Here, I'm actually using the new version of the Ferret called PyFerret and some of the commands may not be compatible with the older version that is pre-installed at MSI. To install PyFerret in your MSI directory, visit \url{https://github.com/NOAA-PMEL/PyFerret/} and follow instructions. \emph{I highly recommend PyFerret.})
+(Note: Here, I'm actually using the new version of the Ferret called PyFerret and some of the commands may not be compatible with the older version that is pre-installed at MSI. To install PyFerret in your MSI directory, see Appendix and follow instructions. Also, visit \url{https://github.com/NOAA-PMEL/PyFerret/} for more information. \emph{I highly recommend PyFerret.})
 
 \begin{figure}[b!]   % Insert Figure 1 here
    \centering
@@ -714,7 +714,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{itemize}
 \noin To learn different configurations of MOBI, refer to the primer by A. Schmittner (\url{https://github.com/tanio003/tmm/blob/TT_Release/Tutorial_MSI/MOBI2.0_Schmittner.pdf}). 
 
-\noin \textbf{In our exercise, we will try conducting a spin-up run for 3000 yrs using 30 prognostic tracers. Instructions will mostly follow that of S. Khatiwala.}
+\textbf{In our exercise, we will try conducting a spin-up run for 3000 yrs using 30 prognostic tracers. Instructions will mostly follow that of S. Khatiwala.}
 
 \begin{enumerate}
 
@@ -767,14 +767,52 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{enumerate}
 
 
-
-
-
-
-
-
-
 \section{Appendix}
+
+\subsection{Downloading PyFerret on MSI}
+
+\begin{enumerate}
+\item Install miniconda on your home directory. This is a free cross-platform for Python distribution from Continuum Analytics. 
+\begin{lstlisting}[style=DOS]
+ $ cd ~
+ $ module purge
+ $ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+ $ bash Miniconda3-latest-Linux-x86_64.sh
+\end{lstlisting}
+\noin Follow the prompts on the installer screens. If you are unsure about any setting, accept the defaults. To make the changes take effect, close and then re-open your terminal window. Once installed you should find new directory called \verb|miniconda3| on your home directory.
+
+\item Execute the following command to install \verb|pyferret| as well as \verb|ferret_datasets| (the default Ferret datasets) into conda.
+\begin{lstlisting}[style=DOS]
+ $ conda create -n PyFERRET -c conda-forge pyferret ferret_datasets --yes
+\end{lstlisting}
+\noin \verb|PyFERRET| is the environment name where \verb|pyferret| is installed. You can change that to any name you like.
+
+\item To start using PyFerret, execute the following commands (replace \verb|PyFERRET| with whatever environment name you used):
+\begin{lstlisting}[style=DOS]
+(base) $ conda activate PyFerret
+(PyFERRET) $ pyferret
+  	NOAA/PMEL TMAP
+ 	PyFerret v7.6 (optimized)
+ 	Linux 4.15.0-1089-azure - 06/25/20
+ 	18-Sep-20 15:07
+
+yes?
+\end{lstlisting}
+
+\item (Optional) You may with to add directories to \verb|FER_DATA| and \verb|FER_GO|:
+\begin{lstlisting}[style=DOS]
+(PyFERRET) $ export FER_DATA="$FER_DATA /my/path/to/big/data/dir"
+(PyFERRET) $ export FER_GO="$FER_GO /my/path/to/custom/ferret/scripts"
+\end{lstlisting}
+
+\item Once you are done working with PyFerret you can leave this environment, if you wish, with the command:
+\begin{lstlisting}[style=DOS]
+(PyFERRET) $ conda deactivate
+(base) $
+\end{lstlisting}
+
+\end{enumerate}
+
 
 \subsection{General reference for MOPS and MOBI}
 
@@ -788,10 +826,10 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{itemize}
 
 \subsection{Paramters for MOBI (listed at control.in)}
-\noin - NPZD descriptions are from \url{https://github.com/OSU-CEOAS-Schmittner/UVicMOBI_fct_npzd_o2_n_fe_ca_caco3_c13_n15/blob/master/updates/npzd_src.F}
 
 \begin{itemize}
-\item \textbf{npzd}: Parameters related to biogeochemical NPZD model. 
+\item \textbf{npzd}: Parameters related to biogeochemical NPZD model. Descriptions are from \url{https://github.com/OSU-CEOAS-Schmittner/UVicMOBI_fct_npzd_o2_n_fe_ca_caco3_c13_n15/blob/master/updates/npzd_src.F}
+
 {\footnotesize
 \begin{longtable}{lllll} \hline
   Num  & Parameters         & Description                                                 & Unit                          & Def.      \\ \hline 
@@ -841,7 +879,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
    43  & $mw$               & Sinking speed increase with depth                           & [$s^{-1}$]                    & 0.055     \\ \hline
    \end{longtable}}
 
-\noin To find out what these paramters actually do in the model, you may need to refer to several papers :
+\noin To find out what these paramters actually do in the model, you may need to refer to several description papers :
 \begin{itemize}
 \item Original NPZD model \citep{Oschlies99, Giraud00,Schmittner05,Schmittner08}. 
 \item Zooplankton grazing formulation \citep{Keller12}
