@@ -30,6 +30,7 @@
 \usepackage[version=3]{mhchem}
 \usepackage{newtxtext,newtxmath}
 \usepackage{hyperref}
+\usepackage{longtable}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -711,15 +712,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \item DOM is calculated separately for C, N, and P (DOC, DON, DOP).
 \item The most complex configuration has a total of 30 prognostic tracers.
 \end{itemize}
-
-\noin To learn different configurations of MOBI, refer to the primer by A. Schmittner (\url{https://github.com/tanio003/tmm/blob/TT_Release/Tutorial_MSI/MOBI2.0_Schmittner.pdf}). Also there are several key references for MOBI:
-\begin{itemize}
-\item \bibentry{Khatiwala19}
-\item \bibentry{Muglia17}
-\item \bibentry{Somes17}
-\item \bibentry{Kvale15}
-\item \bibentry{Yamamoto15}
-\end{itemize}
+\noin To learn different configurations of MOBI, refer to the primer by A. Schmittner (\url{https://github.com/tanio003/tmm/blob/TT_Release/Tutorial_MSI/MOBI2.0_Schmittner.pdf}). 
 
 \noin \textbf{In our exercise, we will try conducting a spin-up run for 3000 yrs using 30 prognostic tracers. Instructions will mostly follow that of S. Khatiwala.}
 
@@ -782,21 +775,82 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 
 
 \section{Appendix}
-\noin (Variables listed in MOBI \verb|control.in|):-> Eventually turn it into a Table
+
+\subsection{General reference for MOPS and MOBI}
+
+\noin There are several key references for MOBI:
+\begin{itemize}
+\item \bibentry{Khatiwala19}
+\item \bibentry{Muglia17}
+\item \bibentry{Somes17}
+\item \bibentry{Kvale15}
+\item \bibentry{Yamamoto15}
+\end{itemize}
+
+\subsection{Paramters for MOBI (listed at control.in)}
+\noin - NPZD descriptions are from \url{https://github.com/OSU-CEOAS-Schmittner/UVicMOBI_fct_npzd_o2_n_fe_ca_caco3_c13_n15/blob/master/updates/npzd_src.F}
 
 \begin{itemize}
-\item \textbf{npzd}: (1) $k1n$ = half saturation constant for \ce{NO3 uptake} in [$\mu$M]?, (2) $capr$ = (3) $abio\verb|_|P$ = , (4) $alpha$ = , (5) $nup$ = quadratic mortality term of phytoplantkon in [-]?, (6) $nupt$ = linear mortality term of phytoplankton in [d-1] ?, 
-(7) $redctn$ = Redfield C:N ratio [molar], (8) $geZ$ = ?, (9) Redfield \ce{-O2}:\ce{N} [molar], (10) $kfemin$ = ?, (11) $kfemax$ = ?, 
-(12) $kfemin\verb|_|C$ = ?, (13) $kfemax\verb|_|C$ = ?, (14) $kfe\verb|_|D$ = ?, 
-(15) $zprefC$ = ?, (16) $zprefP$ = ?, (17) $dissk0$ = ?, 
-(18) $gbio$ = linear grazing rate [-]?, (19) $wd0$ = ?, (20) $nuz$ = quadratic mortality rate of zooplankton ?, (21) $jdiar$ = photosynthetic paramter?, (22) $nud0$ = ?, (23) $sgbdfac$ = ?, 
-(24) $diazntp$ = ?, (25) $nup\verb|_|D$ = , (26) $abio\verb|_|C$ = ?, (27) $k1n\verb|_|C$ = ?, (28) $alpha\verb|_|C$ = ?, 
-(29) $nuct0$ = ?, (30) $nupt0\verb|_|D$ = something with mortality, (31) $dfr$ = ?, (32) $dfrt$ = ?, (33) $dtnpzd$ = ?, 
-(34) $hdop$ = ?, (35) $nudop0$ = ?, (36) $nudon0$ = ?, (37) $eps\verb|_|assim$ = ?, 
-(38) $eps\verb|_|excr$ = something with excretion?, (39) $eps\verb|_|recy$ = something with remin?, (40) $eps\verb|_|wcdeni$ = something with water column denit?, (41) $eps\verb|_|bdeni$ something with benthic denit?, 
-(42) $epx\verb|_|nfix$ = something with nfix?, (43) $mwz$ = ?, (44) mw = ?
+\item \textbf{npzd}: Parameters related to biogeochemical NPZD model. 
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters         & Description                                                 & Unit                          & Def.      \\ \hline 
+   1   & $k1n$              & Half saturation constant for N uptake                       & [$mmol/m^3$]                  & 0.7        \\
+   2   & $capr$             & carbonate to carbon production ratio                        & [$molar$]                     & 0.055      \\
+   3   & $abio\verb|_|P$    & $a$; Maximum growth rate parameter                          & [$1/day$]                     & 0.6         \\
+   4   & $alpha$            & Initial slope P-I curve                                     & [$(W/m^2)^{-1}/day$]          & 0.16        \\
+   5   & $nup$              & Specific mortality rate (Phytoplankton)                     & [$1/day$]                     & 0.03        \\
+   6   & $nupt0$            & Fast-recycling  mortality rate (Phytoplankton)              & [$1/day$]                     & 0.001       \\
+   7   & $redctn$           & C/N Redfield ratio                                          & [$molar$]                     & 7           \\
+   8   & $geZ$              & Zooplankton growth efficiency                               & [-]                           & 0.54        \\
+   9   & $redotn$           & O2/N Redfield ratio                                         & [$molar$]                     & 11.0        \\
+   10  & $kfemin$           & Minimum half saturation constant for Fe limitation          & [$mmol Fe / m^3$]             & 0.04e-3     \\
+   11  & $kfemax$           & Maximum half saturation constant for Fe limitation          & [$mmol Fe / m^3$]             & 0.4e-3     \\
+   12  & $kfemin\verb|_|C$  & Minimum half saturation constant for Fe limitation (Cocco)  & [$mmol Fe / m^3$]             & 0.04e-3     \\
+   13  & $kfemax\verb|_|C$  & Maximum half saturation constant for Fe limitation (Cocco)  & [$mmol Fe / m^3$]             & 0.4e-3     \\
+   14  & $kfe\verb|_|D$     & Half saturation constant for Diaz Fe limitation             & [$mmol Fe / m^3$]             & 0.1e-3     \\
+   15  & $zprefC$           & Zooplankton preference for C                                & [-]                           & 0.21       \\
+   16  & $zprefP$           & Zooplankton preference for P                                & [-]                           & 0.24       \\ 
+   17  & $dissk0$           & initial dissolution rate parameter                          & [-]                           & 0.013      \\
+   18  & $gbio$             &  Maximum grazing rate                                        & [$1/day$]                     & 0.37       \\
+   19  & $wd0$              &  Sinking speed of detritus at surface                        & [$m/day$]                     & 15         \\
+   20  & $nuz$              & Quadratic mortality (zpk)                                   & [$(mmol/m^3)^{-2}day^{-1}$]   & 0.06       \\
+   21  & $jdiar$            & factor reducing the growth rate of diazotrophs              & [-]                           & 0.2        \\
+   22  & $nud0$             & detritus remineralization rate                              & [$1/day$]                     & 0.07       \\
+   23  & $sgbdfac$          & sub-grid benthic denitrification rate factor                & [-]                           & 2.0        \\
+   24  & $diazntp$          & diazotroph N:P ratio                                        & [molar]                       & 40.0       \\
+   25  & $nup\verb|_|D$     & Specific mortaility rate (Diazotrophs)                      & [$1/day$]                     & 0.0001     \\
+   26  & $abio\verb|_|C$    & $a$; Maximum growth rate parameter (Cocco)                  & [$1/day$]                     & 0.3        \\
+   27  & $k1n\verb|_|C$     & Half sat const for N uptake (Cocco)                         & [$mmol/m^3$]                  & 0.35       \\
+   28  & $alpha\verb|_|C$   & Initial slope P-I curve (Cocco)                             & [$(W/m^2)^{-1}/day$]          & 0.1        \\
+   29  & $nuct0$            & Fast-recycling mortality rate (Cocco)                       & [$1/day$]                     & 0.013      \\
+   30  & $nupt0\verb|_|D$   & Fast-recyling mortality rate (Diazotrophs)                  & [$1/day$]                     & 0.001      \\
+   31  & $dfr$              & phyt mortality refractory/semi-labile DOM fraction          & [-]                           & 0.1        \\
+   32  & $dfrt$             & phyt fast-recy refracotyr/semi-labile DOM fraction          & [-]                           & 0.08       \\
+   33  & $dtnpzd$           & time step of biology                                        & [s]                           & 14400.0    \\
+   34  & $hdop$             & DOP growth rate handicap                                    & [-]                           & 0.4       \\
+   35  & $nudop0$           & DOP remineralization rate                                   & [$1/day$]                     & 2.0e-5    \\
+   35  & $nudon0$           & DON remineralization rate                                   & [$1/day$]                     & 1.0e-5    \\
+   36  & $eps\verb|_|assim$ & Scaling factor for assimilation                             & [-]                           & 6.0       \\
+   37  & $eps\verb|_|excr$  & Scaling factor for excretion                                & [-]                           & 4.0       \\
+   38  & $eps\verb|_|recy$  & Scaling factor for recycling                                & [-]                           & 1.3       \\
+   39  & $eps\verb|_|wcdeni$& Scaling factor for water column denitrification             & [-]                           & 25.0      \\
+   40  & $eps\verb|_|bdeni0$& Scaling factor for benthic denitrification                  & [-]                           & 4.0      \\
+   41  & $eps\verb|_|nfix$  & Scaling factor for benthic N fixation                       & [-]                           & 1.0      \\
+   42  & $mwz$              & Depth where sinking below remains constant                  & [$cm$]                        & 100000    \\
+   43  & $mw$               & Sinking speed increase with depth                           & [$s^{-1}$]                    & 0.055     \\ \hline
+   \end{longtable}}
 
-\noin To find out what these mean, I may also need to refer to several papers \citep{Oschlies99, Giraud00, Schartau03, Schmittner05}. 
+\noin To find out what these paramters actually do in the model, you may need to refer to several papers :
+\begin{itemize}
+\item Original NPZD model \citep{Oschlies99, Giraud00,Schmittner05,Schmittner08}. 
+\item Zooplankton grazing formulation \citep{Keller12}
+\item Nitrogen isotope model \citep{Somes10grl,Somes10gbc,Somes13}
+\item Carbon isotope (\ce{^13C}) model \citep{Schmittner13}
+\item Prognostic \ce{CaCO3}, Coccolithophores, and balast \citep{Kvale15}
+\item Iron Model \citep{Nickelsen15}
+\item Benthic denitrification and sedimentary iron release \citep{Somes15,Muglia17}
+\end{itemize}
 
 \item \textbf{contrl}:
 \item \textbf{tsteps}:
