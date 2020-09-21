@@ -68,5 +68,5 @@ if exist('time_average_output_time.txt', 'file') == 2;
    nt=length(diagData)/nbb;
    diagData=reshape(diagData,[nbb nt]);
    Diag=matrixToGrid(diagData,Ib,boxFile,gridFile);
-   write2netcdf(['co2airseaflux.nc'],Diag,x,y,[],Tavg,'co2airseaflux','mmolC/m2/timestep')
+   write2netcdf(['co2airseaflux.nc'],Diag,x,y,[],Tavg,'co2air_to_sea_flux','mmolC/m2/timestep')
 end
