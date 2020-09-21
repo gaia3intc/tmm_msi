@@ -637,11 +637,11 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  yes? ppl YLAB pCO2 (ppm)
  yes? ppl PLOT
  yes? set w 2 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
- title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=10]*2*360/1000*(-1);go fland
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2air_to_sea_flux[l=10]*2*360/1000*(-1);go fland
  yes? set w 3 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
- title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=100]*2*360/1000*(-1);go fland
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2air_to_sea_flux[l=100]*2*360/1000*(-1);go fland
  yes? set w 4; plot/d=2/hlimits=2000:2100/vlimits=-7:0/
- title="Ocean-atmosphere CO2 flux (PgC yr-1)" co2airseaflux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
+ title="Ocean-atmosphere CO2 flux (PgC yr-1)" co2air_to_sea_flux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
 \end{lstlisting}
 (Note: Here, I'm actually using the new version of the Ferret called PyFerret and some of the commands may not be compatible with the older version that is pre-installed at MSI. To install PyFerret in your MSI directory, see Appendix and follow instructions. Also, visit \url{https://github.com/NOAA-PMEL/PyFerret/} for more information. \emph{I highly recommend PyFerret.})
 
