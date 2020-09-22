@@ -607,11 +607,11 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  35   -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
  36   -num_biogeochem_steps_per_ocean_step 8 \
  37   -separate_biogeochem_time_stepping \
- 38   -time_avg -avg_start_time_step 169199 -avg_time_steps 720 \ 
+ 38   -time_avg -avg_start_time_step 169201 -avg_time_steps 720 \ 
  # output annual avg. from year 2000 (235 years after 1765)
  39   -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,
  detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc \
- 40   -calc_diagnostics -diag_start_time_step 169199 -diag_time_steps 720 \ 
+ 40   -calc_diagnostics -diag_start_time_step 169201 -diag_time_steps 720 \ 
  # output annual mean fluxes from 2000 (235 years after 1765)
  41   -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,
  fbgc6.petsc,fbgc7.petsc \
@@ -832,7 +832,7 @@ yes?
 
 {\footnotesize
 \begin{longtable}{lllll} \hline
-  Num  & Parameters         & Description                                                 & Unit                          & Def.      \\ \hline 
+  Num  & Parameters         & Description                                                 & Unit                          & Default    \\ \hline 
    1   & $k1n$              & Half saturation constant for N uptake                       & [$mmol/m^3$]                  & 0.7        \\
    2   & $capr$             & carbonate to carbon production ratio                        & [$molar$]                     & 0.055      \\
    3   & $abio\verb|_|P$    & $a$; Maximum growth rate parameter                          & [$1/day$]                     & 0.6         \\
