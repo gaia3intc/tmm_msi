@@ -895,20 +895,102 @@ yes?
 \item \textbf{riglid}:
 \item \textbf{mixing}:
 \item \textbf{diagn}:
-\item \textbf{io}:
-\item \textbf{ictime}:
-\item \textbf{blmix}:
-\item \textbf{hlmix}:
-\item \textbf{isopyc}:
-\item \textbf{ppmix}:
-\item \textbf{smagnl}:
-\item \textbf{embm}:
-\item \textbf{carbon}:
-\item \textbf{paleo}:
-\item \textbf{ice}:
-\item \textbf{veg}:
-\item \textbf{mtlm}:
-\item \textbf{sed}:
+\item \textbf{io}: Variables related to ocean circulation module. Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/iounit.h| and \verb|$UVICESCMROOT/source/common/diag.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters  & Description                                                      & Unit                 & Default    \\ \hline 
+  1    & $expnam$    & 60 character text string for experiment name                     & ['Name']             & ' '     \\
+  2    & $iotavg$    & Control \verb|#| for tracer averages                             & [-]                  & 6       \\
+  3    & $iotmb$     & Control \verb|#| for writing meridional tracer budget            & [-]                  & 6       \\
+  4    & $iotrmb$    & Control \verb|#| for term balances for tracer and momentum       & [-]                  & 6    \\
+  5    & $iozmbc$    & Control \verb|#| for writing zonal mean surf boundary conditions & [-]                  & 6    \\
+  6    & $ioglen$    & Control \verb|#| for writing global energetics integrals         & [-]                  & 6    \\
+  7    & $iovmsf$    & Control \verb|#| for writing meridional stream function          & [-]                  & 6          \\
+  8    & $iogyre$    & Control \verb|#| for writing gyre transport                      & [-]                  & 6          \\
+  9    & $ioprxz$    & Control \verb|#| for writing x-z sections from latitudes         & [-]                  & 6          \\
+  10   & $ioext$     & Control \verb|#| for writing external mode (stream function)     & [-]                  & 6          \\
+  11   & $iodsp$     & Control \verb|#| for writing diagnostic surface pressure         & [-]                  & 6          \\
+  12   & $iotsi$     & Control \verb|#| for writing time step integrals                 & [-]                  & 6          \\
+  13   & $iotraj$    & ?                                                                & [?]                  & 6          \\
+  14   & $ioxbt$     & Control \verb|#| for writing time averaged xbt data              & [-]                  & 6          \\
+  15   & $mrot$      & Regional mask region for max/min overturning                     & [-]                  & 1          \\
+  16   & $jsot$      & Starting j index for max/min overturning                         & [-]                  & 65          \\
+  17   & $jeot$      & Ending j index for max/min overturning                           & [-]                  & 90          \\  
+  18   & $ksot$      & Starting k index for max/min overturning                         & [-]                  & 3          \\  
+  19   & $keot$      & Ending k index for max/min overturning                           & [-]                  & 17          \\ \hline 
+   \end{longtable}}
+
+
+
+
+\item \textbf{ictime}: Variables related to time management. Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/tmngr.h|, \verb|$UVICESCMROOT/source/common/tmngr.F|, and \\ \verb|$UVICESCMROOT/source/common/switch.h|. 
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $eqyear$                         & Use constant length year calendar?            & [true,false]                  & .true.     \\
+  2    & $eqmon$                          & Use 12 equal months of monlen days each?      & [true,false]                  & .false.    \\
+  3    & $refinit$                        & reference to initial condition time           & [true,false]                  & .true.     \\
+  4    & $refrun$                         & referenced to the start of each run           & [true,false]                  & .false.    \\
+  5    & $init\verb|_|time\verb|_|in$     & sets input restart to initial time            & [true,false]                  & .false.    \\
+  6    & $init\verb|_|time\verb|_|out$    & sets output restart to initial time           & [true,false]                  & .false.    \\
+  7    & $year0$                          & year of initial conditions                    & [year]                        & 0          \\
+  8    & $month0$                         & month of initial conditions                   & [month]                       & 1          \\
+  9    & $day0$                           & day of initial conditions                     & [day]                         & 1          \\
+  10   & $hour0$                          & hour of initial conditions                    & [hour]                        & 0          \\
+  11   & $min0$                           & minute of initial conditions                  & [minute]                      & 0          \\
+  12   & $sec0$                           & second of initial conditions                  & [second]                      & 0          \\ \hline 
+  
+   \end{longtable}}
+   
+   
+\item \textbf{blmix}: Variables related to Bryan-Lewis mixing model. 
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $AHV$                            & Vertical diffusion coefficient                & [-]                           & 0.6        \\ \hline
+   \end{longtable}}
+\item \textbf{hlmix}: Variables related to horizontal mixing. Default = not given.
+\item \textbf{isopyc}: Variables related to the isopycnal mixing scheme. Descriptions are found in \\ \verb|$UVICESCMROOT/source/mom/isopycnal.F|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $slmx$                           & max slope of isopycnals                       & [-]                           & 0.01       \\
+  2    & $ahisop$                         & isopycnal tracer diffusivity                  & [$\mathrm{cm^2/sec}]$         & 1.2e7      \\
+  3    & $athkdf$                         & isopycnal thickness diffusivity               & [$\mathrm{cm^2/sec}]$         & 8.e6       \\
+  4    & $del_dm$                         & transition for scaling diffusion coefficient  & [$\mathrm{cm^2/sec}]$         & 0.4e-2     \\
+  5    & $s_dm$                           & half width scaling for diffusion coefficient  & [$\mathrm{cm^2/sec}]$         & 0.1e-2     \\ \hline
+   \end{longtable}}
+
+\item \textbf{ppmix}: Variables related to the Pacanowski/Philander vertical mixing scheme. Default = not given.
+\item \textbf{smagnl}: Variables related to the Smagorinsky nonlinear horizontal viscosity. Default = not given.
+\item \textbf{embm}: Variables related to the energy balance atmosphere model.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $adiff$                          & atmospheric diffusivity?                      & [?]                           & 0.03       \\ \hline
+   \end{longtable}}
+\item \textbf{carbon}:Variables related to carbon cycle in the energy balance atmosphere model. Descriptions are found in \verb|$UVICESCMROOT/source/common/cembm.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $co2ccn$                         & atmospheric CO2 concentration                 & [ppmv]                        & 277.4412   \\
+  2    & $dc14ccn$                        & atmospheric dC14 concentration                & [permil]                      & 0.0        \\ \hline
+   \end{longtable}}
+\item \textbf{paleo}: Variable related to paleoclimatology and paleoceanography. Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/cembm.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $pyear$                          & default paleo calendar year (-/+ = BC/AD)     & [year]                        & 1765.       \\ \hline
+   \end{longtable}}
+\item \textbf{ice}:  Variables related to ice module. Default = not given.
+\item \textbf{veg}: Variables related to land/vegetation module. Default = not given.
+\item \textbf{mtlm}:Variables related to land-surface and vegetation model.Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/mtlm.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $BF$                             & Burn fraction                                 & [-]                           & 0.0     \\    \hline
+   \end{longtable}}
+\item \textbf{sed}: Variables related to sediment module. Default = not given.
 
 \end{itemize}
 

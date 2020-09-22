@@ -1,10 +1,10 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  22 SEP 2020 18:05
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  22 SEP 2020 16:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**TMM_intro_MSI.tex
-(./TMM_intro_MSI.tex
+**TMM_intro_MSI2.tex
+(./TMM_intro_MSI2.tex
 LaTeX2e <2018-12-01>
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
@@ -108,7 +108,7 @@ LaTeX Info: Redefining \cite on input line 694.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/natbib/bibentry.sty
 Package: bibentry 2007/10/30 1.5 (PWD)
 )
-(./TMM_intro_MSI.bbl)
+No file TMM_intro_MSI2.bbl.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/mathtools/mathtools.sty
 Package: mathtools 2018/01/08 v1.21 mathematical typesetting tools
 
@@ -940,13 +940,12 @@ File: t1ntxtlf.fd 2015/01/17 v1.0 font definition file for T1/ntx/tlf
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.0pt on input line 50.
 
-(./TMM_intro_MSI.aux)
-\openout1 = `TMM_intro_MSI.aux'.
+No file TMM_intro_MSI2.aux.
+\openout1 = `TMM_intro_MSI2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 50.
 LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 50
 .
-
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
@@ -1064,10 +1063,12 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 50.
 LaTeX Info: Redefining \pageref on input line 50.
 LaTeX Info: Redefining \nameref on input line 50.
-
-(./TMM_intro_MSI.out) (./TMM_intro_MSI.out)
 \@outlinefile=\write3
-\openout3 = `TMM_intro_MSI.out'.
+\openout3 = `TMM_intro_MSI2.out'.
+
+
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
 
 
 Package chemgreek Info: Activating mapping `newtx' on line 50.
@@ -1080,7 +1081,6 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 12.0pt on input line 52.
 LaTeX Font Info:    Try loading font information for OT1+ntxtlf on input line 5
 2.
-
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ot1ntxtlf.fd
 File: ot1ntxtlf.fd 2015/01/17 v1.0 font definition file for OT1/ntx/tlf
 )
@@ -1142,17 +1142,8 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 57.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 14.4pt on input line 57.
-
-(./TMM_intro_MSI.toc
-LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 1.
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.0pt on input line 1.
-LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 2.
-)
 \tf@toc=\write4
-\openout4 = `TMM_intro_MSI.toc'.
+\openout4 = `TMM_intro_MSI2.toc'.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
@@ -1163,6 +1154,8 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <12> not available
 (Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 61.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 12.0pt on input line 61.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.0pt on input line 62.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
 (Font)              scaled to size 10.0pt on input line 62.
 LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 66.
@@ -1177,14 +1170,21 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `ntxtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [1
-
-]
+LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10> not available
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 74.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 10.0pt on input line 74.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 7.0pt on input line 76.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 (Font)              scaled to size 7.0pt on input line 76.
- [2]
+ [1
+
+] [2]
+
+Package natbib Warning: Citation `Kriest15' on page 3 undefined on input line 2
+06.
+
 [3] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
@@ -1215,7 +1215,6 @@ n-verts each tracer av-er-age con-cen-tra-tion .petsc file (e.g., po4avg.petsc)
 
  []
 
-[7]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 493.
@@ -1228,7 +1227,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 493.
 
-[8]
+[7] [8]
 LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 5
 92.
  (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
@@ -1236,30 +1235,119 @@ File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
 (Font)              scaled to size 7.0pt on input line 592.
- [9]
+
 Overfull \hbox (4.6365pt too wide) in paragraph at lines 644--645
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+Package natbib Warning: Citation `Meinshausen11' on page 9 undefined on input l
+ine 651.
+
+
+Package natbib Warning: Citation `Meinshausen11' on page 9 undefined on input l
+ine 651.
+
+
+LaTeX Warning: Reference `fig:pco2RCP85' on page 9 undefined on input line 655.
+
+
+[9]
+
+LaTeX Warning: Reference `fig:airseamap' on page 10 undefined on input line 657
+.
+
+
+LaTeX Warning: Reference `fig:airseamapWoolf' on page 10 undefined on input lin
+e 659.
+
+
+Package natbib Warning: Citation `Woolf19' on page 10 undefined on input line 6
+59.
+
+
+LaTeX Warning: Reference `fig:airseamap' on page 10 undefined on input line 659
+.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[10]
+
+Package natbib Warning: Citation `Woolf19' on page 10 undefined on input line 6
+78.
+
+
+LaTeX Warning: Reference `fig:airseamap' on page 10 undefined on input line 678
+.
+
+
+Package natbib Warning: Citation `Woolf19' on page 10 undefined on input line 6
+78.
+
+
+LaTeX Warning: Reference `fig:airseamap' on page 10 undefined on input line 678
+.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: Reference `fig:airseatimeseries' on page 10 undefined on input l
+ine 682.
+
+
+LaTeX Warning: Reference `fig:airseatimeseries_cmip5' on page 10 undefined on i
+nput line 682.
+
+
+Package natbib Warning: Citation `Lovenduski16' on page 10 undefined on input l
+ine 682.
+
+
 Overfull \hbox (12.78545pt too wide) in paragraph at lines 693--694
  [][] 
  []
 
-[11]
+
+Package natbib Warning: Citation `Lovenduski16' on page 10 undefined on input l
+ine 694.
+
+
+LaTeX Warning: Reference `fig:airseatimeseries' on page 10 undefined on input l
+ine 694.
+
+
+Package natbib Warning: Citation `Lovenduski16' on page 10 undefined on input l
+ine 694.
+
+
+LaTeX Warning: Reference `fig:airseatimeseries' on page 10 undefined on input l
+ine 694.
+
+[10]
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.0pt on input line 704.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 7.3pt on input line 704.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 5.5pt on input line 704.
- [12] [13]
+ [11] [12]
+
+Package natbib Warning: Citation `Khatiwala19' undefined on input line 821.
+
+
+Package natbib Warning: Citation `Muglia17' undefined on input line 822.
+
+
+Package natbib Warning: Citation `Somes17' undefined on input line 823.
+
+
+Package natbib Warning: Citation `Kvale15' undefined on input line 824.
+
+
+Package natbib Warning: Citation `Yamamoto15' undefined on input line 825.
+
+
 Overfull \hbox (7.97206pt too wide) in paragraph at lines 831--832
 \T1/ntxtlf/m/n/10 OSU-[]CEOAS-[]Schmittner / UVicMOBI _ fct _ npzd _ o2 _ n _ f
 e _ ca _ caco3 _ c13 _ n15 / blob / master / updates / npzd _ src .
@@ -1277,62 +1365,100 @@ LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 Underfull \vbox (badness 10000) detected at line 855
  []
 
-[14]
-Underfull \vbox (badness 10000) detected at line 920
- []
+[13]
+
+Package longtable Warning: Column widths have changed
+(longtable)                in table 1 on input line 880.
 
 
-Underfull \vbox (badness 10000) detected at line 943
- []
+Package natbib Warning: Citation `Oschlies99' on page 14 undefined on input lin
+e 884.
 
 
-Underfull \vbox (badness 10000) detected at line 951
- []
+Package natbib Warning: Citation `Giraud00' on page 14 undefined on input line 
+884.
 
 
-Underfull \vbox (badness 10000) detected at line 962
- []
-
-[15]
-Underfull \vbox (badness 10000) detected at line 971
- []
+Package natbib Warning: Citation `Schmittner05' on page 14 undefined on input l
+ine 884.
 
 
-Underfull \vbox (badness 10000) detected at line 978
- []
+Package natbib Warning: Citation `Schmittner08' on page 14 undefined on input l
+ine 884.
 
 
-Underfull \vbox (badness 10000) detected at line 984
- []
+Package natbib Warning: Citation `Keller12' on page 14 undefined on input line 
+885.
 
 
-Underfull \vbox (badness 10000) detected at line 992
- []
+Package natbib Warning: Citation `Somes10grl' on page 14 undefined on input lin
+e 886.
 
-[16] (./TMM_intro_MSI.bbl
-Missing character: There is no “ in font ntx-Regular-tlf-t1!
-Missing character: There is no ” in font ntx-Regular-tlf-t1!
- [17
 
-])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1005.
- [18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1005.
- (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1005.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1005.
+Package natbib Warning: Citation `Somes10gbc' on page 14 undefined on input lin
+e 886.
 
-Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
-(rerunfilecheck)             Checksum: 15CCE05FD9C17312B47991BF8ED3121F.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1005.
+
+Package natbib Warning: Citation `Somes13' on page 14 undefined on input line 8
+86.
+
+
+Package natbib Warning: Citation `Schmittner13' on page 14 undefined on input l
+ine 887.
+
+
+Package natbib Warning: Citation `Kvale15' on page 14 undefined on input line 8
+88.
+
+
+Package natbib Warning: Citation `Nickelsen15' on page 14 undefined on input li
+ne 889.
+
+
+Package natbib Warning: Citation `Somes15' on page 14 undefined on input line 8
+90.
+
+
+Package natbib Warning: Citation `Muglia17' on page 14 undefined on input line 
+890.
+
+[14] [15]
+No file TMM_intro_MSI2.bbl.
+
+Package natbib Warning: There were undefined citations.
+
+
+Package longtable Warning: Table widths have changed. Rerun LaTeX.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 923.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 923.
+(./TMM_intro_MSI2.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 923.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 923.
+
+
+Package rerunfilecheck Warning: File `TMM_intro_MSI2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `TMM_intro_MSI2.out':
+(rerunfilecheck)             Before: 
+(rerunfilecheck)             After:  15CCE05FD9C17312B47991BF8ED3121F.
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 923.
  ) 
 Here is how much of TeX's memory you used:
- 28485 strings out of 492916
- 473295 string characters out of 6133346
- 813708 words of memory out of 5000000
- 32255 multiletter control sequences out of 15000+600000
+ 28382 strings out of 492916
+ 471688 string characters out of 6133346
+ 796576 words of memory out of 5000000
+ 32164 multiletter control sequences out of 15000+600000
  618900 words of font info for 139 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 36i,16n,77p,1049b,1953s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,16n,77p,1050b,1953s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.pdf (18 pages).
+Output written on TMM_intro_MSI2.pdf (15 pages).
