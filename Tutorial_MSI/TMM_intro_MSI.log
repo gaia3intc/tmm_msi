@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  22 SEP 2020 18:05
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  29 SEP 2020 17:41
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1229,15 +1229,15 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 493.
 
 [8]
-LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 5
-92.
+LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 6
+01.
  (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.0pt on input line 592.
+(Font)              scaled to size 7.0pt on input line 601.
  [9]
-Overfull \hbox (4.6365pt too wide) in paragraph at lines 644--645
+Overfull \hbox (4.6365pt too wide) in paragraph at lines 654--655
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
@@ -1248,91 +1248,119 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [10]
-Overfull \hbox (12.78545pt too wide) in paragraph at lines 693--694
+Overfull \hbox (12.78545pt too wide) in paragraph at lines 702--703
  [][] 
  []
 
 [11]
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 704.
+(Font)              scaled to size 10.0pt on input line 713.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.3pt on input line 704.
+(Font)              scaled to size 7.3pt on input line 713.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.5pt on input line 704.
+(Font)              scaled to size 5.5pt on input line 713.
  [12] [13]
-Overfull \hbox (7.97206pt too wide) in paragraph at lines 831--832
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.0pt on input line 842.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.0pt on input line 845.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.2pt on input line 845.
+
+Underfull \vbox (badness 10000) detected at line 850
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 861
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 872
+ []
+
+
+Overfull \hbox (5.7777pt too wide) in paragraph at lines 874--876
+[]\T1/ntxtlf/b/n/10 mixing\T1/ntxtlf/m/n/10 : Vari-ables re-lated to mix-ing. M
+ost of these de-clared in [][]\T1/ntxtt/m/n/10 $UVICESCMROOT/source/mom/UVic_ES
+CM.F
+ []
+
+LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
+(Font)              scaled to size 8.0pt on input line 883.
+
+Underfull \vbox (badness 10000) detected at line 893
+ []
+
+[14]
+Underfull \vbox (badness 10000) detected at line 918
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 947
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 967
+ []
+
+[15]
+Underfull \vbox (badness 10000) detected at line 975
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 986
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 995
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1002
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1008
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1016
+ []
+
+
+Overfull \hbox (7.97206pt too wide) in paragraph at lines 1018--1019
 \T1/ntxtlf/m/n/10 OSU-[]CEOAS-[]Schmittner / UVicMOBI _ fct _ npzd _ o2 _ n _ f
 e _ ca _ caco3 _ c13 _ n15 / blob / master / updates / npzd _ src .
  []
 
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 833.
-LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 836.
-LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.2pt on input line 836.
-LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 8.0pt on input line 838.
 
-Underfull \vbox (badness 10000) detected at line 855
+Underfull \vbox (badness 10000) detected at line 1042
  []
 
-[14]
-Underfull \vbox (badness 10000) detected at line 920
- []
-
-
-Underfull \vbox (badness 10000) detected at line 943
- []
-
-
-Underfull \vbox (badness 10000) detected at line 951
- []
-
-
-Underfull \vbox (badness 10000) detected at line 962
- []
-
-[15]
-Underfull \vbox (badness 10000) detected at line 971
- []
-
-
-Underfull \vbox (badness 10000) detected at line 978
- []
-
-
-Underfull \vbox (badness 10000) detected at line 984
- []
-
-
-Underfull \vbox (badness 10000) detected at line 992
- []
-
-[16] (./TMM_intro_MSI.bbl
+[16] [17] (./TMM_intro_MSI.bbl
 Missing character: There is no “ in font ntx-Regular-tlf-t1!
 Missing character: There is no ” in font ntx-Regular-tlf-t1!
- [17
+ [18
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1005.
- [18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1005.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1092.
+ [19]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1092.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1005.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1005.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1092.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1092.
 
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
 (rerunfilecheck)             Checksum: 15CCE05FD9C17312B47991BF8ED3121F.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1005.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1092.
  ) 
 Here is how much of TeX's memory you used:
- 28485 strings out of 492916
- 473295 string characters out of 6133346
- 813708 words of memory out of 5000000
- 32255 multiletter control sequences out of 15000+600000
+ 28500 strings out of 492916
+ 473427 string characters out of 6133346
+ 822119 words of memory out of 5000000
+ 32270 multiletter control sequences out of 15000+600000
  618900 words of font info for 139 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  36i,16n,77p,1049b,1953s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.pdf (18 pages).
+Output written on TMM_intro_MSI.pdf (19 pages).
