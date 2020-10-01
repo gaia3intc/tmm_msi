@@ -771,7 +771,83 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{lstlisting}
 \lstset{emph={}, emphstyle=\color{green},emph={[2]}, emphstyle={[2]\color{blue}}} % reset coloring
 
-\item Edit \verb|control.in|. See the appendix for what each of these options mean.
+\item Edit the C preprocessor options in \verb|MOBI_TMM_OPTION.h| as necessary. In particular, you have to define the directive \verb|O_co2_user| (i.e., by \verb|# define O_co2_ccn_user|). See Appendix ??? for what each of the options mean. 
+
+\item Build the model with:
+\begin{lstlisting}[style=DOS]
+ $ make cleanall
+ $ make tmmmobi
+\end{lstlisting}
+\noin If compiled properly, you would see an executable file \verb|tmmmobi| created along with a bunch of objective .o files. Don't worry about various warnings as long as they are not fatal. 
+
+\item Generate the names tracers being simulated (as per the options set in \verb|MOBI_TMM_OPTIONS.h| and their initial consitions. To do this, first set at the top of \verb|make_input_files_for_mobi_model_write_ic.m|. 
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mobi_model_write_ic.m
+\end{lstlisting}
+\noin Execute in MATLAB.
+\begin{lstlisting}[style=DOS]
+ >> make_input_files_for_mobi_model_write_ic
+\end{lstlisting}
+
+\item Compile and execute \verb|tmmmobiwrite|. 
+\begin{lstlisting}[style=DOS]
+ $ make tmmmobiwrite
+ $ ./tmmmobiwrite
+\end{lstlisting}
+\noin This will write out \verb|MOBI_tracer_names.txt| containing the tracer names, and a corresponding set of *.dat text files (e.g., dic.dat) containing the vertical profile of tracer concentration. These names and (horizontally uniform) profiles are used by \verb|make_input_files_for_mobi_model.m| to generate initial condition files (e.g., dicini.petsc). 
+
+\item Make a directory \verb|InitialConditionProfiles| and copy the *.dat files into it. By default \\ \verb|make_input_files_for_mobi_model.m| will look in this directory for the *.dat files.
+\begin{lstlisting}[style=DOS]
+ $ cp -p *.dat InitialConditionProfiles/
+\end{lstlisting}
+
+\noin (Note-1): There are already copies of \verb|MOBI_tracer_names.txt| and \verb|InitialConditionProfiles/| in matlab/ but S.Khawtiwala recommends you still go through this step to generate tracer names consistent with your version of \verb|UVic/MOBI| and \verb|MOBI_TMM_OPTIONS.h|.
+
+\noin (Note-2): The order of tracers in \verb|MOBI_tracer_names.txt| is the same as that in which you specify initial condition, output and time average files in the TMM-MOBI run script. You can reduce the tedium (and chances of making a mistake) of generating the correct sequence to specify in the run script by executing this on the command line: 
+\begin{lstlisting}[style=DOS]
+ $ printf "%sini.petsc," `tr '\n' ' ' < MOBI_tracer_names.txt` | sed 's/,*$//g'
+\end{lstlisting}
+(The tr replaces newlines with spaces to put all tracer names on a single line, 
+the printf appends "ini.petsc," to each tracer name, and the sed strips out the 
+final comma.)
+
+\noin (Note-3): \verb|tmmmobiwrite| uses UVic routines where initial condition profiles are set. The code for this is hardwired for the standard UVic grid with 19 levels. If you're using TMs from a different ocean model you will need to modify \verb|make_input_files_for_mobi_model.m| accordingly to specify initial conditions corresponding to your grid. You will also need to change the number of levels (km) in \verb|size.h|.
+
+\item Set the path at the top of \verb|make_input_files_for_mobi_model.m| and execute in MATLAB. (See NOTE-3 in \verb|#|9.)
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mobi_model.m
+\end{lstlisting}
+\begin{lstlisting}[style=DOS]
+ >> make_input_files_for_mobi_model
+\end{lstlisting}
+
+\item Edit the namelists in \verb|control.in| as necessary. The important variables you 
+must set are:
+
+\begin{itemize}
+\item \verb|dtts| in the \verb|&tsteps| namelist: this MUST match the time step argument to the run time option \verb|-biogeochem_deltat| in the runscript. This is the tracer advection-diffusion timestep.
+\item \verb|co2ccn| and \verb|dc14ccn| in the \verb|&carbon| namelist. 
+\item \verb|dtnpzd| in the \verb|&npzd| namelist. Set this so that \verb|dtts| is a multiple of \verb|dtnpzd|. For stability, \verb|dtnpzd| (in seconds) should not exceed 1/3rd of a day (in seconds). 
+\end{itemize}
+\noin See Appendix \ref{subsection:mobi_params} for what each of these other options mean in \verb|control.in|. 
+
+\item Edit runscript as necessary. Also see (NOTE-2 in \verb|#|9). 
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ # runscript_msi
+\end{lstlisting}
+\noin (NOTE-1): If turning on sediments and running on a smaller number of CPUs you should unlimit stacksize. Otherwise you may get a segmentation fault. Don't worry about this for MSI but you can check just in case by:
+\begin{lstlisting}[style=DOS]
+ $ ulimit -H -a
+ ...
+ stack size              (kbytes, -s) unlimited
+\end{lstlisting}
+
+\item Set the path at the top of the load*.m scripts to read in the output in Matlab.
+
+\item Display output files in .nc. Currently, all the .nc files are spewed out one by one. If I get a time, I can make a scirpt to put all the variables into a single .nc file. 
 
 \end{enumerate}
 
@@ -834,7 +910,7 @@ yes?
 \item \bibentry{Yamamoto15}
 \end{itemize}
 
-\subsection{Paramters for MOBI (listed at control.in)}
+\subsection{Paramters for MOBI (listed at control.in)} \label{subsection:mobi_params}
 
 \begin{itemize}
 

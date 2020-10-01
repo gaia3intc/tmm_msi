@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  29 SEP 2020 17:41
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  1 OCT 2020 17:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1259,108 +1259,125 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 7.3pt on input line 713.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 5.5pt on input line 713.
- [12] [13]
+ [12]
+LaTeX Font Info:    Try loading font information for T1+txtt on input line 809.
+
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/txfonts/t1txtt.fd
+File: t1txtt.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Font shape `T1/ntxtt/m/it' in size <7> not available
+(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 809.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `txtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+[13] [14]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 842.
+(Font)              scaled to size 8.0pt on input line 918.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 845.
+(Font)              scaled to size 8.0pt on input line 921.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.2pt on input line 845.
+(Font)              scaled to size 6.2pt on input line 921.
 
-Underfull \vbox (badness 10000) detected at line 850
+Underfull \vbox (badness 10000) detected at line 926
  []
 
 
-Underfull \vbox (badness 10000) detected at line 861
+Underfull \vbox (badness 10000) detected at line 937
  []
 
 
-Underfull \vbox (badness 10000) detected at line 872
+Underfull \vbox (badness 10000) detected at line 948
  []
 
-
-Overfull \hbox (5.7777pt too wide) in paragraph at lines 874--876
+[15]
+Overfull \hbox (5.7777pt too wide) in paragraph at lines 950--952
 []\T1/ntxtlf/b/n/10 mixing\T1/ntxtlf/m/n/10 : Vari-ables re-lated to mix-ing. M
 ost of these de-clared in [][]\T1/ntxtt/m/n/10 $UVICESCMROOT/source/mom/UVic_ES
 CM.F
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 8.0pt on input line 883.
+(Font)              scaled to size 8.0pt on input line 959.
 
-Underfull \vbox (badness 10000) detected at line 893
- []
-
-[14]
-Underfull \vbox (badness 10000) detected at line 918
+Underfull \vbox (badness 10000) detected at line 969
  []
 
 
-Underfull \vbox (badness 10000) detected at line 947
+Underfull \vbox (badness 10000) detected at line 994
  []
 
 
-Underfull \vbox (badness 10000) detected at line 967
+Underfull \vbox (badness 10000) detected at line 1023
  []
 
-[15]
-Underfull \vbox (badness 10000) detected at line 975
- []
-
-
-Underfull \vbox (badness 10000) detected at line 986
+[16]
+Underfull \vbox (badness 10000) detected at line 1043
  []
 
 
-Underfull \vbox (badness 10000) detected at line 995
+Underfull \vbox (badness 10000) detected at line 1051
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1002
+Underfull \vbox (badness 10000) detected at line 1062
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1008
+Underfull \vbox (badness 10000) detected at line 1071
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1016
+Underfull \vbox (badness 10000) detected at line 1078
  []
 
 
-Overfull \hbox (7.97206pt too wide) in paragraph at lines 1018--1019
+Underfull \vbox (badness 10000) detected at line 1084
+ []
+
+[17]
+Underfull \vbox (badness 10000) detected at line 1092
+ []
+
+
+Overfull \hbox (7.97206pt too wide) in paragraph at lines 1094--1095
 \T1/ntxtlf/m/n/10 OSU-[]CEOAS-[]Schmittner / UVicMOBI _ fct _ npzd _ o2 _ n _ f
 e _ ca _ caco3 _ c13 _ n15 / blob / master / updates / npzd _ src .
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1042
+Underfull \vbox (badness 10000) detected at line 1118
  []
 
-[16] [17] (./TMM_intro_MSI.bbl
+[18] [19] (./TMM_intro_MSI.bbl
 Missing character: There is no “ in font ntx-Regular-tlf-t1!
 Missing character: There is no ” in font ntx-Regular-tlf-t1!
- [18
+ [20
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1092.
- [19]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1092.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1168.
+ [21]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1168.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1092.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1092.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1168.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1168.
 
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
 (rerunfilecheck)             Checksum: 15CCE05FD9C17312B47991BF8ED3121F.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1092.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1168.
  ) 
 Here is how much of TeX's memory you used:
- 28500 strings out of 492916
- 473427 string characters out of 6133346
- 822119 words of memory out of 5000000
- 32270 multiletter control sequences out of 15000+600000
- 618900 words of font info for 139 fonts, out of 8000000 for 9000
+ 28557 strings out of 492916
+ 474233 string characters out of 6133346
+ 822191 words of memory out of 5000000
+ 32321 multiletter control sequences out of 15000+600000
+ 619282 words of font info for 140 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  36i,16n,77p,1049b,1953s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.pdf (19 pages).
+Output written on TMM_intro_MSI.pdf (21 pages).
