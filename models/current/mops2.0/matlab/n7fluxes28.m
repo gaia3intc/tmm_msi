@@ -2,7 +2,7 @@ function petsc2netcdf(netcdfFileName);
 % Function for postprocessing petsc2 diagnostic fluxes to netcdf
 % From Iris Kriest (GEOMAR), Jan-28-2020)
 % Edited by Tatsuro Tanioka (Jan-28-2020)
-% Added CO2 air-sea flux (fbgc13) Tata 200616
+% Added PAR [W m-2] at the top of every layer in the euphotic zone (fbgc8) (Oct-16-2020)
 % To run this script, type in MATLAB command line
 % > n7fluxes28('test.nc')
 
@@ -52,6 +52,7 @@ v4=readPetscBinVec('fbgc4.petsc',-1);
 v5=readPetscBinVec('fbgc5.petsc',-1);
 v6=readPetscBinVec('fbgc6.petsc',-1);
 v7=readPetscBinVec('fbgc7.petsc',-1);
+v8=readPetscBinVec('fbgc8.petsc',-1);
 
 nb=size(v1,1);
 [V1,x,y,z]=matrixToGrid(v1(Irr,:),[1:nb]',boxFile,gridFile);
@@ -61,6 +62,7 @@ nb=size(v1,1);
 [V5,x,y,z]=matrixToGrid(v5(Irr,:),[1:nb]',boxFile,gridFile);
 [V6,x,y,z]=matrixToGrid(v6(Irr,:),[1:nb]',boxFile,gridFile);
 [V7,x,y,z]=matrixToGrid(v7(Irr,:),[1:nb]',boxFile,gridFile);
+[V8,x,y,z]=matrixToGrid(v8(Irr,:),[1:nb]',boxFile,gridFile);
 
 
 [nx,ny,nz,nt]=size(V1);
@@ -138,6 +140,12 @@ if status, error(mexnc('STRERROR',status)), end
 status=mexnc('put_att_double', ncid, data_varid7, 'missing_value', nc_double', 1, NaN );
 if status, error(mexnc('STRERROR',status)), end
 
+%PAR
+[data_varid8, status] = mexnc('DEF_VAR', ncid, 'PAR', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+if status, error(mexnc('STRERROR',status)), end
+status=mexnc('put_att_double', ncid, data_varid8, 'missing_value', nc_double', 1, NaN );
+if status, error(mexnc('STRERROR',status)), end
+
 status = mexnc('PUT_ATT_TEXT', ncid, lon_varid, 'units', nc_char, length('degrees_east'), 'degrees_east');
 if status, error(mexnc('STRERROR',status)), end
 status = mexnc('PUT_ATT_TEXT', ncid, lat_varid, 'units', nc_char, length('degrees_north'), 'degrees_north');
@@ -189,6 +197,10 @@ if status, error(mexnc('STRERROR',status)), end
 
 %seventh diagnostic
 status = mexnc('put_var_double', ncid, data_varid7, V7 );
+if status, error(mexnc('STRERROR',status)), end
+
+%eighth diagnostic
+status = mexnc('put_var_double', ncid, data_varid8, V8 );
 if status, error(mexnc('STRERROR',status)), end
 
 status = mexnc('close', ncid );

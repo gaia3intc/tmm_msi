@@ -8,7 +8,7 @@ C !ROUTINE: MODEL
 C !INTERFACE: ==========================================================
       SUBROUTINE MOPS_BIOGEOCHEM_DIAGNOSTICS(Nrloc,
      &           fbgc1loc,fbgc2loc,fbgc3loc,fbgc4loc,fbgc5loc,
-     &           fbgc6loc,fbgc7loc)
+     &           fbgc6loc,fbgc7loc,fbgc8loc)
 
 C !DESCRIPTION:
 
@@ -23,7 +23,8 @@ C !INPUT PARAMETERS: ===================================================
 C     Output variables
       real*8 fbgc1loc(Nrloc),fbgc2loc(Nrloc),fbgc3loc(Nrloc),
      &       fbgc4loc(Nrloc),fbgc5loc(Nrloc),
-     &       fbgc6loc(Nrloc),fbgc7loc(Nrloc)
+     &       fbgc6loc(Nrloc),fbgc7loc(Nrloc),
+     &       fbgc8loc(Nrloc) 
 C !LOCAL VARIABLES: ====================================================
           INTEGER k
 CEOP
@@ -37,6 +38,7 @@ C     Copy diagnostic variables
         fbgc5loc(k)=f5_out(k)
         fbgc6loc(k)=f6_out(k)
         fbgc7loc(k)=f7_out(k)
+        fbgc8loc(k)=f8_out(k)
       ENDDO
 
       RETURN
