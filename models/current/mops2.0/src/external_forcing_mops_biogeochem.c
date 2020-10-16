@@ -125,12 +125,13 @@ PetscBool calcDiagnostics = PETSC_FALSE;
 StepTimer diagTimer;
 PetscBool appendDiagnostics = PETSC_FALSE;
 /* Add model specific diagnostic variables below */
-Vec fbgc1, fbgc2, fbgc3, fbgc4, fbgc5, fbgc6, fbgc7, fbgc1avg, fbgc2avg, fbgc3avg, fbgc4avg, fbgc5avg, fbgc6avg, fbgc7avg;
-PetscViewer fdfbgc1avg, fdfbgc2avg, fdfbgc3avg, fdfbgc4avg, fdfbgc5avg, fdfbgc6avg, fdfbgc7avg;
-PetscScalar *localfbgc1, *localfbgc2, *localfbgc3, *localfbgc4, *localfbgc5, *localfbgc6, *localfbgc7;
-char *diagOutFile[7];
+/* Added fbgc8 (PAR) TaTa 201016 */
+Vec fbgc1, fbgc2, fbgc3, fbgc4, fbgc5, fbgc6, fbgc7, fbgc8, fbgc1avg, fbgc2avg, fbgc3avg, fbgc4avg, fbgc5avg, fbgc6avg, fbgc7avg, fbgc8avg;
+PetscViewer fdfbgc1avg, fdfbgc2avg, fdfbgc3avg, fdfbgc4avg, fdfbgc5avg, fdfbgc6avg, fdfbgc7avg, fdfbgc8avg;
+PetscScalar *localfbgc1, *localfbgc2, *localfbgc3, *localfbgc4, *localfbgc5, *localfbgc6, *localfbgc7, *localfbgc8;
+char *diagOutFile[8];
 PetscInt idiag;
-PetscInt numDiag=7;
+PetscInt numDiag=8;
 
 #ifdef CARBON
 PetscScalar *localco2airseafluxdiag, *localco2airseafluxdiagavg;
@@ -656,6 +657,13 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
 	ierr = VecSet(fbgc7avg,zero);CHKERRQ(ierr);
 	ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,diagOutFile[6],FILE_MODE_WRITE,&fdfbgc7avg);CHKERRQ(ierr);
 
+	ierr = VecDuplicate(TR,&fbgc8);CHKERRQ(ierr);
+	ierr = VecSet(fbgc8,zero);CHKERRQ(ierr);
+	ierr = VecGetArray(fbgc8,&localfbgc8);CHKERRQ(ierr);
+	ierr = VecDuplicate(TR,&fbgc8avg);CHKERRQ(ierr);
+	ierr = VecSet(fbgc8avg,zero);CHKERRQ(ierr);
+	ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,diagOutFile[7],FILE_MODE_WRITE,&fdfbgc8avg);CHKERRQ(ierr);
+
 #ifdef CARBON
     ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localco2airseafluxdiag);CHKERRQ(ierr);  
     ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localco2airseafluxdiagavg);CHKERRQ(ierr);  
@@ -778,7 +786,7 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
 
 	if (calcDiagnostics) {  
 	  if (Iter0+iLoop>=diagTimer.startTimeStep) { /* start time averaging (note: startTimeStep is ABSOLUTE time step) */
-        mops_biogeochem_diagnostics_(&nzloc,&localfbgc1[kl],&localfbgc2[kl],&localfbgc3[kl],&localfbgc4[kl],&localfbgc5[kl],&localfbgc6[kl],&localfbgc7[kl]);
+        mops_biogeochem_diagnostics_(&nzloc,&localfbgc1[kl],&localfbgc2[kl],&localfbgc3[kl],&localfbgc4[kl],&localfbgc5[kl],&localfbgc6[kl],&localfbgc7[kl],&localfbgc8[kl]);
 #ifdef CARBON        
         localco2airseafluxdiag[ip]=localco2airseaflux;
 #endif                
@@ -899,6 +907,10 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
 	  ierr = VecSetValues(fbgc7,lSize,gIndices,localfbgc7,INSERT_VALUES);CHKERRQ(ierr);
 	  ierr = VecAssemblyBegin(fbgc7);CHKERRQ(ierr);
 	  ierr = VecAssemblyEnd(fbgc7);CHKERRQ(ierr);      
+
+	  ierr = VecSetValues(fbgc8,lSize,gIndices,localfbgc8,INSERT_VALUES);CHKERRQ(ierr);
+	  ierr = VecAssemblyBegin(fbgc8);CHKERRQ(ierr);
+	  ierr = VecAssemblyEnd(fbgc8);CHKERRQ(ierr);      
 	}  
   }
 
@@ -990,6 +1002,7 @@ PetscErrorCode writeExternalForcing(PetscScalar tc, PetscInt iLoop, PetscInt num
 		ierr = VecAXPY(fbgc5avg,one,fbgc5);CHKERRQ(ierr);
 		ierr = VecAXPY(fbgc6avg,one,fbgc6);CHKERRQ(ierr);
 		ierr = VecAXPY(fbgc7avg,one,fbgc7);CHKERRQ(ierr);
+		ierr = VecAXPY(fbgc8avg,one,fbgc8);CHKERRQ(ierr);
 
 #ifdef CARBON
         for (ip=0; ip<lNumProfiles; ip++) {
@@ -1030,6 +1043,9 @@ PetscErrorCode writeExternalForcing(PetscScalar tc, PetscInt iLoop, PetscInt num
 		ierr = VecView(fbgc7avg,fdfbgc7avg);CHKERRQ(ierr);
 		ierr = VecSet(fbgc7avg,zero); CHKERRQ(ierr);
 
+		ierr = VecScale(fbgc8avg,1.0/diagTimer.count);CHKERRQ(ierr);
+		ierr = VecView(fbgc8avg,fdfbgc8avg);CHKERRQ(ierr);
+		ierr = VecSet(fbgc8avg,zero); CHKERRQ(ierr);
 #ifdef CARBON
         for (ip=0; ip<lNumProfiles; ip++) {
           localco2airseafluxdiagavg[ip]=localco2airseafluxdiagavg[ip]/diagTimer.count;
@@ -1131,6 +1147,10 @@ PetscErrorCode finalizeExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt n
 	ierr = VecDestroy(&fbgc7);CHKERRQ(ierr);
 	ierr = VecDestroy(&fbgc7avg);CHKERRQ(ierr);
     ierr = PetscViewerDestroy(&fdfbgc7avg);CHKERRQ(ierr);	
+
+	ierr = VecDestroy(&fbgc8);CHKERRQ(ierr);
+	ierr = VecDestroy(&fbgc8avg);CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&fdfbgc8avg);CHKERRQ(ierr);	
 
   }
 

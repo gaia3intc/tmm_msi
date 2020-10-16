@@ -139,6 +139,7 @@ c      real*8 alkchem(bgc_ktotal)
         f5_out(k)=0.0d0 
         f6_out(k)=0.0d0 
         f7_out(k)=0.0d0 
+        f8_out(k)=0.0d0 
 
       ENDDO
 
@@ -237,12 +238,14 @@ C INTERNAL TIME LOOP FOR BGC
 
       parfrac=0.4d0
       ciz(1)=bgc_swr*(1.0d0-bgc_seaice)*parfrac
+      f8_out(1) = ciz(1)
 
       DO K=2,bgc_keuphloc
 
         attlim=MAX(0.0d0,bgc_tracer(k-1,iphy))
         atten = (ACkw+ACkchl*attlim)*bgc_dz(k-1)
         ciz(k)=ciz(k-1)*exp(-atten)
+        f8_out(k) = ciz(k)
 
       ENDDO
 

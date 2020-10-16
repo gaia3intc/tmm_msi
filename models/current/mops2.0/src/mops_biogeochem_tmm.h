@@ -31,7 +31,8 @@ extern void mops_biogeochem_model_(PetscInt *Nrloc, PetscScalar *DeltaT,
 
 extern void mops_biogeochem_diagnostics_(PetscInt *Nrloc, 
                                          PetscScalar localfbgc1[], PetscScalar localfbgc2[], PetscScalar localfbgc3[], 
-					 PetscScalar localfbgc4[], PetscScalar localfbgc5[], PetscScalar localfbgc6[], PetscScalar localfbgc7[]);
+					 PetscScalar localfbgc4[], PetscScalar localfbgc5[], PetscScalar localfbgc6[], 
+                                         PetscScalar localfbgc7[], PetscScalar localfbgc8[]);
 
 extern void mops_biogeochem_set_params_(PetscInt *numbgcparams, PetscScalar bgcparams[]);
 
