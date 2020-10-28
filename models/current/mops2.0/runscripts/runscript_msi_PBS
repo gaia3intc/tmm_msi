@@ -1,21 +1,17 @@
-#!/bin/bash -l        
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=24
-#SBATCH --mem-per-cpu=2gb
-#SBATCH --time=06:00:00
-#SBATCH --mail-type=ALL  
-#SBATCH --mail-user=tatsurobkkuk@gmail.com
-#SBATCH -p small
-#SBATCH --output=%j.out
+#!/bin/bash -l
+#PBS -l walltime=06:00:00,nodes=1:ppn=24,pmem=2580mb
+#PBS -m abe
+#PBS -j oe
+#PBS -M youemailxxx@umn.edu
 
-cd $SLURM_SUBMIT_DIR
+cd $PBS_O_WORKDIR 
 
 module load intel
 module load impi/intel
 module load cmake
 
 # 360 days per year with a time step of 2 steps per day:
-mpirun -np 24 ./mops \
+mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \
         -numtracers 9 \
         -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,no3ini.petsc,dicini.petsc,alkini.petsc \
         -me Ae \
