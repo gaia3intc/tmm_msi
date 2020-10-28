@@ -22,6 +22,7 @@ writePCFiles=0
 
 READ_SWRAD=0
 useCarbon=1
+useOrgCarbon=1
 useAtmModel=0
 pCO2atm_ini=280.0
 useTimeVaryingPrescribedCO2=0
@@ -39,6 +40,7 @@ co2Scenario='RCP85';
 
 if useTimeVaryingPrescribedCO2
    useAtmModel = 0
+   useVirtualFlux = 0
 end
 
 % Set path names, etc.
@@ -227,6 +229,12 @@ if useCarbon
   DIC=repmat(2251,[nb 1]); % [mmol C/m3]
   ALK=repmat(2360,[nb 1]); % [mmol eq/m3]
 end
+if useOrgCarbon
+DOC=repmat(117e-4,[nb 1]); % [mmol C/m3]
+POC=repmat(117e-4,[nb 1]); % [mmol C/m3]
+PHYC=repmat(117e-4,[nb 1]); % [mmol C/m3]
+ZOOC=repmat(117e-4,[nb 1]); % [mmol C/m3]
+end
 
 if useCoarseGrainedMatrix
 % Coarse grain initial conditions
@@ -330,6 +338,12 @@ if writeFiles
 	writePetscBin('dicini.petsc',DIC)
 	writePetscBin('alkini.petsc',ALK)
   end    
+  if useOrgCarbon
+	writePetscBin('docini.petsc',DOC)
+	writePetscBin('pocini.petsc',POC)
+	writePetscBin('phycini.petsc',PHYC)
+	writePetscBin('zoocini.petsc',ZOOC)
+  end
   if ~periodicForcing
 	write_binary('fice.bin',Ficeb,'real*8')
 	write_binary('wind.bin',windb,'real*8')	

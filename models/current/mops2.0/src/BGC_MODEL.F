@@ -126,6 +126,13 @@ c      real*8 alkchem(bgc_ktotal)
       real*8 toalk(bgc_ktotal)
 #endif
 
+! organic carbon chemistry
+#ifdef ORGCARBON
+      real*8 DIC,DOC,POC,PHYC,ZOOC
+      real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)
+      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)
+#endif
+
 ! Reset the diagnostic fluxes per ocean time step.
 
       bgc_keuphloc = INT(MIN(bgc_kloc,bgc_keuph))
@@ -189,6 +196,13 @@ C INTERNAL TIME LOOP FOR BGC
         todic(k)=0.0d0
         toalk(k)=0.0d0
 #endif
+
+#ifdef ORGCARBON
+        todoc(k)=0.0d0
+        topoc(k)=0.0d0
+        tophyc(k)=0.0d0
+        tozooc(k)=0.0d0
+#endif        
 
         runoff(k)=0.0d0 
 
@@ -548,6 +562,18 @@ c restrict anaerobic processes to regions with low oxygen concentration
      &       0.0d0
 !     &     rcp*topo4(k)*bgc_dt    
 #endif
+
+#ifdef ORGCARBON
+      bgc_tracer(k,idoc)= bgc_tracer(k,idoc)  +
+     &     rcp*todop(k)*bgc_dt    
+      bgc_tracer(k,ipoc)= bgc_tracer(k,ipoc)  +
+     &     rcp*todet(k)*bgc_dt    
+      bgc_tracer(k,iphyc)= bgc_tracer(k,iphyc)  +
+     &     rcp*tophy(k)*bgc_dt    
+      bgc_tracer(k,izooc)= bgc_tracer(k,izooc)  +
+     &     rcp*tozoo(k)*bgc_dt    
+#endif      
+
 
       ENDDO 
 

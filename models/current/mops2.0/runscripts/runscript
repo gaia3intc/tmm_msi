@@ -1,4 +1,5 @@
 ## 365 days per year with a time step of 2 steps per day:
+## 9 tracers, no organic carbon 
 #mpiexec -np 2 ./mops \
 #        -numtracers 9 \
 #        -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,no3ini.petsc,dicini.petsc,alkini.petsc \
@@ -27,16 +28,17 @@
 #        > log
 
 ## 360 days per year with a time step of 2 steps per day:
-mpiexec -np 2 ./mops \
-        -numtracers 9 \
-        -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,no3ini.petsc,dicini.petsc,alkini.petsc \
+## includes organic carbon tracers
+mpiexec -np 2 ./mops_cp \
+        -numtracers 13 \
+        -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,no3ini.petsc,dicini.petsc,alkini.petsc,docini.petsc,pocini.petsc,phycini.petsc,zoocini.petsc \
         -me Ae \
         -mi Ai \
         -t0 0.0 -iter0 0 \
         -deltat_clock 0.0013888888888889 \
         -max_steps 720 \
         -write_time_steps 720 \
-        -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,no3out.petsc,dicout.petsc,alkout.petsc \
+        -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,no3out.petsc,dicout.petsc,alkout.petsc,docout.petsc,pocout.petsc,phycout.petsc,zoocout.petsc \
         -external_forcing \
         -use_profiles \
         -nzeuph 6 \
@@ -49,7 +51,7 @@ mpiexec -np 2 ./mops \
         -num_biogeochem_steps_per_ocean_step 8 \
         -separate_biogeochem_time_stepping \
         -time_avg -avg_start_time_step 1 -avg_time_steps 60 \
-        -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc \
+        -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc,docavg.petsc,pocavg.petsc,phycavg.petsc,zoocavg.petsc \
         -calc_diagnostics -diag_start_time_step 1 -diag_time_steps 60 \
         -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,fbgc7.petsc,fbgc8.petsc \
         > log

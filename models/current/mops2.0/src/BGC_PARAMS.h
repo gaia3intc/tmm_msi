@@ -25,12 +25,20 @@ c the indices of tracers
 #ifndef CARBON
       PARAMETER(bgc_ntracer=7)
 #else
-      PARAMETER(bgc_ntracer=9)
+c      PARAMETER(bgc_ntracer=9)
       INTEGER idic,ialk
       PARAMETER(idic=8,ialk=9)
 c connect between carbon exchange and P-based BGC
       real*8 ocmip_alkfac,ocmip_silfac
       COMMON/CO2SURFACE/ocmip_alkfac,ocmip_silfac
+#endif
+
+#ifdef ORGCARBON
+      PARAMETER(bgc_ntracer=13)
+      INTEGER idoc,ipoc,iphyc,izooc
+      PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13)
+#elif CARBON
+      PARAMETER(bgc_ntracer=9)
 #endif
 
 c the tracer field

@@ -38,6 +38,7 @@ PROGRAM = mops
 RPROGRAM = rmops
 IPROGRAM = imops
 IRPROGRAM = irmops
+FNSEDPROGRAM = mops_cp
 
 SRCTMM = tmm_main.c tmm_forward_step.c tmm_write.c tmm_forcing_utils.c \
         tmm_profile_utils.c tmm_timer.c petsc_signal_utils.c petsc_matvec_utils.c
@@ -67,6 +68,7 @@ ifneq ($(strip $(OPTFILE)),)
 endif
 
 # option -DCARBON to couple carbon to the P-core
+# option -DORGCARBON to couple organic carbon to the P-core
 # option -DASCIIPARAMS to use ASCII parameter file as default
 
 # use surface supply of buried P
@@ -85,6 +87,10 @@ $(RPROGRAM): CPPFLAGS+=-DRUNOFF -DASCIIPARAMS -DCARBON
 $(IRPROGRAM): FPPFLAGS+=$(FPPFLAG)-DRUNOFF $(FPPFLAG)-DIMPRO $(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON
 $(IRPROGRAM): CPPFLAGS+=-DRUNOFF -DIMPRO -DASCIIPARAMS -DCARBON
 
+# No burial of organic matter with flexible C:P
+$(FNSEDPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON
+$(FNSEDPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON
+	
 OBJTMM = $(SRCTMM:.c=.o)
 OBJCMODEL = $(SRCMODEL:.c=.o)
 OBJFMODEL = $(SRF90MODEL:.F90=.o) $(SRFMODEL:.F=.o)
@@ -110,6 +116,9 @@ $(RPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
 
 $(IRPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(FNSEDPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
 
 cleanall:
