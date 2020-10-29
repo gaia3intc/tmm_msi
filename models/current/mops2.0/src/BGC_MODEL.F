@@ -163,8 +163,7 @@ c      real*8 alkchem(bgc_ktotal)
 
 ! Flexible C:P of Phytoplankton and Zooplankton
 #ifdef FLEXCP
-      real*8 rcp_det_ez         
-      real*8 rpc_zoo_ref,rpc_zoo,rcp_zoo
+      real*8 rcp_det_ez,rcp_zoo         
 #endif
 
 ! Reset the diagnostic fluxes per ocean time step.
@@ -319,6 +318,7 @@ C INTERNAL TIME LOOP FOR BGC
           rcp_det_ez = rcp
       endif
       ! Calculate C:P Zooplankton
+      CALL CALC_CP_ZOO(rcp_det_ez,rcp_zoo)
 #endif
 
 ! Biogeochemical fluxes in euphotic zone and their export
@@ -523,7 +523,7 @@ C INTERNAL TIME LOOP FOR BGC
         endif
 #endif
 
-! Option for instant reminerazlization of organic matter
+! Option for instant reminerazlization of detritus and POC
 ! by T.Tanioka (Nov 2020)
 #ifdef NOSED
         if(flux_l.gt.0.0d0) then
@@ -867,15 +867,15 @@ C Contants for power-law C:P calculation. See BGC_PARAMS.h and BGC_INI.F.
 C Maximum and Minimum C:P. See BGC_INI.F
 
 C OUTPUT/ARGUMENT LIST: 
-C rcp_det_ez    C:P of Phytoplankton [mmol O2/m2/d]
+C cp_phyto     C:P of Phytoplankton [molar]
 
-      SUBROUTINE CALC_CP_PHYTO(Option,PO4,DIN,Light,Temp,rcp_det_ez)
+      SUBROUTINE CALC_CP_PHYTO(Option,PO4,DIN,Light,Temp,cp_phyto)
 
       implicit none
 
 #include "BGC_PARAMS.h"
       integer Option
-      real*8 PO4,DIN,Light,Temp,rcp_det_ez
+      real*8 PO4,DIN,Light,Temp,cp_phyto
       real*8 rpc_det,rcp_det
 
 ! Calculate C:P          
@@ -897,11 +897,55 @@ C rcp_det_ez    C:P of Phytoplankton [mmol O2/m2/d]
            rcp_det = mincp
        endif
 ! Output         
-       rcp_det_ez = rcp_det
+       cp_phyto = rcp_det
 
        RETURN
 
        END
 
-       
+C ----------------------------------------------------------------------
+C CALCULATE C:P of Zooplankton      
+C CALCULATE C:P of Zooplankton      
+C CALCULATE C:P of Zooplankton      
+C CALCULATE C:P of Zooplankton      
+C CALCULATE C:P of Zooplankton      
+C by T. Tanioka (Nov 2020)
+C Reference:
+C ---  Based on homeostatic C:P parameter : Persson et al. (2010), Oikos, 119(5), 741-751      
 
+C PREPROCESSOR OPTIONS:
+C CALLED BY:	bgc_model
+
+C CALLS:	
+
+C INPUT/ARGUMENT LIST:	
+C cp_phyto      Phytoplankton C:P
+
+C INPUT/COMMON BLOCK: 
+C Homestatic parameter par_zoo_cp_hom. See BGC_PARAMS.h and BGC_INI.F.
+
+C OUTPUT/ARGUMENT LIST: 
+C cp_zoo    C:P of Zooplankton [molar]
+
+      SUBROUTINE CALC_CP_ZOO(cp_phyto,cp_zoo)
+
+      implicit none
+
+#include "BGC_PARAMS.h"
+      real*8 rpc_zoo_ref,rpc_zoo
+      real*8 cp_phyto,cp_zoo
+
+! Calculate C:P of Zooplankton by Power-law equation
+! (P:C)zoo = (P:C)ref^(1-H) * (P:C)prey^H, where H = Homeostatic parameter (0-1)
+      rpc_zoo_ref = 1.0d0/rcp                           ! Reference P:C  = Redfield P:C
+      rpc_zoo = (rpc_zoo_ref**(1.0d0-par_zoo_cp_hom))*
+     &              (1.0d0/cp_phyto)**(par_zoo_cp_hom)
+      if(rpc_zoo.gt.0.0d0) then
+          cp_zoo = 1.0d0/rpc_zoo
+      else
+          cp_zoo = rcp
+      endif
+
+      RETURN
+
+      END

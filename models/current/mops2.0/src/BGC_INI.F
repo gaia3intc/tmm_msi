@@ -194,7 +194,7 @@ c Paramters related to C:P Power-law
       par_bio_spc_t = -3.6       ! s_P:C^T
 c Parameter related to C:P of Zooplankton 
       par_zoo_cp_hom = 0.0d0      ! Homeostatic Parameter (0 ~ 1)
-c                                 ! (0 = Completely homeostatic, 1: C:P Zoo = C:P  Phyto)       
+c                                 ! (0 = Fixed at reference C:P, 1: C:P Zoo Uptake = C:P Phyto)       
 #endif     
 
       return
