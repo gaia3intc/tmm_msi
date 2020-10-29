@@ -133,8 +133,8 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 ! Added by T.Tanioka (Nov 2020)
       real*8 phymort,zoomort
       real*8 flux_old,fdiv_old
-      real*8 denit_switch
       real*8 mu
+      real*8 rcp_det_ez
 #ifdef NOSED
       real*8 remindet_inst
 #endif
@@ -163,7 +163,7 @@ c      real*8 alkchem(bgc_ktotal)
 
 ! Flexible C:P of Phytoplankton and Zooplankton
 #ifdef FLEXCP
-      real*8 rcp_det_ez,rcp_zoo         
+      real*8 rcp_phyto,rcp_zoo         
 #endif
 
 ! Reset the diagnostic fluxes per ocean time step.
@@ -313,28 +313,35 @@ C INTERNAL TIME LOOP FOR BGC
       ! Calculate C:P Phytoplankton
       if(PO4.gt.vsafe .AND. DIN.gt.vsafe) then
           CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(k),bgc_theta(k),
-     &      rcp_det_ez)
+     &      rcp_phyto)
       else
-          rcp_det_ez = rcp
+          rcp_phyto = rcp
       endif
       ! Calculate C:P Zooplankton
-      CALL CALC_CP_ZOO(rcp_det_ez,rcp_zoo)
+      CALL CALC_CP_ZOO(rcp_phyto,rcp_zoo)
+c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 #endif
+
+#ifndef FLEXCP
+      rcp_det_ez = rcp
+#else
+      rcp_det_ez = rcp_phyto
+#endif      
 
 ! Biogeochemical fluxes in euphotic zone and their export
 ! Take care of negative tracer concentrations.
 
       DO K=1,bgc_keuphloc
 
-       PO4=bgc_tracer(k,ipo4)
-       DIN=bgc_tracer(k,idin)
-       PHY=bgc_tracer(k,iphy)
-       ZOO=bgc_tracer(k,izoo)
+       PO4=MAX(bgc_tracer(k,ipo4)-alimit*alimit,0.0d0)
+       DIN=MAX(bgc_tracer(k,idin)-alimit*alimit,0.0d0)
+       PHY=MAX(bgc_tracer(k,iphy)-alimit*alimit,0.0d0)
+       ZOO=MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
        attlim=MAX(PHY,0.0d0)
 
 #ifdef ORGCARBON
-       PHYC=bgc_tracer(k,iphyc)
-       ZOOC=bgc_tracer(k,izooc)
+       PHYC=MAX(bgc_tracer(k,iphyc)-alimit*alimit*rcp,0.0d0)
+       ZOOC=MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp,0.0d0)
 #endif
 
 ! temperature dependence of phytoplankton growth (Eppley)
@@ -363,6 +370,7 @@ C INTERNAL TIME LOOP FOR BGC
 
 ! The growth rate of phytoplankton: light*nutrient limitation.
            phygrow0 = TACmuphy*PHY*MIN(flightlim,fnutlim)
+           mu = phygrow0/PHY   ! Growth rate in [1/d] 
 
 ! Make sure not to take up more nutrients than available.
            phygrow = MIN(limnut,phygrow0*bgc_dt)/bgc_dt
@@ -399,6 +407,7 @@ C INTERNAL TIME LOOP FOR BGC
          phyexu =0.0d0
          phyloss=0.0d0
          graz   =0.0d0
+         mu = 0.0d0
 
        endif !PHY
 
@@ -431,8 +440,57 @@ C INTERNAL TIME LOOP FOR BGC
 
           nfixation = 0.0d0  
 
-       endif  
-       
+       endif
+
+#ifdef ORGCARBON
+! Phyto C fluxes = Phyto fluxes * rcp_det_ez 
+        if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then   
+            phycgrow = phygrow*rcp_det_ez
+            phycexu = phyexu*rcp_det_ez
+            phycloss = phyloss*rcp_det_ez
+            grazc = graz*rcp_det_ez
+            if(grazc.gt.PHYC/bgc_dt) then    ! Grazing does not exceed PhytoC biomass
+                grazc = PHYC/bgc_dt
+                graz = grazc/rcp_det_ez
+            endif
+        else ! PHY < 0 and/or PHYC < 0
+            phycgrow = 0.0d0
+            phycexu = 0.0d0
+            phycloss = 0.0d0
+            grazc = 0.0d0
+            phygrow = 0.0d0
+            phyexu = 0.0d0
+            phyloss = 0.0d0
+            graz = 0.0d0
+        endif
+
+! Zoo C fluxes = Zoo fluxes * rcp_zoo 
+        if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
+           zoocexu = zooexu*rcp_zoo
+           zoocloss = zooloss*rcp_zoo
+! Flux adjustment for zooplankton due to consumer and predator grazing C flux mismatch
+!    - When food C:P > C:P Zoo (P-limited), cancel mismatch by adding extra C back to DOC and POC
+!    - When food C:P < C:P Zoo (C-limited), cancel mismatch by adding extra P back to DOP and POP
+           grazc0 = ACeff*(grazc - graz*rcp_zoo)  
+           zoocrel = grazc0                       
+           zooprel = ACeff*(graz - grazc/rcp_zoo) 
+           if(grazc0.le.0.0d0) then 
+              zoocrel = 0.0d0       
+           else
+              zooprel = 0.0d0       
+           endif
+        else ! ZOO < 0 and/or ZOOC < 0
+            zoocrel = 0.0d0
+            zooprel = 0.0d0
+            zoocexu = 0.0d0
+            zoocloss = 0.0d0
+            grazc = 0.0d0
+            zooexu = 0.0d0
+            zooloss = 0.0d0
+            graz = 0.0d0
+        endif
+#endif
+      
 ! Photosynthesis stored in this array for diagnostic purposes only.
         f1_out(k) = f1_out(k)+phygrow*bgc_dt
         f2_out(k) = f2_out(k)+graz*bgc_dt
@@ -449,6 +507,28 @@ C INTERNAL TIME LOOP FOR BGC
         todet(k) = (1.0d0-graztodop)*(1.0d0-ACeff)*graz
      &        + (1.0d0-graztodop)*(phyexu+zooloss)
         todin(k)=topo4(k)*rnp + nfixation
+        
+! Collect all the organic carbon terms in the euphotic zone
+#ifdef ORGCARBON
+        todic(k)=-phycgrow+zoocexu
+        todoc(k)= graztodop*(1.0d0-ACeff)*grazc
+     &           +graztodop*(phycexu+zoocloss)
+     &           +phycloss
+     &           +zoocrel*graztodop
+        tophyc(k)= phycgrow-grazc-phycexu-phycloss
+        tozooc(k)=  ACeff*grazc-zoocexu-zoocloss
+     &           -zoocrel    
+        topoc(k) = (1.0d0-graztodop)*(1.0d0-ACeff)*grazc
+     &           + (1.0d0-graztodop)*(phycexu+zoocloss)
+     &           + zoocrel*(1.0d0-graztodop) 
+        ! Adjustments on P content of zooplankton and DOP and POP 
+        if(zooprel.gt.0.0d0) then 
+!            tozoo(k) = tozoo(k) - zooprel
+            tozoo(k) = tozooc(k)/rcp_zoo
+            todop(k) = todop(k) + zooprel*graztodop
+            todet(k) = todet(k) + zooprel*(1.0d0-graztodop)
+        endif
+#endif        
 
         ENDDO !loop over euphotic zone
 
@@ -567,6 +647,13 @@ C INTERNAL TIME LOOP FOR BGC
       ZOO = MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
       DET = MAX(bgc_tracer(k,idet)-alimit*alimit,0.0d0)
 
+#ifdef FLEXCNP
+      DOC = MAX(bgc_tracer(k,idoc)-alimit*alimit*rcp,0.0d0)
+      POC = MAX(bgc_tracer(k,ipoc)-alimit*alimit*rcp,0.0d0)
+      PHYC = MAX(bgc_tracer(k,iphyc)-alimit*alimit*rcp,0.0d0)
+      ZOOC = MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp,0.0d0)
+#endif
+
 c AEROBIC DECAY
 
 c In contrast to the older (Kriest&Oschlies, 2013) version, this option:
@@ -594,47 +681,122 @@ c restrict remineralisation to amount of vaialable oxygen
       remindop = oxymm*dlambda*DOP*o2usefrac
       remindet = oxymm*detlambda*DET*o2usefrac
 
+#ifdef ORGCARBON
+         if (DOC.gt.0.0d0 .AND. DOP.gt.0.0d0) then
+             remindoc = remindop*(DOC/DOP)
+         else
+             remindoc = 0.0d0
+             remindop = 0.0d0
+         endif
+         if (POC.gt.0.0d0 .AND. DET.gt.0.0d0) then
+            reminpoc = remindet*(POC/DET)
+         else
+            reminpoc = 0.0d0
+            remindet = 0.0d0
+         endif
+#endif
+
 c ANAEROBIC DECAY INCL. ANAMMOX ETC.
 
       if(OXY.lt.36.0d0) then
-      
-      DIN = MAX(bgc_tracer(k,idin)-subdin,0.0d0)
-      dinmm = DIN*DIN/(DIN*DIN+ACkbacdin*ACkbacdin)*(1.0d0-oxymm)
+          
+          DIN = MAX(bgc_tracer(k,idin)-subdin,0.0d0)
+          dinmm = DIN*DIN/(DIN*DIN+ACkbacdin*ACkbacdin)*(1.0d0-oxymm)
 
 c NO3 required for total remineralisation in a time step will then be:
       
-      dinreq = dinmm*(dlambda*DOP+detlambda*DET)*rhno3ut*bgc_dt
+          dinreq = dinmm*(dlambda*DOP+detlambda*DET)*rhno3ut*bgc_dt
       
 c restrict remineralisation to amount of variable oxygen
       
-      if (dinreq.gt.0.0d0) then
-         dinusefrac = MIN(DIN,dinreq)/dinreq
-      else
-         dinusefrac = 0.0d0
-      endif
+         if (dinreq.gt.0.0d0) then
+             dinusefrac = MIN(DIN,dinreq)/dinreq
+         else
+             dinusefrac = 0.0d0
+         endif
 
 c restrict anaerobic processes to regions with low oxygen concentration
 
-      denitdop = dinmm*dlambda*DOP*dinusefrac
-      denitdet = dinmm*detlambda*DET*dinusefrac
+         denitdop = dinmm*dlambda*DOP*dinusefrac
+         denitdet = dinmm*detlambda*DET*dinusefrac
 
-      else
+#ifdef ORGCARBON
+         if (DOC.gt. 0.0d0 .AND. DOP.gt.0.0d0) then
+             denitdoc = denitdop*(DOC/DOP)
+         else
+             denitdoc = 0.0d0
+             denitdop = 0.0d0
+         endif
+         if (POC.gt. 0.0d0 .AND. DET.gt.0.0d0) then
+             denitpoc = denitdet*(POC/DET)
+         else
+             denitpoc = 0.0d0
+             denitdet = 0.0d0
+         endif
+#endif
+         else
       
-      denitdop = 0.0d0
-      denitdet = 0.0d0
+         denitdop = 0.0d0
+         denitdet = 0.0d0
+
+#ifdef ORGCARBON
+         denitdoc = 0.0d0
+         denitpoc = 0.0d0
+#endif
 
       endif
-      
+
+c Phytoplankton and zooplankton mortality across all layers
+c Explicity written as new variables (by T.Tanioka)      
+c In original  MOPS it was included inside SMS equaation      
+      if(PHY.gt.0.0d0) then
+          phymort = plambda*PHY
+      else
+          phymort = 0.0d0
+      endif
+
+      if(ZOO.gt.0.0d0) then
+          zoomort = zlambda*ZOO
+      else
+          zoomort = 0.0d0
+      endif
+
+#ifdef ORGCARBON
+      if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then
+         phycmort = phymort*(PHYC/PHY)
+      else  ! PHY < 0.0 and/or PHYC < 0.0 
+         phycmort = 0.0d0
+         phymort = 0.0d0
+      endif
+
+      if(ZOO.gt. 0.0d0 .AND. ZOOC.gt.0.0d0) then
+         zoocmort = zoomort*(ZOOC/ZOO)
+      else ! PHY < 0.0 and/or ZOOC < 0.0d0
+         zoocmort = 0.0d0
+         zoomort = 0.0d0
+      endif
+#endif
+
+! Putting all the terms together to calculate SMS     
       topo4(k)=topo4(k)+remindop+remindet+denitdop+denitdet
       todop(k)=todop(k)-remindop-denitdop
-     &                 +plambda*PHY
-     &                 +zlambda*ZOO     
+     &                 +phymort     
+     &                 +zoomort     
       tooxy(k)=tooxy(k)-(remindop+remindet)*ro2ut
-      tophy(k)=tophy(k)-plambda*PHY
-      tozoo(k)=tozoo(k)-zlambda*ZOO
+      tophy(k)=tophy(k)-phymort
+      tozoo(k)=tozoo(k)-zoomort
       todet(k)=todet(k)-remindet-denitdet
       todin(k)=todin(k)+(remindop+remindet)*rnp
      &                 -(denitdop+denitdet)*rhno3ut 
+#ifdef ORGCARBON
+      todic(k)=todic(k)+remindoc+reminpoc+denitdoc+denitpoc     
+      todoc(k) = todoc(k)-remindoc-denitdoc
+     &                 +phycmort
+     &                 +zoocmort      
+      tophyc(k)=tophyc(k)-phycmort     
+      tozooc(k)=tozooc(k)-zoocmort    
+      topoc(k)=topoc(k)-reminpoc-denitpoc
+#endif
 
       f4_out(k) = f4_out(k) + (remindop+remindet)*bgc_dt
       f7_out(k) = f7_out(k) + (denitdop+denitdet)*bgc_dt
@@ -691,23 +853,29 @@ c restrict anaerobic processes to regions with low oxygen concentration
      &     todin(k)*bgc_dt + rnp*runoff(k)*bgc_dt
 
 #ifdef CARBON
-      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
-     &     rcp*topo4(k)*bgc_dt    
-     &    + rcp*runoff(k)*bgc_dt
+!      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
+!     &     rcp*topo4(k)*bgc_dt    
+!     &    + rcp*runoff(k)*bgc_dt
       bgc_tracer(k,ialk)= bgc_tracer(k,ialk)  +
      &       0.0d0
 !     &     rcp*topo4(k)*bgc_dt    
 #endif
 
 #ifdef ORGCARBON
+      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
+     &     todic(k)*bgc_dt + rcp*runoff(k)*bgc_dt
       bgc_tracer(k,idoc)= bgc_tracer(k,idoc)  +
-     &     rcp*todop(k)*bgc_dt    
+     &     todoc(k)*bgc_dt    
       bgc_tracer(k,ipoc)= bgc_tracer(k,ipoc)  +
-     &    (rcp*todet(k)+fdivc(k))*bgc_dt    
+     &    (topoc(k)+fdivc(k))*bgc_dt    
       bgc_tracer(k,iphyc)= bgc_tracer(k,iphyc)  +
-     &     rcp*tophy(k)*bgc_dt    
+     &     tophyc(k)*bgc_dt    
       bgc_tracer(k,izooc)= bgc_tracer(k,izooc)  +
-     &     rcp*tozoo(k)*bgc_dt    
+     &     tozooc(k)*bgc_dt    
+#elif CARBON
+      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
+     &     rcp*topo4(k)*bgc_dt    
+     &    + rcp*runoff(k)*bgc_dt
 #endif      
 
 
@@ -868,6 +1036,7 @@ C Maximum and Minimum C:P. See BGC_INI.F
 
 C OUTPUT/ARGUMENT LIST: 
 C cp_phyto     C:P of Phytoplankton [molar]
+c #ifdef FLEXCP
 
       SUBROUTINE CALC_CP_PHYTO(Option,PO4,DIN,Light,Temp,cp_phyto)
 
@@ -902,7 +1071,7 @@ C cp_phyto     C:P of Phytoplankton [molar]
        RETURN
 
        END
-
+c #endif
 C ----------------------------------------------------------------------
 C CALCULATE C:P of Zooplankton      
 C CALCULATE C:P of Zooplankton      
@@ -926,7 +1095,7 @@ C Homestatic parameter par_zoo_cp_hom. See BGC_PARAMS.h and BGC_INI.F.
 
 C OUTPUT/ARGUMENT LIST: 
 C cp_zoo    C:P of Zooplankton [molar]
-
+c #ifdef FLEXCP
       SUBROUTINE CALC_CP_ZOO(cp_phyto,cp_zoo)
 
       implicit none
@@ -949,3 +1118,4 @@ C cp_zoo    C:P of Zooplankton [molar]
       RETURN
 
       END
+c #endif      
