@@ -6,7 +6,8 @@ C Written by Iris Kriest (modified Aug-Dec 2010).
 C Iris Kriest added sediment+river runoff option #ifdef SEDIMENT (Dec. 2010)
 C Iris Kriest skipped option #ifdef SEDIMENT and added N-cycle with N-fixation and denitrification (Apr 2011)
 C Iris Kriest modified and extended some comments (Jan 2015)
-
+C Tatsuro Tanioka added DOC, POC, Phyto C, and Zoo C (Nov 2020)
+      
 C Basis for air-sea gas exchange of O2: MIT source code, 
 C modified by Samar Khatiwala, then by Iris Kriest (Aug-Nov. 2010)
 
@@ -23,7 +24,11 @@ C CALCULATE THE P CORE (BIOGEOCHEMISTRY) AND CHANGES IN ASS. ELEMENTS (O2,C,N); 
 
 C PREPROCESSOR OPTIONS:
 C CARBON	calculate carbon (bio)geochemistry
- 
+C ORGCARBON     calculate organic carbon biogeochemistry (by T.Tanioka)      
+C NOSED         instant reminerealization of detritus reaching ocean bottom (by T.Tanioka)      
+C NOSED_POC     instant reminerealization of POC reaching ocean bottom (by T.Tanioka)      
+C FLEX_CP       Flexible C:P uptake of phytoplankton and zooplankton (by T.Tanioka)
+
 C CALLED BY:	mops_biogeochem_model
 
 C CALLS:	SR o2_surfforcing
@@ -55,8 +60,10 @@ C carbon parameters. See CAR_PARAMS.h and CAR_INI.F
 C OUTPUT/COMMON BLOCK
 C bgc_tracer(,)	updated tracer fields. See BGC_PARAMS.h
 C f*_out()	biogeochemical fluxes. See BGC_DIAGNOSTICS.h
+C                 -- f8_out (=PAR) added by T.Tanioka 
+      
 C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
-
+C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 
       SUBROUTINE BGC_MODEL(bgc_kloc,bgc_dz,     
      &            bgc_runoffvol,bgc_globalrunoff,
@@ -117,6 +124,16 @@ C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
       real*8 denitdet,denitdop
       real*8 ttemp
 
+! New coefficients related to biology
+! Added by T.Tanioka (Nov 2020)
+      real*8 phymort,zoomort
+      real*8 flux_old,fdiv_old
+      real*8 denit_switch
+      real*8 mu
+#ifdef NOSED
+      real*8 remindet_inst
+#endif
+
 ! carbon chemistry
 #ifdef CARBON      
       real*8 co2gasex,co2emp,surf_dic,surf_pho,surf_alk,surf_sil
@@ -127,10 +144,19 @@ c      real*8 alkchem(bgc_ktotal)
 #endif
 
 ! organic carbon chemistry
+! Added by T.Tanioka (Nov 2020)
 #ifdef ORGCARBON
-      real*8 DIC,DOC,POC,PHYC,ZOOC
+      real*8 DOC,POC,PHYC,ZOOC
       real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)
       real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)
+      real*8 fluxc(bgc_ktotal),fdivc(bgc_ktotal)
+      real*8 remindoc,reminpoc
+      real*8 denitdoc,denitpoc
+      real*8 phycmort,zoocmort
+      real*8 phycgrow,phycexu,phycloss,grazc,grazc0
+      real*8 zoocrel,zooprel,zoocexu,zoocloss
+      real*8 fPOC,flux_l_c,flux_u_c
+      real*8 remindet_inst_c
 #endif
 
 ! Reset the diagnostic fluxes per ocean time step.
@@ -174,6 +200,10 @@ c      real*8 alkchem(bgc_ktotal)
       
       flux_bury = 0.0d0
 
+#ifdef ORGCARBON
+      flux_bury_c = 0.0d0
+#endif
+
 C INTERNAL TIME LOOP FOR BGC
 
       do it=1,bgc_timesteps
@@ -202,6 +232,8 @@ C INTERNAL TIME LOOP FOR BGC
         topoc(k)=0.0d0
         tophyc(k)=0.0d0
         tozooc(k)=0.0d0
+        fdivc(k)=0.0d0
+        fluxc(k)=0.0d0
 #endif        
 
         runoff(k)=0.0d0 
@@ -273,6 +305,11 @@ C INTERNAL TIME LOOP FOR BGC
        PHY=bgc_tracer(k,iphy)
        ZOO=bgc_tracer(k,izoo)
        attlim=MAX(PHY,0.0d0)
+
+#ifdef ORGCARBON
+       PHYC=bgc_tracer(k,iphyc)
+       ZOOC=bgc_tracer(k,izooc)
+#endif
 
 ! temperature dependence of phytoplankton growth (Eppley)
 ! this affects the light-half-saturation constant via acik=acmuphy/alpha
@@ -392,27 +429,95 @@ C INTERNAL TIME LOOP FOR BGC
 
 ! Explicit sinking of detritus in seperate loop. 
         flux_u = 0.0d0
+#ifdef ORGCARBON
+        flux_u_c = 0.0d0
+#endif        
+        flux_old = 0.0d0
+        fdiv_old = 0.0d0
 
         do k=1,bgc_kloc-1 !loop over all layers
 
           DET = MAX(bgc_tracer(k,idet)-alimit*alimit,0.0d0)
           flux_l=wdet(k)*DET
+          flux_old = flux(k)
+          fdiv_old = fdiv(k)
           flux(k)  = flux(k)+flux_u
           fdiv(k) = fdiv(k)+(flux_u-flux_l)/bgc_dz(k)
           flux_u=flux_l          
 
-        enddo
+#ifdef ORGCARBON
+          POC = MAX(bgc_tracer(k,ipoc)-alimit*alimit*rcp,0.0d0)
+          if (POC.gt.0.0d0 .AND. DET.gt.0.0d0) then
+              flux_l_c=wdet(k)*POC
+              fluxc(k)=fluxc(k)+flux_u_c
+              fdivc(k)=fdivc(k)+(flux_u_c-flux_l_c)/bgc_dz(k)
+              flux_u_c=flux_l_c
+          else
+              flux_u=0.0d0
+              flux_u_c=0.0d0
+              flux(k)=flux_old
+              fdiv(k)=fdiv_old
+          endif
+#endif
 
+        enddo
         flux_l = 0.0d0
+#ifdef ORGCARBON
+        flux_l_c = 0.0d0
+#endif        
+        flux_old = 0.0d0
+        fdiv_old = 0.0d0
 
 ! account for burial in the sediment	
         DET = MAX(bgc_tracer(bgc_kloc,idet)-alimit*alimit,0.0d0)
         fDET = wdet(bgc_kloc)*DET
         flux_l = MIN(1.0d0,burdige_fac*fDET**burdige_exp)*fDET
         flux_bury = flux_bury + flux_l*bgc_dt
-
+#ifdef NOSED
+        flux_l = fDET
+        flux_bury = 0.0d0
+#endif
+        flux_old = flux(bgc_kloc)
+        fdiv_old = fdiv(bgc_kloc)
         flux(bgc_kloc) = flux(bgc_kloc)+flux_u
         fdiv(bgc_kloc) = fdiv(bgc_kloc)+(flux_u-flux_l)/bgc_dz(bgc_kloc)
+#ifdef ORGCARBON
+        POC = MAX(bgc_tracer(bgc_kloc,ipoc)-alimit*alimit*rcp,0.0d0)
+        if (POC.gt.0.0d0 .AND. DET.gt.0.0d0) then 
+           flux_l_c = flux_l*(POC/DET)
+           flux_bury_c = flux_bury_c + flux_l_c*bgc_dt   
+           fluxc(bgc_kloc) = fluxc(bgc_kloc)+flux_u_c
+           fdivc(bgc_kloc) = fdivc(bgc_kloc)+(flux_u_c-flux_l_c)
+     &                    /bgc_dz(bgc_kloc)
+        else                     
+           flux_l = 0.0d0
+           flux_l_c = 0.0d0
+           flux(bgc_kloc) = flux_old
+           fdiv(bgc_kloc) = fdiv_old
+        endif
+#endif
+
+! Option for instant reminerazlization of organic matter
+! by T.Tanioka (Nov 2020)
+#ifdef NOSED
+        if(flux_l.gt.0.0d0) then
+            remindet_inst = 0.0d0
+            remindet_inst = flux_l/bgc_dz(bgc_kloc)
+            topo4(bgc_kloc)=topo4(bgc_kloc)+remindet_inst 
+            todin(bgc_kloc)=todin(bgc_kloc)+remindet_inst*rnp
+            tooxy(bgc_kloc)=tooxy(bgc_kloc)-remindet_inst*ro2ut    
+            f4_out(bgc_kloc)=f4_out(bgc_kloc)+remindet_inst*bgc_dt
+        endif
+#endif
+
+#ifdef NOSED_POC
+        flux_bury_c = 0.0d0
+        if(flux_l_c.gt.0.0d0) then
+            remindet_inst_c = 0.0d0
+            remindet_inst_c = flux_l_c/bgc_dz(bgc_kloc)
+            todic(bgc_kloc)=todic(bgc_kloc)+remindet_inst_c
+        endif 
+#endif
 
 ! Store flux for diagnostic purposes.
 
@@ -526,6 +631,11 @@ c restrict anaerobic processes to regions with low oxygen concentration
       runoff(1) = bgc_globalrunoff/bgc_dz(1)
       f5_out(1) = f5_out(1) + runoff(1)*bgc_dt
 #endif
+
+#ifdef NOSED
+      runoff(1) = 0.0d0
+      f5_out(1) = 0.0d0
+#endif      
  
 ! UPDATE MASS CONCENTRATIONS 
 ! UPDATE MASS CONCENTRATIONS 
@@ -567,7 +677,7 @@ c restrict anaerobic processes to regions with low oxygen concentration
       bgc_tracer(k,idoc)= bgc_tracer(k,idoc)  +
      &     rcp*todop(k)*bgc_dt    
       bgc_tracer(k,ipoc)= bgc_tracer(k,ipoc)  +
-     &     rcp*todet(k)*bgc_dt    
+     &    (rcp*todet(k)+fdivc(k))*bgc_dt    
       bgc_tracer(k,iphyc)= bgc_tracer(k,iphyc)  +
      &     rcp*tophy(k)*bgc_dt    
       bgc_tracer(k,izooc)= bgc_tracer(k,izooc)  +

@@ -37,6 +37,10 @@ c connect between carbon exchange and P-based BGC
       PARAMETER(bgc_ntracer=13)
       INTEGER idoc,ipoc,iphyc,izooc
       PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13)
+c burial of sedimentary c
+      real*8 flux_bury_c
+      COMMON/BGCSEDPARAMS/flux_bury_c
+
 #elif CARBON
       PARAMETER(bgc_ntracer=9)
 #endif
@@ -81,3 +85,4 @@ c sediment burial and O2 sensitivity of OM degradation
 c parameters related to N-Fixation and denitrification
       real*8 tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
       COMMON/BGCNPARAMS/tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
+
