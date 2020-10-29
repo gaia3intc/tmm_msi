@@ -96,6 +96,11 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
       real*8 todin(bgc_ktotal)
       real*8 flux(bgc_ktotal)
       real*8 fdiv(bgc_ktotal)
+#ifdef ORGCARBON
+      real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)
+      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)
+      real*8 fluxc(bgc_ktotal),fdivc(bgc_ktotal)
+#endif      
 
 ! air sea gas exchange in general
       real*8 vgas660
@@ -147,9 +152,6 @@ c      real*8 alkchem(bgc_ktotal)
 ! Added by T.Tanioka (Nov 2020)
 #ifdef ORGCARBON
       real*8 DOC,POC,PHYC,ZOOC
-      real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)
-      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)
-      real*8 fluxc(bgc_ktotal),fdivc(bgc_ktotal)
       real*8 remindoc,reminpoc
       real*8 denitdoc,denitpoc
       real*8 phycmort,zoocmort
@@ -157,6 +159,12 @@ c      real*8 alkchem(bgc_ktotal)
       real*8 zoocrel,zooprel,zoocexu,zoocloss
       real*8 fPOC,flux_l_c,flux_u_c
       real*8 remindet_inst_c
+#endif
+
+! Flexible C:P of Phytoplankton and Zooplankton
+#ifdef FLEXCP
+      real*8 rcp_det_ez         
+      real*8 rpc_zoo_ref,rpc_zoo,rcp_zoo
 #endif
 
 ! Reset the diagnostic fluxes per ocean time step.
@@ -281,6 +289,7 @@ C INTERNAL TIME LOOP FOR BGC
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
 
 ! Net solar radiation at top of every layer.
+! Outputting radiation as f8_out (by T.Tanioka)      
 
       parfrac=0.4d0
       ciz(1)=bgc_swr*(1.0d0-bgc_seaice)*parfrac
@@ -294,6 +303,23 @@ C INTERNAL TIME LOOP FOR BGC
         f8_out(k) = ciz(k)
 
       ENDDO
+
+! Calculating C:P of Phytoplankton and Zooplankton at k = 1
+! Assumes C:P is constant in the euphotic zone
+! by T. Tanioka (Nov 2020)
+! cp_option hard-wired for now in BGC_INI.F
+#ifdef FLEXCP
+      PO4=bgc_tracer(1,ipo4)
+      DIN=bgc_tracer(1,idin)
+      ! Calculate C:P Phytoplankton
+      if(PO4.gt.vsafe .AND. DIN.gt.vsafe) then
+          CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(k),bgc_theta(k),
+     &      rcp_det_ez)
+      else
+          rcp_det_ez = rcp
+      endif
+      ! Calculate C:P Zooplankton
+#endif
 
 ! Biogeochemical fluxes in euphotic zone and their export
 ! Take care of negative tracer concentrations.
@@ -811,4 +837,71 @@ C o2ex		exchange rate [mmol O2/m2/d]
       RETURN
 
       END
+
+C ----------------------------------------------------------------------
+C CALCULATE C:P of Phytoplankton      
+C CALCULATE C:P of Phytoplankton      
+C CALCULATE C:P of Phytoplankton      
+C CALCULATE C:P of Phytoplankton      
+C CALCULATE C:P of Phytoplankton      
+C by T. Tanioka (Nov 2020)
+C Reference:
+C --- For power-law model: Tanioka and Matsumoto (2020), Biogeosciences, 17(11), 2939-2954      
+C --- For GM15 model: Galbraith and Martiny (2015), PNAS, 112(27), 8199-8204
+
+C PREPROCESSOR OPTIONS:
+ 
+C CALLED BY:	bgc_model
+
+C CALLS:	
+
+C INPUT/ARGUMENT LIST:	
+C Option        Option for C:P model (1:Power-law, 2:GM15, Other:Redfield)
+C PO4	        Phosphate Conc. [mmol P/m3]
+C DIN	        Nitrate Conc. [mmol P/m3]
+C Light         Irradiance [W/m2]      
+C Temp          Temperature [deg C]
+
+C INPUT/COMMON BLOCK: 
+C Contants for power-law C:P calculation. See BGC_PARAMS.h and BGC_INI.F.
+C Maximum and Minimum C:P. See BGC_INI.F
+
+C OUTPUT/ARGUMENT LIST: 
+C rcp_det_ez    C:P of Phytoplankton [mmol O2/m2/d]
+
+      SUBROUTINE CALC_CP_PHYTO(Option,PO4,DIN,Light,Temp,rcp_det_ez)
+
+      implicit none
+
+#include "BGC_PARAMS.h"
+      integer Option
+      real*8 PO4,DIN,Light,Temp,rcp_det_ez
+      real*8 rpc_det,rcp_det
+
+! Calculate C:P          
+      if(Option.eq.1) then         ! Option 1: Calculate C:P using Power-law
+           rpc_det = par_bio_pc0/1000.0*(PO4/par_bio_po4_ref)**
+     &     par_bio_spc_p*(DIN/par_bio_no3_ref)**par_bio_spc_n 
+     &       *((Temp+273.15)/(par_bio_temp_ref+273.15))**
+     &     par_bio_spc_t*(Light/par_bio_light_ref)**par_bio_spc_i
+           rcp_det = 1.0/rpc_det
+       elseif(Option.eq.2) then    ! Option 2: Calculate C:P with GM15
+           rcp_det=1000.0d0/(6.9*PO4+4)
+       else                        ! Other = Refield
+           rcp_det = rcp
+       endif
+! Imposing Maximum and Minimum C:P
+       if(rcp_det.gt.maxcp) then
+           rcp_det = maxcp
+       elseif(rcp_det.lt.mincp) then
+           rcp_det = mincp
+       endif
+! Output         
+       rcp_det_ez = rcp_det
+
+       RETURN
+
+       END
+
+       
 

@@ -178,5 +178,24 @@ C beside sinking and remineralization might play a role in the euphotic zone.
 
 #endif
 
+#ifdef FLEXCP
+      cp_option=1                ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
+      maxcp=500.0                ! Upper bound C:P
+      mincp=50.0                 ! Lower bound C:P
+c Paramters related to C:P Power-law
+      par_bio_pc0 = 1000.0d0/rcp ! Referennce P:C (permil) = Redfield P:C 
+      par_bio_po4_ref = 0.57     ! Reference PO4 (mmol m-3)
+      par_bio_no3_ref = 5.7      ! Reference NO3 (mmol m-3)
+      par_bio_temp_ref = 18.0    ! Reference Temperature (deg C)
+      par_bio_light_ref = 70.0   ! Reference irradiance (W m-2)
+      par_bio_spc_p = 0.21       ! s_P:C^PO4
+      par_bio_spc_n = 0.0        ! s_P:C^NO3
+      par_bio_spc_i = 0.0        ! s_P:C^I
+      par_bio_spc_t = -3.6       ! s_P:C^T
+c Parameter related to C:P of Zooplankton 
+      par_zoo_cp_hom = 0.0d0      ! Homeostatic Parameter (0 ~ 1)
+c                                 ! (0 = Completely homeostatic, 1: C:P Zoo = C:P  Phyto)       
+#endif     
+
       return
       end
