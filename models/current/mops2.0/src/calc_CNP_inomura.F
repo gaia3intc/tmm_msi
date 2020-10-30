@@ -7,6 +7,8 @@
 ! Tatsuro Tanioka, 200702
 ! Modified 200722 to match satellite C:N:P retrieval algorithm
 
+! Not currently activated in MOPS
+
       subroutine calc_cnp_inomura(PO4,DIN,PAR,T,mu,
      &     flightlim,fnutlim,cp_phy,cn_phy,np_phy)
       implicit none

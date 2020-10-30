@@ -148,14 +148,14 @@ c A minimum value for the degradation of PHY and DOP
         ACkbaco2 = 2.0d0  !Half sat.-constant for oxic degradation (see Kriest and Oschlies, 2015) ! original code
         ACkbacdin = 8.0d0 !Half sat.-constant for suboxic degradation (see Kriest and Oschlies, 2015) original code
 
-c      MOPS2.0 Calibrated 6 Parameters for MIT2.8 (Kriest 2020,BG,17(12);Table 1)
-c      Added by T.Tanioka (Nov 2020)       
-       detmartin = 1.39d0 ! Exponent for Martin curve
-       ro2ut = 173.7d0  ! -O2:P ratio        
-       nfix = 1.19d-3 ![mmol N/m3/d]; if PO4>0 and DIN = 0 and T=26.82 this corresponds 
-       subdin = 15.8d0 ! [mmol N/m3] no denitrification below this level
-       ACkbaco2 = 1.01d0  !Half sat.-constant for oxic degradation [mmol O2 m/3]
-       ACkbacdin = 32.0d0 !Half sat.-constant for suboxic degradation [mmol N/m3]
+c       MOPS2.0 Calibrated 6 Parameters for MIT2.8 (Kriest 2020,BG,17(12);Table 1)
+c       Added by T.Tanioka (Nov 2020)       
+        detmartin = 1.39d0 ! Exponent for Martin curve
+        ro2ut = 173.7d0  ! -O2:P ratio        
+        nfix = 1.19d-3 ![mmol N/m3/d]; if PO4>0 and DIN = 0 and T=26.82 this corresponds 
+        subdin = 15.8d0 ! [mmol N/m3] no denitrification below this level
+        ACkbaco2 = 1.01d0  !Half sat.-constant for oxic degradation [mmol O2 m/3]
+        ACkbacdin = 32.0d0 !Half sat.-constant for suboxic degradation [mmol N/m3]
 
       endif !setDefaults; anything beyond this line will be affected during optimization 
       

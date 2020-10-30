@@ -27,7 +27,7 @@ C CARBON	calculate carbon (bio)geochemistry
 C ORGCARBON     calculate organic carbon biogeochemistry (by T.Tanioka)
 C NOSED         instant reminerealization of detritus reaching ocean bottom (by T.Tanioka)      
 C NOSED_POC     instant reminerealization of POC reaching ocean bottom (by T.Tanioka)      
-C FLEX_CP       Flexible C:P uptake of phytoplankton and zooplankton (by T.Tanioka)
+C FLEXCP        Flexible C:P uptake of phytoplankton and zooplankton (by T.Tanioka)
 
 C CALLED BY:	mops_biogeochem_model
 
@@ -35,7 +35,7 @@ C CALLS:	SR o2_surfforcing
 C       	SR car_coeffs (#ifdef CARBON)
 C        	SR co2_surfforcing (#ifdef CARBON)
 C      		function phi
-C               SR CALC_CP.F (#ifdef FLEXCP)      
+C               SR CALC_CP.F (#ifdef FLEXCP) (by T.Tanioka)      
 
 C INPUT/ARGUMENT LIST:	
 C bgc_kloc	number of vertical layers for this particular profile
@@ -148,18 +148,16 @@ c      real*8 alkchem(bgc_ktotal)
 ! Added by T.Tanioka (Nov 2020)      
       real*8 DIC,DOC,POC,PHYC,ZOOC                                      
       real*8 todic(bgc_ktotal)           
-      real*8 phycgrow
-      real*8 zoocexu
       real*8 rcp_det_ez,rcp_zoo
 #endif
 
 #ifdef ORGCARBON   
 ! organic carbon with flexible CNP 
       real*8 phycmort,zoocmort 
-      real*8 phycexu,phycloss
+      real*8 phycexu,phycloss,phycgrow
       real*8 grazc,grazc0 
       real*8 zoocrel,zooprel                 
-      real*8 zoocloss
+      real*8 zoocloss,zoocexu
       real*8 remindoc,reminpoc,denitdoc,denitpoc
       real*8 fPOC,flux_l_c,flux_u_c
       real*8 remindet_inst_c   
@@ -292,6 +290,7 @@ C INTERNAL TIME LOOP FOR BGC
 
       parfrac=0.4d0
       ciz(1)=bgc_swr*(1.0d0-bgc_seaice)*parfrac
+      f8_out(1) = ciz(1)
 
       DO K=2,bgc_keuphloc
 
