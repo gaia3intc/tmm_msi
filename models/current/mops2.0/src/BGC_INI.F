@@ -8,6 +8,7 @@ C Iris Kriest skipped option #ifdef SEDIMENT and added N-cycle with N-fixation a
 C Iris Kriest modified and extended some comments (Jan 2015)
 C Iris Kriest added -DIMPRO option for use of implicit profiles, as in Kriest and Oschlies, 2011 (April 2015)
 C Iris Kriest modified slightly for use within optimization (May 2015)
+C T.Tanioka added new parameters related to flexible C:P (Nov 2020)      
 
 C Basis for air-sea gas exchange of O2: MIT source code, 
 C modified by Samar Khatiwala, then by Iris Kriest (Aug-Nov 2010)
@@ -188,26 +189,19 @@ C beside sinking and remineralization might play a role in the euphotic zone.
 #endif
 
 #ifdef FLEXCP
-      cp_option = 1 !  Which C:N:P model? (3=Inomura,2=powe-law,1=Galbraith and Martiny,0=Redfield)
-      maxcp=500.0          ! Upper bound C:P
-      mincp=50.0           ! Lower bound C:P
-      maxcn=20.0          ! Upper bound C:N
-      mincn=2.0           ! Lower bound C:N
-c Paramters related to C:N:P power-law (TaTa 200420)
-      par_bio_pc0 = 1000.0d0/117.0d0  ! Referennce P:C (permil) = Redfield P:C = 1000/117
-      par_bio_nc0 = 1000.0d0*16.0d0/117.0d0 ! Reference N:C (permil) = Redfield N:C = 1000*16/117
-      par_bio_po4_ref = 0.57 ! Reference PO4 (mmol m-3)
-      par_bio_no3_ref = 5.7 ! Reference NO3 (mmol m-3)
-      par_bio_temp_ref = 18.0 ! Reference Temperature (deg C)
-      par_bio_light_ref = 70.0 ! Reference irradiance (W m-2)
-      par_bio_spc_p = 0.21 ! s_P:C^PO4
-      par_bio_spc_n = 0.0  ! s_P:C^NO3
-      par_bio_spc_i = 0.0  ! s_P:C^I
-      par_bio_spc_t = -3.6 ! s_P:C^T
-      par_bio_snc_p = 0.0  ! s_N:C^PO4
-      par_bio_snc_n = 0.0 ! s_N:C^NO3
-      par_bio_snc_i = 0.0  ! s_N:C^I
-      par_bio_snc_t = 0.0  ! s_N:C^T
+      cp_option=1                ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
+      maxcp=500.0                ! Upper bound C:P
+      mincp=50.0                 ! Lower bound C:P
+c Paramters related to C:P Power-law
+      par_bio_pc0 = 1000.0d0/rcp ! Referennce P:C (permil) = Redfield P:C 
+      par_bio_po4_ref = 0.57     ! Reference PO4 (mmol m-3)
+      par_bio_no3_ref = 5.7      ! Reference NO3 (mmol m-3)
+      par_bio_temp_ref = 18.0    ! Reference Temperature (deg C)
+      par_bio_light_ref = 70.0   ! Reference irradiance (W m-2)
+      par_bio_spc_p = 0.21       ! s_P:C^PO4
+      par_bio_spc_n = 0.0        ! s_P:C^NO3
+      par_bio_spc_i = 0.0        ! s_P:C^I
+      par_bio_spc_t = -3.6       ! s_P:C^T
 c Parameter related to C:P of Zooplankton 
       par_zoo_cp_hom = 0.0d0 ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
 #endif   

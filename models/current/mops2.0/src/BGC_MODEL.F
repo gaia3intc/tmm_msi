@@ -148,27 +148,24 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 c      real*8 dicchem(bgc_ktotal)
 c      real*8 alkchem(bgc_ktotal)
 #endif
+
 #ifdef ORGCARBON   
 ! organic carbon with flexible CNP 
       real*8 DIC,DOC,POC,PHYC,ZOOC                                      
       real*8 reminpoc,remindoc                  
       real*8 denitdoc,denitpoc                  
-      real*8 rpc_det          ! temporary P:C of phyto calculated
-      real*8 rnc_det          ! temporary N:C of phyto calculated
-      real*8 rcp_det          ! temporary C:P of phyto calculated
-      real*8 rcn_det          ! temporary C:N of phyto calculated
-      real*8 rnp_det          ! temporary N:P of phyto calculated
-      real*8 rpc_det_ez       ! P:C of phyto set at euphtotic zone
-      real*8 rcp_phyto        ! C:P of phyto set at euphotic zone
-      real*8 phycmort,zoocmort ! added Tata 200519
-      real*8 phycgrow,phycexu,phycloss,grazc ! Tata 200710
-      real*8 rpc_zoo_ref             ! Reference P:C of Zooplankton
-      real*8 rpc_zoo,rcp_zoo         ! P:C and C:P of Zooplankton calculated from P:C of prey and homeostaic parameter
-      real*8 grazc0 ! added Tata 200715
-      real*8 zoocrel,zooprel                 ! Release of Zooplankton C and P for homeostasis Tata 200701
+      real*8 phycmort,zoocmort 
+      real*8 phycgrow,phycexu,phycloss
+      real*8 grazc,grazc0 
+      real*8 zoocrel,zooprel                 
       real*8 zoocexu,zoocloss
       real*8 fPOC,flux_l_c,flux_u_c
-      real*8 remindet_inst_c   ! added Tata 200525 for instant remin
+      real*8 remindet_inst_c   
+#endif
+
+! Flexible C:P of Phytoplankton and Zooplankton
+#ifdef FLEXCP
+      real*8 rcp_phyto,rcp_zoo
 #endif
 
 ! Reset the diagnostic fluxes per ocean time step.
@@ -184,9 +181,8 @@ c      real*8 alkchem(bgc_ktotal)
         f5_out(k)=0.0d0 
         f6_out(k)=0.0d0 
         f7_out(k)=0.0d0
-#ifdef FLEXCP       
-        f8_out(k)=ro2ut
-#endif
+        f8_out(k)=0.0d0
+
       ENDDO
 
       DO K=1,bgc_kloc
@@ -211,7 +207,7 @@ c      real*8 alkchem(bgc_ktotal)
       
       flux_bury = 0.0d0
 
-#ifdef FLEXCP
+#ifdef ORGCARBON
       flux_bury_c = 0.0d0
 #endif      
 
@@ -235,7 +231,7 @@ C INTERNAL TIME LOOP FOR BGC
 #ifdef CARBON        
         todic(k)=0.0d0
 #endif
-#ifdef FLEXCP
+#ifdef ORGCARBON
         todoc(k)=0.0d0
         topoc(k)=0.0d0
         tophyc(k)=0.0d0
@@ -290,6 +286,7 @@ C INTERNAL TIME LOOP FOR BGC
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
 
 ! Net solar radiation at top of every layer.
+! Outputting radiation as f8_out (by T.Tanioka)      
 
       parfrac=0.4d0
       ciz(1)=bgc_swr*(1.0d0-bgc_seaice)*parfrac
@@ -299,6 +296,7 @@ C INTERNAL TIME LOOP FOR BGC
         attlim=MAX(0.0d0,bgc_tracer(k-1,iphy))
         atten = (ACkw+ACkchl*attlim)*bgc_dz(k-1)
         ciz(k)=ciz(k-1)*exp(-atten)
+        f8_out(k) = ciz(k)
 
       ENDDO
 
@@ -327,34 +325,25 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
       rcp_det_ez = rcp_phyto
 #endif      
 
-
 ! Biogeochemical fluxes in euphotic zone and their export
 ! Take care of negative tracer concentrations.
 
       DO K=1,bgc_keuphloc
 
-!       PO4=bgc_tracer(k,ipo4)
-!       DIN=bgc_tracer(k,idin)
-!       PHY=bgc_tracer(k,iphy)
-!       ZOO=bgc_tracer(k,izoo)
        PO4=MAX(bgc_tracer(k,ipo4)-alimit*alimit,0.0d0)
        DIN=MAX(bgc_tracer(k,idin)-alimit*alimit,0.0d0)
        PHY=MAX(bgc_tracer(k,iphy)-alimit*alimit,0.0d0)
        ZOO=MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
+       attlim=MAX(PHY,0.0d0)
 
 #ifdef FLEXCP       
-!       DOC=bgc_tracer(k,idoc)
-!       POC=bgc_tracer(k,ipoc)
-!       DIC=bgc_tracer(k,idic)
-!       PHYC=bgc_tracer(k,iphyc)
-!       ZOOC=bgc_tracer(k,izooc)
        DOC=MAX(bgc_tracer(k,idoc)-alimit*alimit*117.0d0,0.0d0)
        POC=MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
        DIC=MAX(bgc_tracer(k,idic)-alimit*alimit*117.0d0,0.0d0)
        PHYC=MAX(bgc_tracer(k,iphyc)-alimit*alimit*117.0d0,0.0d0)
        ZOOC=MAX(bgc_tracer(k,izooc)-alimit*alimit*117.0d0,0.0d0)
 #endif       
-       attlim=MAX(PHY,0.0d0)
+
 ! temperature dependence of phytoplankton growth (Eppley)
 ! this affects the light-half-saturation constant via acik=acmuphy/alpha
        tempscale = EXP(bgc_theta(k)/TempB)
@@ -481,9 +470,9 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 
 ! Putting all the Zooplankton C fluxes = P fluxes * C:P ZOO
         if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
-           ! Flux adjustment for zooplankton due to consumer and predator grazing C flux mismatch
-           ! When food C:P > C:P Zoo, cancel mismatch by adding extra C back to DOC and POC pool as excretion
-           ! When food C:P < C:P Zoo,  Zooplankton is C-limited, cancel mimatch by adding extra P back to DOP and POP  as excretion!
+! Flux adjustment for zooplankton due to consumer and predator grazing C flux mismatch
+!    - When food C:P > C:P Zoo (P-limited), cancel mismatch by adding extra C back to DOC and POC
+!    - When food C:P < C:P Zoo (C-limited), cancel mismatch by adding extra P back to DOP and POP
            grazc0 = ACeff*(grazc - graz*rcp_zoo)  ! Calculate C-demand deficit
            zoocrel = grazc0                       ! Excess C is released to DOC pool when food C:P > C:P required
            zooprel = ACeff*(graz - grazc/rcp_zoo) ! Excess P is released to DOP pool when food C:P < C:P required
@@ -506,8 +495,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
             graz = 0.0d0
         endif
 #endif       
-! Store -O2:P, -NO3:P, C:P_phyto, and C:P_zoo for diagnostic purposes (TaTa 200415)
-        f8_out(k) = ro2ut
+
 !---------------------------------------------------------------------------   
 
 ! Photosynthesis stored in this array for diagnostic purposes only.
@@ -545,7 +533,6 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
         ! Adjustments on P content of zooplankton and DOP and POP 
         if(zooprel.gt.0.0d0) then 
            tozoo(k) = tozoo(k) - zooprel
-!           tozoo(k) = tozooc(k)/rcp_zoo
            todop(k) = todop(k) + zooprel*graztodop
            todet(k) = todet(k) + zooprel*(1.0d0-graztodop)
         endif

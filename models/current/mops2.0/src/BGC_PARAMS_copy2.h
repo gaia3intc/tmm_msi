@@ -22,29 +22,30 @@ c the indices of tracers
      &          idet=6,    !Detritus-P
      &          idin=7)    !DIN
 
-#ifndef CARBON
+#ifdef NOCARBON
       PARAMETER(bgc_ntracer=7)
-#else
-c      PARAMETER(bgc_ntracer=9)
-      INTEGER idic,ialk
-      PARAMETER(idic=8,ialk=9)
+#endif    
+#ifdef CARBON
 c connect between carbon exchange and P-based BGC
       real*8 ocmip_alkfac,ocmip_silfac
       COMMON/CO2SURFACE/ocmip_alkfac,ocmip_silfac
 #endif
-
-#ifdef ORGCARBON
+#ifdef CARBON_FIXCNP
+      PARAMETER(bgc_ntracer=9)
+      INTEGER idic,ialk
+      PARAMETER(idic=8,ialk=9)    
+#endif      
+#ifdef FLEXCP
       PARAMETER(bgc_ntracer=13)
-      INTEGER idoc,ipoc,iphyc,izooc
-      PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13)
-c burial of sedimentary c
+      INTEGER idic,ialk
+      INTEGER idoc,ipoc
+      INTEGER iphyc,izooc
+      PARAMETER(idic=8,ialk=9,idoc=10,ipoc=11,iphyc=12,izooc=13)    
+c burial of sedimentary C (Tata 200610)
       real*8 flux_bury_c
       COMMON/BGCSEDPARAMS/flux_bury_c
-
-#elif CARBON
-      PARAMETER(bgc_ntracer=9)
-#endif
-
+#endif      
+    
 c the tracer field
       REAL*8 bgc_tracer
 
@@ -86,18 +87,19 @@ c parameters related to N-Fixation and denitrification
       real*8 tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
       COMMON/BGCNPARAMS/tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
 
-#ifdef FLEXCP 
-c parameters related C:P power-law
+#ifdef FLEXCP
+c parameters related to C:N:P power-law
       integer cp_option
-      real*8 par_bio_pc0,par_bio_po4_ref,par_bio_no3_ref,
+      real*8 par_bio_pc0,par_bio_nc0,par_bio_po4_ref,par_bio_no3_ref,
      &       par_bio_temp_ref,par_bio_light_ref,
      &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
-     &       maxcp,mincp,
+     &       par_bio_snc_p,par_bio_snc_n,par_bio_snc_i,par_bio_snc_t,
+     &       maxcp,mincp,maxnp,minnp,maxcn,mincn,
      &       par_zoo_cp_hom
-      COMMON/BGCPLPARAMS/par_bio_pc0,par_bio_po4_ref,par_bio_no3_ref,
-     &       par_bio_temp_ref,par_bio_light_ref,
+      COMMON/BGCPLPARAMS/par_bio_pc0,par_bio_nc0,par_bio_po4_ref,
+     &       par_bio_no3_ref,par_bio_temp_ref,par_bio_light_ref,
      &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
-     &       maxcp,mincp,
-     &       par_zoo_cp_hom,
+     &       par_bio_snc_p,par_bio_snc_n,par_bio_snc_i,par_bio_snc_t,
+     &       maxcp,mincp,maxnp,minnp,maxcn,mincn,par_zoo_cp_hom,
      &       cp_option
 #endif
