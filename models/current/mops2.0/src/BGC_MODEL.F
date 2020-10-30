@@ -144,7 +144,9 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 ! carbon chemistry
 #ifdef CARBON      
       real*8 co2gasex,co2emp,surf_dic,surf_pho,surf_alk,surf_sil
-      real*8 todic(bgc_ktotal)                  
+      real*8 todic(bgc_ktotal)           
+      real*8 phycgrow
+      real*8 zoocexu
 c      real*8 dicchem(bgc_ktotal)
 c      real*8 alkchem(bgc_ktotal)
 #endif
@@ -155,10 +157,10 @@ c      real*8 alkchem(bgc_ktotal)
       real*8 reminpoc,remindoc                  
       real*8 denitdoc,denitpoc                  
       real*8 phycmort,zoocmort 
-      real*8 phycgrow,phycexu,phycloss
+      real*8 phycexu,phycloss
       real*8 grazc,grazc0 
       real*8 zoocrel,zooprel                 
-      real*8 zoocexu,zoocloss
+      real*8 zoocloss
       real*8 fPOC,flux_l_c,flux_u_c
       real*8 remindet_inst_c   
 #endif
@@ -359,9 +361,9 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
        glbygd = 2.0d0*ciz(k)/(TACik*bgc_tau)   ! 2 * G_L/G_D of EG97
        flightlim = bgc_tau/atten*(phi(glbygd)-phi(glbygd*exp(-atten)))
 
-       if(PHY.gt.0.0d0) then                       ! Original code
+       if(PHY.gt.0.0d0) then                      
 
-         limnut = MIN(PO4,DIN/rnp)            ! original code, note optimal N:P is still Redfield (TaTa 200416)
+         limnut = MIN(PO4,DIN/rnp) 
 
          if(limnut.gt.vsafe) then
 
@@ -387,7 +389,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 ! Other losses of phytoplankton       
          phyloss = AComni * PHY * PHY
 
-         if(ZOO.gt.0.0d0) then                       ! Original code
+         if(ZOO.gt.0.0d0) then                     
 
 ! Grazing of zooplankton, Holling III
            graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
@@ -406,11 +408,11 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
          phyexu =0.0d0
          phyloss=0.0d0
          graz   =0.0d0
-         mu = 0.0d0 ! Tata 200715
+         mu = 0.0d0 
 
        endif !PHY
       
-       if(ZOO.gt.0.0d0) then                      ! Original code
+       if(ZOO.gt.0.0d0) then                  
 
 ! Zooplankton exudation
           zooexu = AClambdaz * ZOO
@@ -439,25 +441,26 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 
           nfixation = 0.0d0  
 
-       endif  
+       endif 
 
-!---------------------------------------------------------------------------        
-#ifdef FLEXCP
+! Phytoplankton C fluxes = P fluxes * rcp_det_ez
+! Zooplankton C fluxes = P fluxes * C:P ZOO
+#ifdef CARBON
+! Calculate fluxes related to DIC first       
+       phycgrow = phygrow*rcp_det_ez
+       zoocexu = zooexu*rcp_zoo
+#endif 
 
-! Putting all the Phytoplankton C fluxes = P fluxes * C:P
-! Tata 200701
-! Tata modified 200921, 201016
-
-        if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then   
-           phycgrow = phygrow*rcp_det_ez
+#ifdef ORGCARBON
+       if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then   
            phycexu = phyexu*rcp_det_ez
            phycloss = phyloss*rcp_det_ez
            grazc = graz*rcp_det_ez
-           if(grazc.gt.PHYC/bgc_dt) then    ! Check that Grazing of C does not exceed Phytoplankton C biomass
+           if(grazc.gt.PHYC/bgc_dt) then    
                grazc = PHYC/bgc_dt
                graz = grazc/rcp_det_ez
            endif
-        else ! PHY < 0 and/or PHYC < 0
+       else ! PHY < 0 and/or PHYC < 0
            phycgrow = 0.0d0
            phycexu = 0.0d0
            phycloss = 0.0d0
@@ -466,25 +469,22 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
            phyexu = 0.0d0
            phyloss = 0.0d0
            graz = 0.0d0
-        endif
+       endif
 
-! Putting all the Zooplankton C fluxes = P fluxes * C:P ZOO
-        if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
+       if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
 ! Flux adjustment for zooplankton due to consumer and predator grazing C flux mismatch
 !    - When food C:P > C:P Zoo (P-limited), cancel mismatch by adding extra C back to DOC and POC
 !    - When food C:P < C:P Zoo (C-limited), cancel mismatch by adding extra P back to DOP and POP
            grazc0 = ACeff*(grazc - graz*rcp_zoo)  ! Calculate C-demand deficit
-           zoocrel = grazc0                       ! Excess C is released to DOC pool when food C:P > C:P required
-           zooprel = ACeff*(graz - grazc/rcp_zoo) ! Excess P is released to DOP pool when food C:P < C:P required
+           zoocrel = grazc0                       ! Excess C is released to DOC pool 
+           zooprel = ACeff*(graz - grazc/rcp_zoo) ! Excess P is released to DOP pool 
            if(grazc0.le.0.0d0) then 
               zoocrel = 0.0d0       ! C-limited, No excess DOC release
            else
               zooprel = 0.0d0       ! P-limited, No excess DOP release
            endif
-
-           zoocexu = zooexu*rcp_zoo
            zoocloss = zooloss*rcp_zoo
-        else ! ZOO < 0 and/or ZOOC < 0
+       else ! ZOO < 0 and/or ZOOC < 0
             zoocrel = 0.0d0
             zooprel = 0.0d0
             zoocexu = 0.0d0
@@ -493,10 +493,8 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
             zooexu = 0.0d0
             zooloss = 0.0d0
             graz = 0.0d0
-        endif
+       endif
 #endif       
-
-!---------------------------------------------------------------------------   
 
 ! Photosynthesis stored in this array for diagnostic purposes only.
         f1_out(k) = f1_out(k)+phygrow*bgc_dt
@@ -515,11 +513,13 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
         todet(k) = (1.0d0-graztodop)*(1.0d0-ACeff)*graz 
      &        + (1.0d0-graztodop)*(phyexu+zooloss)
 
+! Collect all the carbon terms in the euphotic zone
 
-#ifdef FLEXCP
-
-! Collect all the organic carbon terms in the euphotic zone
+#ifdef CARBON
         todic(k)=-phycgrow+zoocexu
+#endif        
+
+#ifdef ORGCARBON
         todoc(k)= graztodop*(1.0d0-ACeff)*grazc
      &           +graztodop*(phycexu+zoocloss)
      &           +phycloss
@@ -536,10 +536,9 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
            todop(k) = todop(k) + zooprel*graztodop
            todet(k) = todet(k) + zooprel*(1.0d0-graztodop)
         endif
-        
 #endif        
 
-        ENDDO !loop over euphotic zone
+      ENDDO !loop over euphotic zone
 
 
 ! Explicit sinking of detritus in seperate loop. 
