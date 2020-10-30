@@ -188,7 +188,7 @@ C beside sinking and remineralization might play a role in the euphotic zone.
 #endif
 
 #ifdef FLEXCP
-      use_pl = 2 !  Which C:N:P model? (3=Inomura,2=powe-law,1=Galbraith and Martiny,0=Redfield)
+      cp_option = 1 !  Which C:N:P model? (3=Inomura,2=powe-law,1=Galbraith and Martiny,0=Redfield)
       maxcp=500.0          ! Upper bound C:P
       mincp=50.0           ! Lower bound C:P
       maxcn=20.0          ! Upper bound C:N
@@ -209,10 +209,8 @@ c Paramters related to C:N:P power-law (TaTa 200420)
       par_bio_snc_i = 0.0  ! s_N:C^I
       par_bio_snc_t = 0.0  ! s_N:C^T
 c Parameter related to C:P of Zooplankton 
-      par_zoo_cp_hom = 1.0d0 ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
-
+      par_zoo_cp_hom = 0.0d0 ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
 #endif   
-
 
       return
       end

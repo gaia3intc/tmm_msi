@@ -89,7 +89,7 @@ c parameters related to N-Fixation and denitrification
 
 #ifdef FLEXCP
 c parameters related to C:N:P power-law
-      integer use_pl
+      integer cp_option
       real*8 par_bio_pc0,par_bio_nc0,par_bio_po4_ref,par_bio_no3_ref,
      &       par_bio_temp_ref,par_bio_light_ref,
      &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
@@ -100,5 +100,6 @@ c parameters related to C:N:P power-law
      &       par_bio_no3_ref,par_bio_temp_ref,par_bio_light_ref,
      &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
      &       par_bio_snc_p,par_bio_snc_n,par_bio_snc_i,par_bio_snc_t,
-     &       maxcp,mincp,maxnp,minnp,maxcn,mincn,par_zoo_cp_hom,use_pl
+     &       maxcp,mincp,maxnp,minnp,maxcn,mincn,par_zoo_cp_hom,
+     &       cp_option
 #endif

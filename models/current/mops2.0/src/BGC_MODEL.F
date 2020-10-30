@@ -6,6 +6,7 @@ C Written by Iris Kriest (modified Aug-Dec 2010).
 C Iris Kriest added sediment+river runoff option #ifdef SEDIMENT (Dec. 2010)
 C Iris Kriest skipped option #ifdef SEDIMENT and added N-cycle with N-fixation and denitrification (Apr 2011)
 C Iris Kriest modified and extended some comments (Jan 2015)
+C Tatsuro Tanioka added DOC, POC, Phyto C, and Zoo C (Nov 2020)
 
 C Basis for air-sea gas exchange of O2: MIT source code, 
 C modified by Samar Khatiwala, then by Iris Kriest (Aug-Nov. 2010)
@@ -23,13 +24,18 @@ C CALCULATE THE P CORE (BIOGEOCHEMISTRY) AND CHANGES IN ASS. ELEMENTS (O2,C,N); 
 
 C PREPROCESSOR OPTIONS:
 C CARBON	calculate carbon (bio)geochemistry
- 
+C ORGCARBON     calculate organic carbon biogeochemistry (by T.Tanioka)
+C NOSED         instant reminerealization of detritus reaching ocean bottom (by T.Tanioka)      
+C NOSED_POC     instant reminerealization of POC reaching ocean bottom (by T.Tanioka)      
+C FLEX_CP       Flexible C:P uptake of phytoplankton and zooplankton (by T.Tanioka)
+
 C CALLED BY:	mops_biogeochem_model
 
 C CALLS:	SR o2_surfforcing
 C       	SR car_coeffs (#ifdef CARBON)
 C        	SR co2_surfforcing (#ifdef CARBON)
 C      		function phi
+C               SR CALC_CP.F (#ifdef FLEXCP)      
 
 C INPUT/ARGUMENT LIST:	
 C bgc_kloc	number of vertical layers for this particular profile
@@ -89,10 +95,13 @@ C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
       real*8 todin(bgc_ktotal)
       real*8 flux(bgc_ktotal)
       real*8 fdiv(bgc_ktotal)
-#ifdef FLEXCP     
+
+#ifdef ORGCARBON     
 ! Added Tata 200608      
       real*8 fluxc(bgc_ktotal)
       real*8 fdivc(bgc_ktotal)
+      real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)                    ! Added Tata 200606
+      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)                  ! Added Tata 200606
 #endif
 ! air sea gas exchange in general
       real*8 vgas660
@@ -148,9 +157,7 @@ c      real*8 alkchem(bgc_ktotal)
       real*8 rcn_det          ! temporary C:N of phyto calculated
       real*8 rnp_det          ! temporary N:P of phyto calculated
       real*8 rpc_det_ez       ! P:C of phyto set at euphtotic zone
-      real*8 rcp_det_ez       ! C:P of phyto set at euphotic zone
-      real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)                    ! Added Tata 200606
-      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)                  ! Added Tata 200606
+      real*8 rcp_phyto,rcp_det_ez       ! C:P of phyto set at euphotic zone
       real*8 phycmort,zoocmort ! added Tata 200519
       real*8 phycgrow,phycexu,phycloss,grazc ! Tata 200710
       real*8 rpc_zoo_ref             ! Reference P:C of Zooplankton
@@ -306,52 +313,31 @@ C INTERNAL TIME LOOP FOR BGC
 
       ENDDO
 
-#ifdef FLEXCP       
-! Calculating C:P at k = 1, assuming C:P is constant throughout the water column
+! Calculating C:P of Phytoplankton and Zooplankton at k = 1
+! Assumes C:P is constant in the euphotic zone
+! by T. Tanioka (Nov 2020)
+! cp_option hard-wired for now in BGC_INI.F
+#ifdef FLEXCP
       PO4=bgc_tracer(1,ipo4)
       DIN=bgc_tracer(1,idin)
-
-! Switch in BGC_INI.F (use_pl = 3: Inomura, use_pl = 2: Power-law, 1: Galbraith and Martiny, otherwise: Redfield)
-        if((PO4.gt.vsafe) .AND. (DIN.gt.vsafe)) then
-         if(use_pl.eq.3) then ! Option 3: Calculate C:P using Inomura
-!         CALL         calc_CNP_inomura(PO4,DIN,ciz(k),bgc_theta(k),mu,
-!     &     flightlim,fnutlim,rcp_det, rcn_det,rnp_det)   
-!         print*,'C:P,C:N,N:P=',rcp_det,rcn_det,rnp_det
-!         print*,'PAR,T,mu,k=',ciz(k),bgc_theta(k),mu
-             rcp_det = rcp
-         elseif(use_pl.eq.2) then  ! Option 2: Calculating C:P using Power-law model
-           rpc_det = par_bio_pc0/1000.0*(PO4/par_bio_po4_ref)**
-     &     par_bio_spc_p*(DIN/par_bio_no3_ref)**par_bio_spc_n 
-     &       *((bgc_theta(k)+273.15)/(par_bio_temp_ref+273.15))**
-     &     par_bio_spc_t*(ciz(k)/par_bio_light_ref)**par_bio_spc_i
-           rcp_det = 1.0/rpc_det   
-         elseif(use_pl.eq.1) then ! Option 1: Galbraith and Martiny (2015), PNAS
-           rcp_det=1000.0d0/(6.9*PO4+4)
-         else     ! Redfield
-           rcp_det = rcp
-         endif 
-         ! Imposing Maximum and Minimum C:P
-         if(rcp_det.gt.maxcp) then
-            rcp_det = maxcp
-         elseif(rcp_det.lt.mincp) then
-            rcp_det = mincp
-         endif
-         rcp_det_ez = rcp_det
-        else ! PO4 and NO3 below threshold so assign Redfield C:P
-         rcp_det_ez = rcp
-        endif 
-! Calculate C:P of Zooplankton from C:P of Prey and Homeostatic parameter (TaTa 200731)
-! (P:C)zoo = (P:C)zoo,ref^(1-H) * (P:C)prey^H, where H = Homeostatic parameter (0-1)
-        rpc_zoo_ref = 1.0d0/rcp                                   ! Reference P:C  = Redfield P:C
-        rpc_zoo = (rpc_zoo_ref**(1.0d0-par_zoo_cp_hom))*
-     &              (1.0d0/rcp_det_ez)**(par_zoo_cp_hom)
-        if(rpc_zoo.gt.0.0d0) then
-           rcp_zoo = 1.0d0/rpc_zoo
-        else
-           rcp_zoo = rcp
-        endif
-
+      ! Calculate C:P Phytoplankton
+      if(PO4.gt.vsafe .AND. DIN.gt.vsafe) then
+          CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(k),bgc_theta(k),
+     &      rcp_phyto)
+      else
+          rcp_phyto = rcp
+      endif
+      ! Calculate C:P Zooplankton
+      CALL CALC_CP_ZOO(rcp_phyto,rcp_zoo)
+c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 #endif
+
+#ifndef FLEXCP
+      rcp_det_ez = rcp
+#else
+      rcp_det_ez = rcp_phyto
+#endif      
+
 
 ! Biogeochemical fluxes in euphotic zone and their export
 ! Take care of negative tracer concentrations.
