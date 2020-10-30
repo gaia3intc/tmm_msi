@@ -136,7 +136,6 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
       real*8 phymort,zoomort 
       real*8 flux_old,fdiv_old 
       real*8 mu                
-      real*8 rcp_det_ez
 #ifdef NOSED      
       real*8 remindet_inst   
 #endif      
@@ -144,31 +143,34 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 ! carbon chemistry
 #ifdef CARBON      
       real*8 co2gasex,co2emp,surf_dic,surf_pho,surf_alk,surf_sil
+c      real*8 dicchem(bgc_ktotal)
+c      real*8 alkchem(bgc_ktotal)
+! Added by T.Tanioka (Nov 2020)      
+      real*8 DIC,DOC,POC,PHYC,ZOOC                                      
       real*8 todic(bgc_ktotal)           
       real*8 phycgrow
       real*8 zoocexu
-c      real*8 dicchem(bgc_ktotal)
-c      real*8 alkchem(bgc_ktotal)
+      real*8 rcp_det_ez,rcp_zoo
 #endif
 
 #ifdef ORGCARBON   
 ! organic carbon with flexible CNP 
-      real*8 DIC,DOC,POC,PHYC,ZOOC                                      
-      real*8 reminpoc,remindoc                  
-      real*8 denitdoc,denitpoc                  
       real*8 phycmort,zoocmort 
       real*8 phycexu,phycloss
       real*8 grazc,grazc0 
       real*8 zoocrel,zooprel                 
       real*8 zoocloss
+      real*8 remindoc,reminpoc,denitdoc,denitpoc
       real*8 fPOC,flux_l_c,flux_u_c
       real*8 remindet_inst_c   
 #endif
 
 ! Flexible C:P of Phytoplankton and Zooplankton
 #ifdef FLEXCP
-      real*8 rcp_phyto,rcp_zoo
+      real*8 rcp_phyto
 #endif
+
+! Coefficients related to C:P Phyto and Zoo Calculation
 
 ! Reset the diagnostic fluxes per ocean time step.
 
@@ -230,10 +232,8 @@ C INTERNAL TIME LOOP FOR BGC
         flux(k) =0.0d0
         fdiv(k) =0.0d0
         todin(k)=0.0d0
-#ifdef CARBON        
-        todic(k)=0.0d0
-#endif
 #ifdef ORGCARBON
+        todic(k)=0.0d0
         todoc(k)=0.0d0
         topoc(k)=0.0d0
         tophyc(k)=0.0d0
@@ -323,6 +323,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 
 #ifndef FLEXCP
       rcp_det_ez = rcp
+      rcp_zoo = rcp
 #else
       rcp_det_ez = rcp_phyto
 #endif      
@@ -444,15 +445,9 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
        endif 
 
 ! Phytoplankton C fluxes = P fluxes * rcp_det_ez
-! Zooplankton C fluxes = P fluxes * C:P ZOO
-#ifdef CARBON
-! Calculate fluxes related to DIC first       
-       phycgrow = phygrow*rcp_det_ez
-       zoocexu = zooexu*rcp_zoo
-#endif 
-
 #ifdef ORGCARBON
        if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then   
+           phycgrow = phygrow*rcp_det_ez
            phycexu = phyexu*rcp_det_ez
            phycloss = phyloss*rcp_det_ez
            grazc = graz*rcp_det_ez
@@ -471,6 +466,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
            graz = 0.0d0
        endif
 
+! Zooplankton C fluxes = P fluxes * C:P ZOO
        if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
 ! Flux adjustment for zooplankton due to consumer and predator grazing C flux mismatch
 !    - When food C:P > C:P Zoo (P-limited), cancel mismatch by adding extra C back to DOC and POC
@@ -484,6 +480,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
               zooprel = 0.0d0       ! P-limited, No excess DOP release
            endif
            zoocloss = zooloss*rcp_zoo
+           zoocexu = zooexu*rcp_zoo
        else ! ZOO < 0 and/or ZOOC < 0
             zoocrel = 0.0d0
             zooprel = 0.0d0
@@ -515,11 +512,8 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 
 ! Collect all the carbon terms in the euphotic zone
 
-#ifdef CARBON
-        todic(k)=-phycgrow+zoocexu
-#endif        
-
 #ifdef ORGCARBON
+        todic(k)=-phycgrow+zoocexu
         todoc(k)= graztodop*(1.0d0-ACeff)*grazc
      &           +graztodop*(phycexu+zoocloss)
      &           +phycloss
@@ -558,18 +552,18 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
           flux(k)  = flux(k)+flux_u
           fdiv(k) = fdiv(k)+(flux_u-flux_l)/bgc_dz(k)
           flux_u=flux_l          
-#ifdef FLEXCP
+#ifdef ORGCARBON
           POC = MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
           if (POC.gt.0.0d0 .AND. DET.gt.0.0d0) then       
-             flux_l_c=wdet(k)*POC
-             fluxc(k)  = fluxc(k)+flux_u_c
-             fdivc(k) = fdivc(k)+(flux_u_c-flux_l_c)/bgc_dz(k)
-             flux_u_c=flux_l_c
-          else                        ! DET sinks only when POC sinks
-             flux_u = 0.0d0
-             flux_u_c = 0.0d0
-             flux(k) = flux_old
-             fdiv(k) = fdiv_old
+              flux_l_c=wdet(k)*POC
+              fluxc(k)  = fluxc(k)+flux_u_c
+              fdivc(k) = fdivc(k)+(flux_u_c-flux_l_c)/bgc_dz(k)
+              flux_u_c=flux_l_c
+          else                        
+              flux_u = 0.0d0
+              flux_u_c = 0.0d0
+              flux(k) = flux_old
+              fdiv(k) = fdiv_old
           endif
 #endif          
         enddo
@@ -581,9 +575,8 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 #ifdef FLEXCP
         flux_l_c = 0.0d0
 #endif        
-!---------------------------------------------------------------------------------
+
 ! account for burial in the sediment
-        
         DET = MAX(bgc_tracer(bgc_kloc,idet)-alimit*alimit,0.0d0)
         fDET = wdet(bgc_kloc)*DET
         flux_l = MIN(1.0d0,burdige_fac*fDET**burdige_exp)*fDET
@@ -595,55 +588,45 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
         fdiv_old = fdiv(bgc_kloc)
         flux(bgc_kloc) = flux(bgc_kloc)+flux_u
         fdiv(bgc_kloc) = fdiv(bgc_kloc)+(flux_u-flux_l)/bgc_dz(bgc_kloc)
-
-#ifdef FLEXCP
-! Burial of POC
+#ifdef ORGCARBON
         POC = MAX(bgc_tracer(bgc_kloc,ipoc)-alimit*alimit*117.0d0,0.0d0)
         if (POC .gt.0.0d0 .AND. DET.gt.0.0d0) then 
-!           fPOC = wdet(bgc_kloc)*POC
-!           flux_l_c = MIN(1.0d0,burdige_fac*fPOC**burdige_exp)*fPOC
-           flux_l_c = flux_l*(POC/DET)
-           flux_bury_c = flux_bury_c + flux_l_c*bgc_dt   
-           fluxc(bgc_kloc) = fluxc(bgc_kloc)+flux_u_c
-           fdivc(bgc_kloc) = fdivc(bgc_kloc)+(flux_u_c-flux_l_c)
+            flux_l_c = flux_l*(POC/DET)
+            flux_bury_c = flux_bury_c + flux_l_c*bgc_dt   
+            fluxc(bgc_kloc) = fluxc(bgc_kloc)+flux_u_c
+            fdivc(bgc_kloc) = fdivc(bgc_kloc)+(flux_u_c-flux_l_c)
      &                    /bgc_dz(bgc_kloc)
-        else                     ! DET Burial only when POC is buried
-           flux_l = 0.0d0
-           flux_l_c = 0.0d0
-           flux(bgc_kloc) = flux_old
-           fdiv(bgc_kloc) = fdiv_old
+        else                     
+            flux_l = 0.0d0
+            flux_l_c = 0.0d0
+            flux(bgc_kloc) = flux_old
+            fdiv(bgc_kloc) = fdiv_old
         endif
 #endif
 
+! Option for instant reminerazlization of detritus
+! by T.Tanioka (Nov 2020)
 #ifdef NOSED
-! Option for no burial TaTa 200521
-! Instantly aerobically remineralizes the detritus that gets buried back to PO4 
-! Make sure that mass balance of P holds  
         if(flux_l.gt.0.0d0) then
-         remindet_inst = 0.0d0 ! Reset instant remin flux
-         remindet_inst = flux_l/bgc_dz(bgc_kloc)
-         topo4(bgc_kloc)=topo4(bgc_kloc)+remindet_inst 
-         todin(bgc_kloc)=todin(bgc_kloc)+remindet_inst*rnp
-         tooxy(bgc_kloc)=tooxy(bgc_kloc)-remindet_inst*ro2ut    
-         f4_out(bgc_kloc)=f4_out(bgc_kloc)+remindet_inst*bgc_dt
+            remindet_inst = 0.0d0 ! Reset instant remin flux
+            remindet_inst = flux_l/bgc_dz(bgc_kloc)
+            topo4(bgc_kloc)=topo4(bgc_kloc)+remindet_inst 
+            todin(bgc_kloc)=todin(bgc_kloc)+remindet_inst*rnp
+            tooxy(bgc_kloc)=tooxy(bgc_kloc)-remindet_inst*ro2ut    
+            f4_out(bgc_kloc)=f4_out(bgc_kloc)+remindet_inst*bgc_dt
         endif
 #endif
 
+! Option for instant reminerazlization of POC
+! by T.Tanioka (Nov 2020)
 #ifdef NOSED_POC
-! Option for no POC burial, flexible CNP TaTa 200521
-! Instantly remineralizes the POC that gets buried back to DIC
-        flux_bury_c = 0.0d0      ! No burial of C in flexible C:N:P runs
+        flux_bury_c = 0.0d0     
         if(flux_l_c.gt.0.0d0) then
-         remindet_inst_c = 0.0d0 ! Reset instant remin flux
-         remindet_inst_c = flux_l_c/bgc_dz(bgc_kloc)
-         todic(bgc_kloc)=todic(bgc_kloc)+remindet_inst_c
+            remindet_inst_c = 0.0d0 ! Reset instant remin flux
+            remindet_inst_c = flux_l_c/bgc_dz(bgc_kloc)
+            todic(bgc_kloc)=todic(bgc_kloc)+remindet_inst_c
         endif 
 #endif
-
-#ifdef CNOSED_FIXCNP
-! Option for Carbon model with no burial in fixed C:N:P runs
-         todic(bgc_kloc)=todic(bgc_kloc)+remindet_inst*rcp
-#endif         
 
 ! Store flux for diagnostic purposes.
 
@@ -667,7 +650,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
       ZOO = MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
       DET = MAX(bgc_tracer(k,idet)-alimit*alimit,0.0d0)
 
-#ifdef FLEXCP
+#ifdef ORGCARBON
       DOC = MAX(bgc_tracer(k,idoc)-alimit*alimit*117.0d0,0.0d0)
       POC = MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
       PHYC = MAX(bgc_tracer(k,iphyc)-alimit*alimit*117.0d0,0.0d0)
@@ -687,7 +670,7 @@ c Michaelis-Menten limitation for oxic degradation:
       oxymm = OXY*OXY/(OXY*OXY+ACkbaco2*ACkbaco2)
 
 c O2 required for total remineralisation in a time step will then be:
-      o2req = oxymm*(dlambda*DOP+detlambda*DET)*ro2ut*bgc_dt      ! original code
+      o2req = oxymm*(dlambda*DOP+detlambda*DET)*ro2ut*bgc_dt      
 c restrict remineralisation to amount of vaialable oxygen
       
       if (o2req.gt.0.0d0) then
@@ -698,12 +681,11 @@ c restrict remineralisation to amount of vaialable oxygen
 
 ! Adding safety switch to prevent remin at negative values
 ! Tata 200610      
-c         remindop = oxymm*dlambda*DOP*o2usefrac ! original code
-c         remindet = oxymm*detlambda*DET*o2usefrac ! original code
+
          remindop = MAX(0.0d0,oxymm*dlambda*DOP*o2usefrac)
          remindet = MAX(0.0d0,oxymm*detlambda*DET*o2usefrac)
 
-#ifdef CARBON
+#ifdef ORGCARBON
          if (DOC.gt.0.0d0 .AND. DOP.gt.0.0d0) then
             remindoc = MAX(0.0d0,oxymm*dlambda*DOC*o2usefrac)
          else
@@ -741,7 +723,7 @@ c restrict anaerobic processes to regions with low oxygen concentration
       denitdop = MAX(0.0d0,dinmm*dlambda*DOP*dinusefrac)
       denitdet = MAX(0.0d0,dinmm*detlambda*DET*dinusefrac)
 
-#ifdef CARBON
+#ifdef ORGCARBON
       if (DOC.gt. 0.0d0 .AND. DOP.gt.0.0d0) then
          denitdoc = MAX(0.0d0,dinmm*dlambda*DOC*dinusefrac)
       else
@@ -761,7 +743,7 @@ c restrict anaerobic processes to regions with low oxygen concentration
       denitdop = 0.0d0
       denitdet = 0.0d0
 
-#ifdef CARBON
+#ifdef ORGCARBON
       denitdoc = 0.0d0
       denitpoc = 0.0d0
 #endif
@@ -769,7 +751,8 @@ c restrict anaerobic processes to regions with low oxygen concentration
       endif
 
 ! Phytoplankton and Zooplankton mortality
-! Tata 200609 
+c Explicity written as new variables (by T.Tanioka)      
+c In original  MOPS it was included inside SMS equaation      
       if(PHY.gt.0.0d0) then
          phymort = plambda*PHY
       else
@@ -782,9 +765,8 @@ c restrict anaerobic processes to regions with low oxygen concentration
          zoomort = 0.0d0
       endif
 
-#ifdef FLEXCP
+#ifdef ORGCARBON
       if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then
-!         phycmort = phymort*rcp_det_ez
          phycmort = phymort*(PHYC/PHY)
       else  ! PHY < 0.0 and/or PHYC < 0.0 
          phycmort = 0.0d0
@@ -792,7 +774,6 @@ c restrict anaerobic processes to regions with low oxygen concentration
       endif
 
       if(ZOO.gt. 0.0d0 .AND. ZOOC.gt.0.0d0) then
-!         zoocmort = zoomort*rcp_zoo
          zoocmort = zoomort*(ZOOC/ZOO)
       else ! PHY < 0.0 and/or ZOOC < 0.0d0
          zoocmort = 0.0d0
@@ -802,37 +783,29 @@ c restrict anaerobic processes to regions with low oxygen concentration
 !----------------------------------------------------------------
 ! Putting all the terms together to calculate SMS     
       
-!      topo4(k)=topo4(k)+remindop+remindet+denitdop+denitdet  ! original code
-      topo4(k)=topo4(k)+remindop+remindet+(denitdop+denitdet)
-c      todop(k)=todop(k)-remindop-denitdop                    ! original code
-      todop(k)=todop(k)-remindop-denitdop                     ! Added switch for denit Tata 200701
+      topo4(k)=topo4(k)+remindop+remindet+denitdop+denitdet  
+      todop(k)=todop(k)-remindop-denitdop                    
      &                 +phymort      
      &                 +zoomort
       tooxy(k)=tooxy(k)-(remindop+remindet)*ro2ut            
-      todin(k)=todin(k)+(remindop+remindet)*rnp               
-     &                 -(denitdop+denitdet)*rhno3ut             ! original code
-
       tophy(k)=tophy(k)-phymort     
       tozoo(k)=tozoo(k)-zoomort
-      todet(k)=todet(k)-remindet-denitdet                                    ! original code
-#ifdef CARBON      
+      todet(k)=todet(k)-remindet-denitdet                              
+      todin(k)=todin(k)+(remindop+remindet)*rnp               
+     &                 -(denitdop+denitdet)*rhno3ut             
+
+#ifdef ORGCARBON
       todic(k) =todic(k)+remindoc+reminpoc+denitdoc+denitpoc
-#endif
-#ifdef FLEXCP
-! Tata 200608
       todoc(k) = todoc(k)-remindoc-denitdoc
      &                 +phycmort
      &                 +zoocmort      
       tophyc(k)=tophyc(k)-phycmort     
       tozooc(k)=tozooc(k)-zoocmort    
       topoc(k)=topoc(k)-reminpoc-denitpoc
-
 #endif
-
 
       f4_out(k) = f4_out(k) + (remindop+remindet)*bgc_dt
       f7_out(k) = f7_out(k) + (denitdop+denitdet)*bgc_dt
-
     
       ENDDO
 
@@ -852,8 +825,7 @@ c      todop(k)=todop(k)-remindop-denitdop                    ! original code
       f5_out(1) = f5_out(1) + runoff(1)*bgc_dt
 #endif
 
-#ifdef FLEXCP
-! Option for no burial = no external input TaTa 200521     
+#ifdef NOSED
       runoff(1) = 0.0d0
       f5_out(1) = 0.0d0
 #endif
@@ -886,15 +858,16 @@ c      todop(k)=todop(k)-remindop-denitdop                    ! original code
      &     todin(k)*bgc_dt + rnp*runoff(k)*bgc_dt
 
 #ifdef CARBON
-      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
-     &     todic(k)*bgc_dt + rcp*runoff(k)*bgc_dt
-c     &     rcp*topo4(k)*bgc_dt   !original code 
-c     &    + rcp*runoff(k)*bgc_dt !original code
+!      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +  
+!     &     rcp*topo4(k)*bgc_dt    
+!     &    + rcp*runoff(k)*bgc_dt 
       bgc_tracer(k,ialk)= bgc_tracer(k,ialk)  +
      &       0.0d0
 #endif      
 
-#ifdef FLEXCP
+#ifdef ORGCARBON
+      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
+     &     todic(k)*bgc_dt + rcp*runoff(k)*bgc_dt
       bgc_tracer(k,idoc) = bgc_tracer(k,idoc) +
      &     todoc(k)*bgc_dt
       bgc_tracer(k,ipoc)= bgc_tracer(k,ipoc)  +
@@ -903,16 +876,20 @@ c     &    + rcp*runoff(k)*bgc_dt !original code
      &     tophyc(k)*bgc_dt
       bgc_tracer(k,izooc)= bgc_tracer(k,izooc)  +
      &     tozooc(k)*bgc_dt
+#elif CARBON
+      bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
+     &     rcp*topo4(k)*bgc_dt   
+     &    + rcp*runoff(k)*bgc_dt 
 #endif
 
       ENDDO ! end update tracer concentrations
 
-      bgc_tracer(1,ioxy)= bgc_tracer(1,ioxy) +  ! Original Code 
-     &    o2gasex/bgc_dz(1)*bgc_dt              ! Original code
+      bgc_tracer(1,ioxy)= bgc_tracer(1,ioxy) +   
+     &    o2gasex/bgc_dz(1)*bgc_dt              
 
 #ifdef CARBON
-      bgc_tracer(1,idic)= bgc_tracer(1,idic) +   ! Original Code
-     &    (co2emp+co2gasex)/bgc_dz(1)*bgc_dt     ! Original Code
+      bgc_tracer(1,idic)= bgc_tracer(1,idic) +   
+     &    (co2emp+co2gasex)/bgc_dz(1)*bgc_dt     
 
 !flocalarea is localdx*dy divided by the total atmospheric volume
 !      co2_atm=co2_atm+co2gasex*flocalarea*bgc_dt

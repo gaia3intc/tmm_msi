@@ -86,7 +86,6 @@ c parameters related to N-Fixation and denitrification
       real*8 tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
       COMMON/BGCNPARAMS/tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
 
-#ifdef FLEXCP 
 c parameters related C:P power-law
       integer cp_option
       real*8 par_bio_pc0,par_bio_po4_ref,par_bio_no3_ref,
@@ -100,4 +99,3 @@ c parameters related C:P power-law
      &       maxcp,mincp,
      &       par_zoo_cp_hom,
      &       cp_option
-#endif
