@@ -61,7 +61,9 @@ C carbon parameters. See CAR_PARAMS.h and CAR_INI.F
 C OUTPUT/COMMON BLOCK
 C bgc_tracer(,)	updated tracer fields. See BGC_PARAMS.h
 C f*_out()	biogeochemical fluxes. See BGC_DIAGNOSTICS.h
+C                 -- f8_out (=PAR) added by T.Tanioka 
 C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
+C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 
 
       SUBROUTINE BGC_MODEL(bgc_kloc,bgc_dz,     
@@ -97,11 +99,10 @@ C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
       real*8 fdiv(bgc_ktotal)
 
 #ifdef ORGCARBON     
-! Added Tata 200608      
       real*8 fluxc(bgc_ktotal)
       real*8 fdivc(bgc_ktotal)
-      real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)                    ! Added Tata 200606
-      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)                  ! Added Tata 200606
+      real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)                    
+      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)                  
 #endif
 ! air sea gas exchange in general
       real*8 vgas660
@@ -115,16 +116,10 @@ C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
       real*8 phygrow0,phygrow,phyexu,phyloss,detloss
       real*8 graz0,graz,zooexu,zooloss
       real*8 eflux,flux_u,flux_l
-      real*8 phymort,zoomort ! added Tata 200519
-      real*8 graz_zoo        ! = acutal amount of Phyto P that Zoo grazes, added  Tata 200701
-      real*8 flux_old,fdiv_old ! Added Tata 200923, dummy variable to store fluxes
-#ifdef NOSED      
-      real*8 remindet_inst   ! added Tata 200525 for instant remin
-#endif      
       real*8 tempscale,TACmuphy,TACik
       real*8 remindet,remindop
       real*8 phi,glbygd
-      
+
       integer k,kk,n,it,bgc_keuphloc
 
       real*8 bgc_runoffvol(bgc_ktotal),bgc_globalrunoff
@@ -135,29 +130,36 @@ C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
       real*8 dinmm,dinreq,dinusefrac
       real*8 denitdet,denitdop
       real*8 ttemp
-      real*8 denit_switch     ! Switch for denitrificaiton (1 = on, 0 = off) Tata 200701 
-      real*8 mu               ! Growth rate in d-1 Tata 200715
+
+! New coefficiets for biology
+! Added by T.Tanioka (Nov 2020)
+      real*8 phymort,zoomort 
+      real*8 flux_old,fdiv_old 
+      real*8 mu                
+      real*8 rcp_det_ez
+#ifdef NOSED      
+      real*8 remindet_inst   
+#endif      
 
 ! carbon chemistry
 #ifdef CARBON      
       real*8 co2gasex,co2emp,surf_dic,surf_pho,surf_alk,surf_sil
-      real*8 todic(bgc_ktotal)                  ! Added Tata 200606
-      real*8 reminpoc,remindoc                  ! Added Tata  200610
-      real*8 denitdoc,denitpoc                  ! Added Tata 200606
-      real*8 loc_co2airseaflux                  ! Added Tata 200616
+      real*8 todic(bgc_ktotal)                  
 c      real*8 dicchem(bgc_ktotal)
 c      real*8 alkchem(bgc_ktotal)
 #endif
-#ifdef FLEXCP      
+#ifdef ORGCARBON   
 ! organic carbon with flexible CNP 
-      real*8 DIC,DOC,POC,PHYC,ZOOC                                      ! Added Tata 200606
+      real*8 DIC,DOC,POC,PHYC,ZOOC                                      
+      real*8 reminpoc,remindoc                  
+      real*8 denitdoc,denitpoc                  
       real*8 rpc_det          ! temporary P:C of phyto calculated
       real*8 rnc_det          ! temporary N:C of phyto calculated
       real*8 rcp_det          ! temporary C:P of phyto calculated
       real*8 rcn_det          ! temporary C:N of phyto calculated
       real*8 rnp_det          ! temporary N:P of phyto calculated
       real*8 rpc_det_ez       ! P:C of phyto set at euphtotic zone
-      real*8 rcp_phyto,rcp_det_ez       ! C:P of phyto set at euphotic zone
+      real*8 rcp_phyto        ! C:P of phyto set at euphotic zone
       real*8 phycmort,zoocmort ! added Tata 200519
       real*8 phycgrow,phycexu,phycloss,grazc ! Tata 200710
       real*8 rpc_zoo_ref             ! Reference P:C of Zooplankton
@@ -204,7 +206,6 @@ c      real*8 alkchem(bgc_ktotal)
       
 #ifdef CARBON
       CALL CAR_COEFFS(bgc_theta(1),bgc_salt(1),1)
-      loc_co2airseaflux=0.0d0   ! Tata 200616
       co2airseaflux=0.0d0 
 #endif
       
@@ -276,22 +277,10 @@ C INTERNAL TIME LOOP FOR BGC
 !     co2gasex and co2emp are in mmolC/(m^2 d)
 !     co2airseaflux at the end of the internal time stepping loop will be 
 !     in mmolC/(m^2 ocean_time_step)
-!      co2airseaflux = co2airseaflux + (co2gasex + co2emp)*bgc_dt ! original code
-      loc_co2airseaflux = loc_co2airseaflux + (co2gasex + co2emp)*bgc_dt
+      co2airseaflux = co2airseaflux + (co2gasex + co2emp)*bgc_dt ! original code
 
 !      CALL CAR_CHEMISTRY(...,dicchem,alkchem)
 
-#endif
-
-#ifdef FASTGAS
-! For infinitiely fast gas exchange, entire surface layer concs equilibrate with
-! atmosphere, Tata 200616      
-      o2gasex = o2gasex*bgc_dz(1)/bgc_dt
-      co2gasex = co2gasex*bgc_dz(1)/bgc_dt
-      co2airseaflux = co2airseaflux + (co2gasex + co2emp)*bgc_dt
-#else
-! If the gas exchange is not infinitely fast
-      co2airseaflux = loc_co2airseaflux
 #endif
 
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
@@ -841,8 +830,7 @@ c      todop(k)=todop(k)-remindop-denitdop                    ! original code
       tozoo(k)=tozoo(k)-zoomort
       todet(k)=todet(k)-remindet-denitdet                                    ! original code
 #ifdef CARBON      
-      todic(k) =todic(k)+remindoc+reminpoc+
-     &   (denitdoc+denitpoc)*denit_switch       
+      todic(k) =todic(k)+remindoc+reminpoc+denitdoc+denitpoc
 #endif
 #ifdef FLEXCP
 ! Tata 200608
@@ -1053,10 +1041,7 @@ C o2ex		exchange rate [mmol O2/m2/d]
 
 ! Determine flux, inc. correction for local atmos surface pressure
       o2ex = Kwexch*(atmosp*O2sat-soxy)
-#ifdef FASTGAS
-! For fast gas exchange Tata 200604 
-      o2ex = atmosp*O2sat-soxy
-#endif
+
       RETURN
 
       END
