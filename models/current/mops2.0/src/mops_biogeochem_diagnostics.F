@@ -1,15 +1,21 @@
 C$Header: /Users/ikriest/CVS/mops/mops_biogeochem_diagnostics.F,v 1.2 2016/06/03 09:28:59 ikriest Exp $
 C$Name: mops-2_0 $
+C T.Tanioka added fbgc8, fbgc9, fbgc10, fbgc 11 (Nov 2020)
 
 
 CBOP
 C !ROUTINE: MODEL
 
 C !INTERFACE: ==========================================================
+#ifdef ORGCARBON
+      SUBROUTINE MOPS_BIOGEOCHEM_DIAGNOSTICS(Nrloc,
+     &           fbgc1loc,fbgc2loc,fbgc3loc,fbgc4loc,fbgc5loc,
+     &           fbgc6loc,fbgc7loc,fbgc8loc,fbgc9loc)
+#else      
       SUBROUTINE MOPS_BIOGEOCHEM_DIAGNOSTICS(Nrloc,
      &           fbgc1loc,fbgc2loc,fbgc3loc,fbgc4loc,fbgc5loc,
      &           fbgc6loc,fbgc7loc,fbgc8loc)
-
+#endif
 C !DESCRIPTION:
 
 C !USES: ===============================================================
@@ -24,7 +30,10 @@ C     Output variables
       real*8 fbgc1loc(Nrloc),fbgc2loc(Nrloc),fbgc3loc(Nrloc),
      &       fbgc4loc(Nrloc),fbgc5loc(Nrloc),
      &       fbgc6loc(Nrloc),fbgc7loc(Nrloc),
-     &       fbgc8loc(Nrloc) 
+     &       fbgc8loc(Nrloc)
+#ifdef ORGCARBON
+      real*8 fbgc9loc(Nrloc)
+#endif
 C !LOCAL VARIABLES: ====================================================
           INTEGER k
 CEOP
@@ -39,6 +48,9 @@ C     Copy diagnostic variables
         fbgc6loc(k)=f6_out(k)
         fbgc7loc(k)=f7_out(k)
         fbgc8loc(k)=f8_out(k)
+#ifdef ORGCARBON
+        fbgc9loc(k)=f9_out(k)
+#endif
       ENDDO
 
       RETURN

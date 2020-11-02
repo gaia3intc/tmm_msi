@@ -62,6 +62,7 @@ C OUTPUT/COMMON BLOCK
 C bgc_tracer(,)	updated tracer fields. See BGC_PARAMS.h
 C f*_out()	biogeochemical fluxes. See BGC_DIAGNOSTICS.h
 C                 -- f8_out (=PAR) added by T.Tanioka 
+C                 -- f9_out (=SEDIMENT C FLux) added by T.Tanioka 
 C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
 C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 
@@ -151,8 +152,9 @@ c      real*8 alkchem(bgc_ktotal)
       real*8 rcp_det_ez,rcp_zoo
 #endif
 
-#ifdef ORGCARBON   
 ! organic carbon with flexible CNP 
+! Added by T.Tanioka (Nov 2020)      
+#ifdef ORGCARBON   
       real*8 phycmort,zoocmort 
       real*8 phycexu,phycloss,phycgrow
       real*8 grazc,grazc0 
@@ -164,11 +166,10 @@ c      real*8 alkchem(bgc_ktotal)
 #endif
 
 ! Flexible C:P of Phytoplankton and Zooplankton
+! Added by T.Tanioka (Nov 2020)      
 #ifdef FLEXCP
       real*8 rcp_phyto
 #endif
-
-! Coefficients related to C:P Phyto and Zoo Calculation
 
 ! Reset the diagnostic fluxes per ocean time step.
 
@@ -184,6 +185,9 @@ c      real*8 alkchem(bgc_ktotal)
         f6_out(k)=0.0d0 
         f7_out(k)=0.0d0
         f8_out(k)=0.0d0
+#ifdef ORGCARBON
+        f9_out(k)=0.0d0
+#endif
 
       ENDDO
 
@@ -304,7 +308,7 @@ C INTERNAL TIME LOOP FOR BGC
 ! Calculating C:P of Phytoplankton and Zooplankton at k = 1
 ! Assumes C:P is constant in the euphotic zone
 ! by T. Tanioka (Nov 2020)
-! cp_option hard-wired for now in BGC_INI.F
+! cp_option and parameters hard-wired for now in BGC_INI.F
 #ifdef FLEXCP
       PO4=bgc_tracer(1,ipo4)
       DIN=bgc_tracer(1,idin)
@@ -338,7 +342,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
        ZOO=MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
        attlim=MAX(PHY,0.0d0)
 
-#ifdef FLEXCP       
+#ifdef ORGCARBON     
        DOC=MAX(bgc_tracer(k,idoc)-alimit*alimit*117.0d0,0.0d0)
        POC=MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
        DIC=MAX(bgc_tracer(k,idic)-alimit*alimit*117.0d0,0.0d0)
@@ -630,9 +634,14 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 ! Store flux for diagnostic purposes.
 
         f3_out(1)  = flux_bury
-
+#ifdef ORGCARBON
+        f9_out(1)  = flux_bury_c
+#endif
         do k=2,bgc_kloc
           f3_out(k)  = f3_out(k)+flux(k)*bgc_dt
+#ifdef CARBON
+          f9_out(k)  = f9_out(k)+fluxc(k)*bgc_dt
+#endif
         enddo
 
 !---------------------------------------------------------------------------------
@@ -750,8 +759,9 @@ c restrict anaerobic processes to regions with low oxygen concentration
       endif
 
 ! Phytoplankton and Zooplankton mortality
+c In original MOPS phymort and zoomort were included inside SMS equaation      
 c Explicity written as new variables (by T.Tanioka)      
-c In original  MOPS it was included inside SMS equaation      
+
       if(PHY.gt.0.0d0) then
          phymort = plambda*PHY
       else
