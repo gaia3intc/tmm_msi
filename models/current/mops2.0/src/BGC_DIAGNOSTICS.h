@@ -15,7 +15,7 @@ C$Name: mops-2_0 $
 #ifdef ORGCARBON
 ! Added By T.Tanioka (Nov 2020)
 ! fbgc9 = Sediment_C, fbgc10 = Phytoplankton C:P uptake ratio, fbgc11 = Zooplankton C:P uptake ratio
-      real*8 f9_out(bgc_ktotal)
+      real*8 f9_out(bgc_ktotal),f10_out(bgc_ktotal),f11_out(bgc_ktotal)
 #endif
 
 #ifndef ORGCARBON
@@ -23,5 +23,5 @@ C$Name: mops-2_0 $
      &                f8_out
 #else
       COMMON/DIAGVARS/f1_out,f2_out,f3_out,f4_out,f5_out,f6_out,f7_out,
-     &                f8_out,f9_out
+     &                f8_out,f9_out,f10_out,f11_out
 #endif

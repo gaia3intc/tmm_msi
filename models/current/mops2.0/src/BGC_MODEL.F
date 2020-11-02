@@ -63,6 +63,8 @@ C bgc_tracer(,)	updated tracer fields. See BGC_PARAMS.h
 C f*_out()	biogeochemical fluxes. See BGC_DIAGNOSTICS.h
 C                 -- f8_out (=PAR) added by T.Tanioka 
 C                 -- f9_out (=SEDIMENT C FLux) added by T.Tanioka 
+C                 -- f10_out (=Phytoplankton C:P Uptake) added by T.Tanioka 
+C                 -- f11_out (=Zooplankton C:P Uptake) added by T.Tanioka 
 C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
 C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 
@@ -187,6 +189,8 @@ c      real*8 alkchem(bgc_ktotal)
         f8_out(k)=0.0d0
 #ifdef ORGCARBON
         f9_out(k)=0.0d0
+        f10_out(k)=0.0d0
+        f11_out(k)=0.0d0
 #endif
 
       ENDDO
@@ -533,6 +537,10 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
            todop(k) = todop(k) + zooprel*graztodop
            todet(k) = todet(k) + zooprel*(1.0d0-graztodop)
         endif
+
+        ! Store C:P Uptake for Phytoplankton and Zooplankton
+        f10_out(k) = rcp_det_ez
+        f11_out(k) = rcp_zoo
 #endif        
 
       ENDDO !loop over euphotic zone
@@ -639,7 +647,7 @@ c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
 #endif
         do k=2,bgc_kloc
           f3_out(k)  = f3_out(k)+flux(k)*bgc_dt
-#ifdef CARBON
+#ifdef ORGCARBON
           f9_out(k)  = f9_out(k)+fluxc(k)*bgc_dt
 #endif
         enddo

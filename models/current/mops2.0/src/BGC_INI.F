@@ -189,7 +189,7 @@ C beside sinking and remineralization might play a role in the euphotic zone.
 #endif
 
 #ifdef FLEXCP
-      cp_option=0                ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
+      cp_option=1                ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
       maxcp=500.0                ! Upper bound C:P
       mincp=50.0                 ! Lower bound C:P
 c Paramters related to C:P Power-law

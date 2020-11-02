@@ -10,7 +10,8 @@ C !INTERFACE: ==========================================================
 #ifdef ORGCARBON
       SUBROUTINE MOPS_BIOGEOCHEM_DIAGNOSTICS(Nrloc,
      &           fbgc1loc,fbgc2loc,fbgc3loc,fbgc4loc,fbgc5loc,
-     &           fbgc6loc,fbgc7loc,fbgc8loc,fbgc9loc)
+     &           fbgc6loc,fbgc7loc,fbgc8loc,fbgc9loc,fbgc10loc,
+     &           fbgc11loc)
 #else      
       SUBROUTINE MOPS_BIOGEOCHEM_DIAGNOSTICS(Nrloc,
      &           fbgc1loc,fbgc2loc,fbgc3loc,fbgc4loc,fbgc5loc,
@@ -32,7 +33,7 @@ C     Output variables
      &       fbgc6loc(Nrloc),fbgc7loc(Nrloc),
      &       fbgc8loc(Nrloc)
 #ifdef ORGCARBON
-      real*8 fbgc9loc(Nrloc)
+      real*8 fbgc9loc(Nrloc),fbgc10loc(Nrloc),fbgc11loc(Nrloc)
 #endif
 C !LOCAL VARIABLES: ====================================================
           INTEGER k
@@ -50,6 +51,8 @@ C     Copy diagnostic variables
         fbgc8loc(k)=f8_out(k)
 #ifdef ORGCARBON
         fbgc9loc(k)=f9_out(k)
+        fbgc10loc(k)=f10_out(k)
+        fbgc11loc(k)=f11_out(k)
 #endif
       ENDDO
 
