@@ -11,56 +11,32 @@ C$Name: mops-2_0 $
       real*8 parvec(npar)
       
 C BGC PARAMETERS FOR SURFACE OCEAN BIOLOGY      
-C THESE MAY CHANGE DURING OPTIMISATION
-C Theoretically, if I wanted to optimize ALL (well, many) parameters, I'd have to do the 
-C following for MOPS:
-C ! Stoichiometry
-C       rnc         = parvec(1)      !redfield ratio N:P
-C       rnp         = parvec(2)      !redfield ratio N:P
-C       ro2ut       = parvec(3)      !redfield -02:P ratio
-C       subox       = parvec(4)      !no oxic degradation below this level
-C       subdin      = parvec(5)      !no oxic degradation below this level
-C 
-C ! Phytoplankton parameters
-C       TempB       = parvec(6)
-C       ACmuphy     = parvec(7)      !max. growth rate [1/day]
-C       ACik        = parvec(8)      !Light half-saturation constant [W/m2]
-C       ACkpo4      = parvec(9)      !half-saturation constant for PO4 uptake [mmol P/m3]
-C       AClambda    = parvec(10)     !exudation rate [1/day]
-C       AComni      = parvec(11)     !density dep. loss rate [m3/(mmol P * day)]
-C       plambda     = parvec(12)     !phytoplankton mortality [1/day]
-C  
-C        ACmuzoo    =parvec(13) !max. grazing rate [1/d]
-C        AClambdaz  =parvec(14) !zooplankton excretion [1/d]
-C        AComniz    =parvec(15)*rnp !zooplankton mortality [m3/(mmol P * day)]
-C        ACeff      =parvec(16) !assimilation efficiency
-C        zlambda    =parvec(17) !zooplankton mortality
-C
-! DOPparameters
-C        graztodop  = parvec(18) ! fraction grazing that goes into DOP
-C        dlambda    = parvec(19) !DOP remineralization rate [1/day]  (SLOW recycling)
-C
-! Detritus parameters
-C        detlambda  = parvec(20) !detritus remineralisation rate [1/d]    
-C        detmartin  = parvec(21) !w = a*z+b
-C
-! Parameters specific to MOPS: (Kriest and Oschlies 2013, 2015)
-C        burdige_fac = parvec(22) ! factor for sediment burial
-C        burdige_exp = parvec(23) ! exponent for sediment burial
-C        ACkbaco2 = parvec(25) !Half sat.-constant for oxic degradation.
-C        ACkbacdin = parvec(26)  ! Half sat.-constant for suboxic degradation
- 
-C In reality, I'll probably never want/try to optimize all of these, but rather stick
-C to 1-5 parameters. The following is an example of a parameter vector parvec, 
-C that consists of npar=three parameters ACMUphy, graztodop and detmartin:
-
-! Third version for Volkmar's optimization tests, 16 October 2015
-         ro2ut = parvec(1)
-         ACkbaco2 = parvec(2)
-         ACkbacdin =parvec(3)
-         subdin = parvec(4)
-         nfix = parvec(5)
-         detmartin = parvec(6)
+C Edited by T.Tanioka
+C Calibrated BGC Parameters (different for MIT2.8 and ECCO)
+        detmartin  = parvec(1) !w = a*z+b
+        ro2ut      = parvec(2) !redfield -02:P ratio
+        nfix       = parvec(3) !Max rate of N fixation [d-1]
+        subdin     = parvec(4) !no oxic degradation below this level
+        ACkbaco2   = parvec(5) !Half sat.-constant for oxic degradation.
+        ACkbacdin  = parvec(6) !Half sat.-constant for suboxic degradation
+C Flexible C:P Stoichiometry Parameters
+#ifdef FLEXCP
+         cp_option = parvec(7)            ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
+         maxcp = parvec(8)                ! Upper bound C:P
+         mincp = parvec(9)                ! Lower bound C:P
+c Paramters related to C:P Power-law
+         par_bio_pc0 = parvec(10)         ! Referennce P:C (permil) = Redfield P:C 
+         par_bio_po4_ref = parvec(11)     ! Reference PO4 (mmol m-3)
+         par_bio_no3_ref = parvec(12)     ! Reference NO3 (mmol m-3)
+         par_bio_temp_ref = parvec(13)    ! Reference Temperature (deg C)
+         par_bio_light_ref = parvec(14)   ! Reference irradiance (W m-2)
+         par_bio_spc_p = parvec(15)       ! s_P:C^PO4
+         par_bio_spc_n = parvec(16)       ! s_P:C^NO3
+         par_bio_spc_i = parvec(17)       ! s_P:C^I
+         par_bio_spc_t = parvec(18)       ! s_P:C^T
+c Parameter related to C:P of Zooplankton 
+         par_zoo_cp_hom = parvec(19)      ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
+#endif
         
       RETURN
       END

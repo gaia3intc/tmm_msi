@@ -54,6 +54,7 @@ SRFMODEL = 	BGC_MODEL.F \
 	mops_biogeochem_set_params.F \
 	mops_biogeochem_misfit.F \
 	mops_biogeochem_copy_data.F \
+	CALC_CP.F \
 	insolation.F
 
 OPTFILE =
@@ -69,6 +70,9 @@ endif
 
 # option -DCARBON to couple carbon to the P-core
 # option -DORGCARBON to couple organic carbon to the P-core
+# option -DNOSED to instantly remineralize detritus reaching ocean bottom
+# option -DNOSED_POC to instantly remineralize POC reaching ocean bottom
+# option -DFLEXCP for dynamic C:P stoichiometry
 # option -DASCIIPARAMS to use ASCII parameter file as default
 
 # use surface supply of buried P
@@ -87,9 +91,10 @@ $(RPROGRAM): CPPFLAGS+=-DRUNOFF -DASCIIPARAMS -DCARBON
 $(IRPROGRAM): FPPFLAGS+=$(FPPFLAG)-DRUNOFF $(FPPFLAG)-DIMPRO $(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON
 $(IRPROGRAM): CPPFLAGS+=-DRUNOFF -DIMPRO -DASCIIPARAMS -DCARBON
 
-# No burial of organic matter with flexible C:P
-$(FNSEDPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON
-$(FNSEDPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON
+# mops with flexible C:P and no burial
+$(FNSEDPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON $(FPPFLAG)-DNOSED \
+	$(FPPFLAG)-DNOSED_POC $(FPPFLAG)-DFLEXCP
+$(FNSEDPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DNOSED -DNOSED_POC -DFLEXCP
 	
 OBJTMM = $(SRCTMM:.c=.o)
 OBJCMODEL = $(SRCMODEL:.c=.o)

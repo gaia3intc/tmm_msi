@@ -312,7 +312,7 @@ C INTERNAL TIME LOOP FOR BGC
 ! Calculating C:P of Phytoplankton and Zooplankton at k = 1
 ! Assumes C:P is constant in the euphotic zone
 ! by T. Tanioka (Nov 2020)
-! cp_option and parameters hard-wired for now in BGC_INI.F
+! cp_option and parameters are specified in biogem_params.txt
 #ifdef FLEXCP
       PO4=bgc_tracer(1,ipo4)
       DIN=bgc_tracer(1,idin)
@@ -325,7 +325,7 @@ C INTERNAL TIME LOOP FOR BGC
       endif
       ! Calculate C:P Zooplankton
       CALL CALC_CP_ZOO(rcp_phyto,rcp_zoo)
-c      print*,"C:P Phyto,zoo=",rcp_phyto,rcp_zoo
+c      print*,"C:P option=",cp_option
 #endif
 
 #ifndef FLEXCP
@@ -686,7 +686,7 @@ c Michaelis-Menten limitation for oxic degradation:
       oxymm = OXY*OXY/(OXY*OXY+ACkbaco2*ACkbaco2)
 
 c O2 required for total remineralisation in a time step will then be:
-      o2req = oxymm*(dlambda*DOP+detlambda*DET)*ro2ut*bgc_dt      
+      o2req = oxymm*(dlambda*DOP+detlambda*DET)*ro2ut*bgc_dt 
 c restrict remineralisation to amount of vaialable oxygen
       
       if (o2req.gt.0.0d0) then
@@ -920,7 +920,6 @@ c Explicity written as new variables (by T.Tanioka)
 !     &       alkchem(k)*bgc_dt    
 !      enddo
 #endif
-
       ENDDO !internal time loop
 
 ! For now, I am happy to take tracer concentration at the end of each time loop

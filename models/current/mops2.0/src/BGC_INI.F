@@ -148,15 +148,6 @@ c A minimum value for the degradation of PHY and DOP
         ACkbaco2 = 2.0d0  !Half sat.-constant for oxic degradation (see Kriest and Oschlies, 2015) ! original code
         ACkbacdin = 8.0d0 !Half sat.-constant for suboxic degradation (see Kriest and Oschlies, 2015) original code
 
-c       MOPS2.0 Calibrated 6 Parameters for MIT2.8 (Kriest 2020,BG,17(12);Table 1)
-c       Added by T.Tanioka (Nov 2020)       
-        detmartin = 1.39d0 ! Exponent for Martin curve
-        ro2ut = 173.7d0  ! -O2:P ratio        
-        nfix = 1.19d-3 ![mmol N/m3/d]; if PO4>0 and DIN = 0 and T=26.82 this corresponds 
-        subdin = 15.8d0 ! [mmol N/m3] no denitrification below this level
-        ACkbaco2 = 1.01d0  !Half sat.-constant for oxic degradation [mmol O2 m/3]
-        ACkbacdin = 32.0d0 !Half sat.-constant for suboxic degradation [mmol N/m3]
-
       endif !setDefaults; anything beyond this line will be affected during optimization 
       
 C Derived parameters
@@ -188,23 +179,23 @@ C beside sinking and remineralization might play a role in the euphotic zone.
 
 #endif
 
-#ifdef FLEXCP
-      cp_option=1                ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
-      maxcp=500.0                ! Upper bound C:P
-      mincp=50.0                 ! Lower bound C:P
+c#ifdef FLEXCP
+c      cp_option=1                ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
+c      maxcp=500.0                ! Upper bound C:P
+c      mincp=50.0                 ! Lower bound C:P
 c Paramters related to C:P Power-law
-      par_bio_pc0 = 1000.0d0/rcp ! Referennce P:C (permil) = Redfield P:C 
-      par_bio_po4_ref = 0.57     ! Reference PO4 (mmol m-3)
-      par_bio_no3_ref = 5.7      ! Reference NO3 (mmol m-3)
-      par_bio_temp_ref = 18.0    ! Reference Temperature (deg C)
-      par_bio_light_ref = 70.0   ! Reference irradiance (W m-2)
-      par_bio_spc_p = 0.21       ! s_P:C^PO4
-      par_bio_spc_n = 0.0        ! s_P:C^NO3
-      par_bio_spc_i = 0.0        ! s_P:C^I
-      par_bio_spc_t = -3.6       ! s_P:C^T
+c      par_bio_pc0 = 1000.0d0/rcp ! Referennce P:C (permil) = Redfield P:C 
+c      par_bio_po4_ref = 0.57     ! Reference PO4 (mmol m-3)
+c      par_bio_no3_ref = 5.7      ! Reference NO3 (mmol m-3)
+c      par_bio_temp_ref = 18.0    ! Reference Temperature (deg C)
+c      par_bio_light_ref = 70.0   ! Reference irradiance (W m-2)
+c      par_bio_spc_p = 0.21       ! s_P:C^PO4
+c      par_bio_spc_n = 0.0        ! s_P:C^NO3
+c      par_bio_spc_i = 0.0        ! s_P:C^I
+c      par_bio_spc_t = -3.6       ! s_P:C^T
 c Parameter related to C:P of Zooplankton 
-      par_zoo_cp_hom = 1.0d0 ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
-#endif   
+c      par_zoo_cp_hom = 1.0d0 ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
+c#endif   
 
       return
       end
