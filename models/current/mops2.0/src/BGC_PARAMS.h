@@ -25,12 +25,21 @@ c the indices of tracers
 #ifndef CARBON
       PARAMETER(bgc_ntracer=7)
 #else
-      PARAMETER(bgc_ntracer=9)
+c      PARAMETER(bgc_ntracer=9)
       INTEGER idic,ialk
       PARAMETER(idic=8,ialk=9)
 c connect between carbon exchange and P-based BGC
       real*8 ocmip_alkfac,ocmip_silfac
       COMMON/CO2SURFACE/ocmip_alkfac,ocmip_silfac
+#endif
+
+#ifdef ORGCARBON
+      PARAMETER(bgc_ntracer=13)
+      INTEGER idoc,ipoc,iphyc,izooc
+      PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13)
+
+#elif CARBON
+      PARAMETER(bgc_ntracer=9)
 #endif
 
 c the tracer field
@@ -73,3 +82,30 @@ c sediment burial and O2 sensitivity of OM degradation
 c parameters related to N-Fixation and denitrification
       real*8 tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
       COMMON/BGCNPARAMS/tf2,tf1,tf0,tff,nfix,subdin,rhno3ut,ACkbacdin
+
+c burial of sedimentary organic carbon
+c added by T.Tanioka (Nov 2020)
+      real*8 flux_bury_c
+      COMMON/BGCSEDPARAMS/flux_bury_c
+
+c sinking of organic carbon
+c added by T.Tanioka (Nov 2020)
+      real*8 detmartin_c,detwa_c,detwb_c,detwmin_c
+      COMMON/BGCPARAMS/detmartin_c,detwa_c,detwb_c,detwmin_c
+      real*8 wdet_c(bgc_ktotal)
+      COMMON/BGCZ/wdet_c
+
+c parameters related C:P power-law
+c added by T.Tanioka (Nov 2020)
+      integer cp_option
+      real*8 par_bio_pc0,par_bio_po4_ref,par_bio_no3_ref,
+     &       par_bio_temp_ref,par_bio_light_ref,
+     &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
+     &       maxcp,mincp,
+     &       par_zoo_cp_hom
+      COMMON/BGCPLPARAMS/par_bio_pc0,par_bio_po4_ref,par_bio_no3_ref,
+     &       par_bio_temp_ref,par_bio_light_ref,
+     &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
+     &       maxcp,mincp,
+     &       par_zoo_cp_hom,
+     &       cp_option

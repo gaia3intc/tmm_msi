@@ -129,9 +129,24 @@ PetscBool appendDiagnostics = PETSC_FALSE;
 Vec fbgc1, fbgc2, fbgc3, fbgc4, fbgc5, fbgc6, fbgc7, fbgc8, fbgc1avg, fbgc2avg, fbgc3avg, fbgc4avg, fbgc5avg, fbgc6avg, fbgc7avg, fbgc8avg;
 PetscViewer fdfbgc1avg, fdfbgc2avg, fdfbgc3avg, fdfbgc4avg, fdfbgc5avg, fdfbgc6avg, fdfbgc7avg, fdfbgc8avg;
 PetscScalar *localfbgc1, *localfbgc2, *localfbgc3, *localfbgc4, *localfbgc5, *localfbgc6, *localfbgc7, *localfbgc8;
+
+#ifdef ORGCARBON
+/* Added by T.Tanioka (Nov 2020) */
+/* fbgc9 = Sediment_C, fbgc10 = Phytoplankton C:P uptake ratio, fbgc11 = Zooplankton C:P uptake ratio */ 
+Vec fbgc9, fbgc10, fbgc11, fbgc9avg, fbgc10avg, fbgc11avg;
+PetscViewer fdfbgc9avg, fdfbgc10avg, fdfbgc11avg;
+PetscScalar *localfbgc9, *localfbgc10, *localfbgc11;
+#endif
+
+#ifdef ORGCARBON
+char *diagOutFile[11];
+PetscInt idiag;
+PetscInt numDiag=11;
+#else
 char *diagOutFile[8];
 PetscInt idiag;
 PetscInt numDiag=8;
+#endif
 
 #ifdef CARBON
 PetscScalar *localco2airseafluxdiag, *localco2airseafluxdiagavg;
@@ -664,6 +679,30 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
 	ierr = VecSet(fbgc8avg,zero);CHKERRQ(ierr);
 	ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,diagOutFile[7],FILE_MODE_WRITE,&fdfbgc8avg);CHKERRQ(ierr);
 
+#ifdef ORGCARBON
+	ierr = VecDuplicate(TR,&fbgc9);CHKERRQ(ierr);
+	ierr = VecSet(fbgc9,zero);CHKERRQ(ierr);
+	ierr = VecGetArray(fbgc9,&localfbgc9);CHKERRQ(ierr);
+	ierr = VecDuplicate(TR,&fbgc9avg);CHKERRQ(ierr);
+	ierr = VecSet(fbgc9avg,zero);CHKERRQ(ierr);
+	ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,diagOutFile[8],FILE_MODE_WRITE,&fdfbgc9avg);CHKERRQ(ierr);
+
+	ierr = VecDuplicate(TR,&fbgc10);CHKERRQ(ierr);
+	ierr = VecSet(fbgc10,zero);CHKERRQ(ierr);
+	ierr = VecGetArray(fbgc10,&localfbgc10);CHKERRQ(ierr);
+	ierr = VecDuplicate(TR,&fbgc10avg);CHKERRQ(ierr);
+	ierr = VecSet(fbgc10avg,zero);CHKERRQ(ierr);
+	ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,diagOutFile[9],FILE_MODE_WRITE,&fdfbgc10avg);CHKERRQ(ierr);
+
+	ierr = VecDuplicate(TR,&fbgc11);CHKERRQ(ierr);
+	ierr = VecSet(fbgc11,zero);CHKERRQ(ierr);
+	ierr = VecGetArray(fbgc11,&localfbgc11);CHKERRQ(ierr);
+	ierr = VecDuplicate(TR,&fbgc11avg);CHKERRQ(ierr);
+	ierr = VecSet(fbgc11avg,zero);CHKERRQ(ierr);
+	ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,diagOutFile[10],FILE_MODE_WRITE,&fdfbgc11avg);CHKERRQ(ierr);
+#endif        
+    
+
 #ifdef CARBON
     ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localco2airseafluxdiag);CHKERRQ(ierr);  
     ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localco2airseafluxdiagavg);CHKERRQ(ierr);  
@@ -786,7 +825,11 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
 
 	if (calcDiagnostics) {  
 	  if (Iter0+iLoop>=diagTimer.startTimeStep) { /* start time averaging (note: startTimeStep is ABSOLUTE time step) */
+#ifdef ORGCARBON
+        mops_biogeochem_diagnostics_(&nzloc,&localfbgc1[kl],&localfbgc2[kl],&localfbgc3[kl],&localfbgc4[kl],&localfbgc5[kl],&localfbgc6[kl],&localfbgc7[kl],&localfbgc8[kl],&localfbgc9[kl],&localfbgc10[kl],&localfbgc11[kl]);
+#else              
         mops_biogeochem_diagnostics_(&nzloc,&localfbgc1[kl],&localfbgc2[kl],&localfbgc3[kl],&localfbgc4[kl],&localfbgc5[kl],&localfbgc6[kl],&localfbgc7[kl],&localfbgc8[kl]);
+#endif
 #ifdef CARBON        
         localco2airseafluxdiag[ip]=localco2airseaflux;
 #endif                
@@ -910,7 +953,20 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
 
 	  ierr = VecSetValues(fbgc8,lSize,gIndices,localfbgc8,INSERT_VALUES);CHKERRQ(ierr);
 	  ierr = VecAssemblyBegin(fbgc8);CHKERRQ(ierr);
-	  ierr = VecAssemblyEnd(fbgc8);CHKERRQ(ierr);      
+	  ierr = VecAssemblyEnd(fbgc8);CHKERRQ(ierr);     
+#ifdef ORGCARBON
+	  ierr = VecSetValues(fbgc9,lSize,gIndices,localfbgc9,INSERT_VALUES);CHKERRQ(ierr);
+	  ierr = VecAssemblyBegin(fbgc9);CHKERRQ(ierr);
+	  ierr = VecAssemblyEnd(fbgc9);CHKERRQ(ierr);     
+
+	  ierr = VecSetValues(fbgc10,lSize,gIndices,localfbgc10,INSERT_VALUES);CHKERRQ(ierr);
+	  ierr = VecAssemblyBegin(fbgc10);CHKERRQ(ierr);
+	  ierr = VecAssemblyEnd(fbgc10);CHKERRQ(ierr);     
+
+	  ierr = VecSetValues(fbgc11,lSize,gIndices,localfbgc11,INSERT_VALUES);CHKERRQ(ierr);
+	  ierr = VecAssemblyBegin(fbgc11);CHKERRQ(ierr);
+	  ierr = VecAssemblyEnd(fbgc11);CHKERRQ(ierr);     
+#endif
 	}  
   }
 
@@ -1003,6 +1059,11 @@ PetscErrorCode writeExternalForcing(PetscScalar tc, PetscInt iLoop, PetscInt num
 		ierr = VecAXPY(fbgc6avg,one,fbgc6);CHKERRQ(ierr);
 		ierr = VecAXPY(fbgc7avg,one,fbgc7);CHKERRQ(ierr);
 		ierr = VecAXPY(fbgc8avg,one,fbgc8);CHKERRQ(ierr);
+#ifdef ORGCARBON                
+		ierr = VecAXPY(fbgc9avg,one,fbgc9);CHKERRQ(ierr);
+		ierr = VecAXPY(fbgc10avg,one,fbgc10);CHKERRQ(ierr);
+		ierr = VecAXPY(fbgc11avg,one,fbgc11);CHKERRQ(ierr);
+#endif
 
 #ifdef CARBON
         for (ip=0; ip<lNumProfiles; ip++) {
@@ -1046,6 +1107,19 @@ PetscErrorCode writeExternalForcing(PetscScalar tc, PetscInt iLoop, PetscInt num
 		ierr = VecScale(fbgc8avg,1.0/diagTimer.count);CHKERRQ(ierr);
 		ierr = VecView(fbgc8avg,fdfbgc8avg);CHKERRQ(ierr);
 		ierr = VecSet(fbgc8avg,zero); CHKERRQ(ierr);
+#ifdef ORGCARBON
+		ierr = VecScale(fbgc9avg,1.0/diagTimer.count);CHKERRQ(ierr);
+		ierr = VecView(fbgc9avg,fdfbgc9avg);CHKERRQ(ierr);
+		ierr = VecSet(fbgc9avg,zero); CHKERRQ(ierr);
+
+		ierr = VecScale(fbgc10avg,1.0/diagTimer.count);CHKERRQ(ierr);
+		ierr = VecView(fbgc10avg,fdfbgc10avg);CHKERRQ(ierr);
+		ierr = VecSet(fbgc10avg,zero); CHKERRQ(ierr);
+
+		ierr = VecScale(fbgc11avg,1.0/diagTimer.count);CHKERRQ(ierr);
+		ierr = VecView(fbgc11avg,fdfbgc11avg);CHKERRQ(ierr);
+		ierr = VecSet(fbgc11avg,zero); CHKERRQ(ierr);
+#endif
 #ifdef CARBON
         for (ip=0; ip<lNumProfiles; ip++) {
           localco2airseafluxdiagavg[ip]=localco2airseafluxdiagavg[ip]/diagTimer.count;
@@ -1151,7 +1225,19 @@ PetscErrorCode finalizeExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt n
 	ierr = VecDestroy(&fbgc8);CHKERRQ(ierr);
 	ierr = VecDestroy(&fbgc8avg);CHKERRQ(ierr);
     ierr = PetscViewerDestroy(&fdfbgc8avg);CHKERRQ(ierr);	
+#ifdef ORGCARBON
+	ierr = VecDestroy(&fbgc9);CHKERRQ(ierr);
+	ierr = VecDestroy(&fbgc9avg);CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&fdfbgc9avg);CHKERRQ(ierr);	
 
+	ierr = VecDestroy(&fbgc10);CHKERRQ(ierr);
+	ierr = VecDestroy(&fbgc10avg);CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&fdfbgc10avg);CHKERRQ(ierr);	
+
+	ierr = VecDestroy(&fbgc11);CHKERRQ(ierr);
+	ierr = VecDestroy(&fbgc11avg);CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&fdfbgc11avg);CHKERRQ(ierr);	
+#endif
   }
 
 #ifdef CARBON

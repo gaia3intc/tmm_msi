@@ -2,11 +2,14 @@ function petsc2netcdf(netcdfFileName);
 % Function for postprocessing petsc2 snapshot of tracers to netcdf
 % Edited by Tatsuro Tanioka (Jan-28-2020)
 % To run this script, type in MATLAB command line
-% > n7tracers28('test.nc')
+% > n7tracer28('test.nc')
 % Units: most chemical tracers in mmol m-3. PHYTO, ZOO and DETRITUS in mmol P m-3.  
+% Units: PHYTOC, ZOOC, POC, and DOC in mmol C m-3.  
+
 
 %%%% Options for output
-useCarbon = 1; % 1 if option DCARBON, 0 if otherwise
+useCarbon = 1; % 1 if option DCARBON used, 0 if otherwise
+useOrgCarbon = 1; % 1 if option DORGCARB used, 0 if otherwise
 %%%%
 % Set toplevel path to GCMs configuration
 basepath='~/TMM2/MITgcm_2.8deg';
@@ -15,7 +18,7 @@ basepath='~/TMM2/MITgcm_2.8deg';
 % basepath='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
 % basepath = '/work_O1/smomw069/MIT2.8';
 
-addpath(genpath('~/TMM2/tmm_matlab_code'));
+addpath(genpath('~/TMM/tmm_matlab_code'));
 
 load(fullfile(basepath,'config_data'))
 matrixPath=fullfile(basepath,matrixPath);
@@ -53,6 +56,12 @@ if useCarbon
 tr8=readPetscBinVec('dicout.petsc',-1);
 tr9=readPetscBinVec('alkout.petsc',-1);
 end
+if useOrgCarbon
+tr10=readPetscBinVec('docout.petsc',-1);
+tr11=readPetscBinVec('pocout.petsc',-1);
+tr12=readPetscBinVec('phycout.petsc',-1);
+tr13=readPetscBinVec('zoocout.petsc',-1);
+end
 nb=size(tr1,1);
 [TR1,x,y,z]=matrixToGrid(tr1(Irr,:),[1:nb]',boxFile,gridFile);
 [TR2,x,y,z]=matrixToGrid(tr2(Irr,:),[1:nb]',boxFile,gridFile);
@@ -64,6 +73,12 @@ nb=size(tr1,1);
 if useCarbon
 [TR8,x,y,z]=matrixToGrid(tr8(Irr,:),[1:nb]',boxFile,gridFile);
 [TR9,x,y,z]=matrixToGrid(tr9(Irr,:),[1:nb]',boxFile,gridFile);
+end
+if useOrgCarbon
+[TR10,x,y,z]=matrixToGrid(tr10(Irr,:),[1:nb]',boxFile,gridFile);
+[TR11,x,y,z]=matrixToGrid(tr11(Irr,:),[1:nb]',boxFile,gridFile);
+[TR12,x,y,z]=matrixToGrid(tr12(Irr,:),[1:nb]',boxFile,gridFile);
+[TR13,x,y,z]=matrixToGrid(tr13(Irr,:),[1:nb]',boxFile,gridFile);
 end
 [nx,ny,nz,nt]=size(TR1);
 
@@ -159,6 +174,34 @@ if status, error(mexnc('STRERROR',status)), end
 
 end
 
+if useOrgCarbon
+
+%DOC
+[data_varid10, status] = mexnc('DEF_VAR', ncid, 'DOC', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+if status, error(mexnc('STRERROR',status)), end
+status=mexnc('put_att_double', ncid, data_varid10, 'missing_value', nc_double', 1, NaN );
+if status, error(mexnc('STRERROR',status)), end
+
+%POC
+[data_varid11, status] = mexnc('DEF_VAR', ncid, 'POC', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+if status, error(mexnc('STRERROR',status)), end
+status=mexnc('put_att_double', ncid, data_varid11, 'missing_value', nc_double', 1, NaN );
+if status, error(mexnc('STRERROR',status)), end
+
+%PHYTO C
+[data_varid12, status] = mexnc('DEF_VAR', ncid, 'PHYTOC', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+if status, error(mexnc('STRERROR',status)), end
+status=mexnc('put_att_double', ncid, data_varid12, 'missing_value', nc_double', 1, NaN );
+if status, error(mexnc('STRERROR',status)), end
+
+%ZOO C
+[data_varid13, status] = mexnc('DEF_VAR', ncid, 'ZOOC', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+if status, error(mexnc('STRERROR',status)), end
+status=mexnc('put_att_double', ncid, data_varid13, 'missing_value', nc_double', 1, NaN );
+if status, error(mexnc('STRERROR',status)), end
+
+end
+
 status = mexnc('PUT_ATT_TEXT', ncid, lon_varid, 'units', nc_char, length('degrees_east'), 'degrees_east');
 if status, error(mexnc('STRERROR',status)), end
 status = mexnc('PUT_ATT_TEXT', ncid, lat_varid, 'units', nc_char, length('degrees_north'), 'degrees_north');
@@ -220,6 +263,24 @@ status = mexnc('put_var_double', ncid, data_varid8, TR8 );
 if status, error(mexnc('STRERROR',status)), end
 %nineth tracer avg
 status = mexnc('put_var_double', ncid, data_varid9, TR9 );
+end
+
+if useOrgCarbon
+
+if status, error(mexnc('STRERROR',status)), end
+%tenth tracer avg
+status = mexnc('put_var_double', ncid, data_varid10, TR10 );
+if status, error(mexnc('STRERROR',status)), end
+%eleventh tracer avg
+status = mexnc('put_var_double', ncid, data_varid11, TR11 );
+if status, error(mexnc('STRERROR',status)), end
+%twelveth tracer avg
+status = mexnc('put_var_double', ncid, data_varid12, TR12 );
+if status, error(mexnc('STRERROR',status)), end
+%thirteenth tracer avg
+status = mexnc('put_var_double', ncid, data_varid13, TR13 );
+if status, error(mexnc('STRERROR',status)), end
+
 end
 
 % closing

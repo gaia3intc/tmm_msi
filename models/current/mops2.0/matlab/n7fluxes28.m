@@ -1,8 +1,12 @@
 function petsc2netcdf(netcdfFileName);
 % Function for postprocessing petsc2 diagnostic fluxes to netcdf
 % From Iris Kriest (GEOMAR), Jan-28-2020)
-% Edited by Tatsuro Tanioka (Jan-28-2020)
-% Added PAR [W m-2] at the top of every layer in the euphotic zone (fbgc8) (Oct-16-2020)
+% Edited by Tatsuro Tanioka (Nov 2020)
+%    - Added PAR [W m-2] at the top of every layer in the euphotic zone (fbgc8)
+%    - Added SEDIMENT_C [mmolC/m2/timestep] (fbgc9)
+%    - Added CP_PHYTO_UPTAKE [mol C:mol P] (fbgc10)
+%    - Added CP_ZOO_UPTAKE [mol C:mol P] (fbgc11)
+
 % To run this script, type in MATLAB command line
 % > n7fluxes28('test.nc')
 
@@ -14,6 +18,9 @@ function petsc2netcdf(netcdfFileName);
 %   "Sedimentation" which is in mmol P/m2/ocean timestep. Seimentation is organic POP flux into each box.
 %    (i.e., through the upper box boundary). But for layer 1, this flux is burial at the sea floor.
 
+% Options for output
+
+useORGCARBON = 1; % if option DORGCARBON is used, 0 otherwise
 
 %%%%% Set toplevel path to GCMs configuration
 basepath='~/TMM2/MITgcm_2.8deg';
@@ -53,6 +60,11 @@ v5=readPetscBinVec('fbgc5.petsc',-1);
 v6=readPetscBinVec('fbgc6.petsc',-1);
 v7=readPetscBinVec('fbgc7.petsc',-1);
 v8=readPetscBinVec('fbgc8.petsc',-1);
+if useORGCARBON
+    v9=readPetscBinVec('fbgc9.petsc',-1);
+    v10=readPetscBinVec('fbgc10.petsc',-1);
+    v11=readPetscBinVec('fbgc11.petsc',-1);
+end
 
 nb=size(v1,1);
 [V1,x,y,z]=matrixToGrid(v1(Irr,:),[1:nb]',boxFile,gridFile);
@@ -63,7 +75,11 @@ nb=size(v1,1);
 [V6,x,y,z]=matrixToGrid(v6(Irr,:),[1:nb]',boxFile,gridFile);
 [V7,x,y,z]=matrixToGrid(v7(Irr,:),[1:nb]',boxFile,gridFile);
 [V8,x,y,z]=matrixToGrid(v8(Irr,:),[1:nb]',boxFile,gridFile);
-
+if useORGCARBON
+    [V9,x,y,z]=matrixToGrid(v9(Irr,:),[1:nb]',boxFile,gridFile);
+    [V10,x,y,z]=matrixToGrid(v10(Irr,:),[1:nb]',boxFile,gridFile);
+    [V11,x,y,z]=matrixToGrid(v11(Irr,:),[1:nb]',boxFile,gridFile);
+end
 
 [nx,ny,nz,nt]=size(V1);
 
@@ -146,6 +162,21 @@ if status, error(mexnc('STRERROR',status)), end
 status=mexnc('put_att_double', ncid, data_varid8, 'missing_value', nc_double', 1, NaN );
 if status, error(mexnc('STRERROR',status)), end
 
+if useORGCARBON
+% SEDIMENTATION of POC
+    [data_varid9, status] = mexnc('DEF_VAR', ncid, 'Sediment_C', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+    if status, error(mexnc('STRERROR',status)), end
+    status=mexnc('put_att_double', ncid, data_varid9, 'missing_value', nc_double', 1, NaN );
+% Phytoplankton C:P uptake 
+    [data_varid10, status] = mexnc('DEF_VAR', ncid, 'CP_PHYTO_UPTAKE', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+    if status, error(mexnc('STRERROR',status)), end
+    status=mexnc('put_att_double', ncid, data_varid10, 'missing_value', nc_double', 1, NaN );
+% Zooplankton C:P uptake 
+    [data_varid11, status] = mexnc('DEF_VAR', ncid, 'CP_ZOO_UPTAKE', nc_double, 4, [time_dimid dep_dimid lat_dimid lon_dimid] );
+    if status, error(mexnc('STRERROR',status)), end
+    status=mexnc('put_att_double', ncid, data_varid11, 'missing_value', nc_double', 1, NaN );
+end
+
 status = mexnc('PUT_ATT_TEXT', ncid, lon_varid, 'units', nc_char, length('degrees_east'), 'degrees_east');
 if status, error(mexnc('STRERROR',status)), end
 status = mexnc('PUT_ATT_TEXT', ncid, lat_varid, 'units', nc_char, length('degrees_north'), 'degrees_north');
@@ -202,6 +233,21 @@ if status, error(mexnc('STRERROR',status)), end
 %eighth diagnostic
 status = mexnc('put_var_double', ncid, data_varid8, V8 );
 if status, error(mexnc('STRERROR',status)), end
+
+if useORGCARBON
+    %nineth diagnostic
+    status = mexnc('put_var_double', ncid, data_varid9, V9 );
+    if status, error(mexnc('STRERROR',status)), end
+
+    %tenth diagnostic
+    status = mexnc('put_var_double', ncid, data_varid10, V10 );
+    if status, error(mexnc('STRERROR',status)), end
+
+    %eleventh diagnostic
+    status = mexnc('put_var_double', ncid, data_varid11, V11 );
+    if status, error(mexnc('STRERROR',status)), end
+end
+
 
 status = mexnc('close', ncid );
 if status, error(mexnc('STRERROR',status)), end

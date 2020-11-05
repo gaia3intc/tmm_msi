@@ -38,6 +38,7 @@ PROGRAM = mops
 RPROGRAM = rmops
 IPROGRAM = imops
 IRPROGRAM = irmops
+FNSEDPROGRAM = mops_cp
 
 SRCTMM = tmm_main.c tmm_forward_step.c tmm_write.c tmm_forcing_utils.c \
         tmm_profile_utils.c tmm_timer.c petsc_signal_utils.c petsc_matvec_utils.c
@@ -53,6 +54,7 @@ SRFMODEL = 	BGC_MODEL.F \
 	mops_biogeochem_set_params.F \
 	mops_biogeochem_misfit.F \
 	mops_biogeochem_copy_data.F \
+	CALC_CP.F \
 	insolation.F
 
 OPTFILE =
@@ -67,6 +69,10 @@ ifneq ($(strip $(OPTFILE)),)
 endif
 
 # option -DCARBON to couple carbon to the P-core
+# option -DORGCARBON to couple organic carbon to the P-core
+# option -DNOSED to instantly remineralize detritus reaching ocean bottom
+# option -DNOSED_POC to instantly remineralize POC reaching ocean bottom
+# option -DFLEXCP for dynamic C:P stoichiometry
 # option -DASCIIPARAMS to use ASCII parameter file as default
 
 # use surface supply of buried P
@@ -85,6 +91,11 @@ $(RPROGRAM): CPPFLAGS+=-DRUNOFF -DASCIIPARAMS -DCARBON
 $(IRPROGRAM): FPPFLAGS+=$(FPPFLAG)-DRUNOFF $(FPPFLAG)-DIMPRO $(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON
 $(IRPROGRAM): CPPFLAGS+=-DRUNOFF -DIMPRO -DASCIIPARAMS -DCARBON
 
+# mops with flexible C:P and no burial
+$(FNSEDPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON $(FPPFLAG)-DNOSED \
+	$(FPPFLAG)-DNOSED_POC $(FPPFLAG)-DFLEXCP
+$(FNSEDPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DNOSED -DNOSED_POC -DFLEXCP
+	
 OBJTMM = $(SRCTMM:.c=.o)
 OBJCMODEL = $(SRCMODEL:.c=.o)
 OBJFMODEL = $(SRF90MODEL:.F90=.o) $(SRFMODEL:.F=.o)
@@ -110,6 +121,9 @@ $(RPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
 
 $(IRPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(FNSEDPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
 
 cleanall:
