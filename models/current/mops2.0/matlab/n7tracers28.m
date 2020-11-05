@@ -12,8 +12,8 @@ useCarbon = 1; % 1 if option DCARBON used, 0 if otherwise
 useOrgCarbon = 1; % 1 if option DORGCARB used, 0 if otherwise
 %%%%
 % Set toplevel path to GCMs configuration
-basepath='~/TMM/MITgcm_2.8deg';
-%basepath='~/TMM/MITgcm_ECCO';
+basepath='~/TMM2/MITgcm_2.8deg';
+%basepath='~/TMM2/MITgcm_ECCO';
 % basepath='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
 % basepath='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
 % basepath = '/work_O1/smomw069/MIT2.8';

@@ -566,7 +566,7 @@ c      print*,"C:P option=",cp_option
 #ifdef ORGCARBON
           POC = MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
           if (POC.gt.0.0d0 .AND. DET.gt.0.0d0) then       
-              flux_l_c=wdet(k)*POC
+              flux_l_c=wdet_c(k)*POC
               fluxc(k)  = fluxc(k)+flux_u_c
               fdivc(k) = fdivc(k)+(flux_u_c-flux_l_c)/bgc_dz(k)
               flux_u_c=flux_l_c
@@ -600,6 +600,8 @@ c      print*,"C:P option=",cp_option
         flux(bgc_kloc) = flux(bgc_kloc)+flux_u
         fdiv(bgc_kloc) = fdiv(bgc_kloc)+(flux_u-flux_l)/bgc_dz(bgc_kloc)
 #ifdef ORGCARBON
+! Assumes that Burial C:P ratio = POC:POP at the bottom cell 
+! In other words, no preferential burial of POC or POP
         POC = MAX(bgc_tracer(bgc_kloc,ipoc)-alimit*alimit*117.0d0,0.0d0)
         if (POC .gt.0.0d0 .AND. DET.gt.0.0d0) then 
             flux_l_c = flux_l*(POC/DET)

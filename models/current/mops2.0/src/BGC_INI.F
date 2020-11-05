@@ -8,7 +8,10 @@ C Iris Kriest skipped option #ifdef SEDIMENT and added N-cycle with N-fixation a
 C Iris Kriest modified and extended some comments (Jan 2015)
 C Iris Kriest added -DIMPRO option for use of implicit profiles, as in Kriest and Oschlies, 2011 (April 2015)
 C Iris Kriest modified slightly for use within optimization (May 2015)
+C.Moved TMM-specific parameters to ascii input file by T.Taniioka (Nov 2020)
+C   - detmartin, ro2ut, nfix, subdin,  ACkbaco2, ACkbacdin
 C T.Tanioka added new parameters related to flexible C:P (Nov 2020)      
+C T.Tanioka added new parameters related to Organic C FLux attenuation (Nov 2020)      
 
 C Basis for air-sea gas exchange of O2: MIT source code, 
 C modified by Samar Khatiwala, then by Iris Kriest (Aug-Nov 2010)
@@ -88,9 +91,9 @@ C BGC PARAMETERS FOR SURFACE OCEAN BIOLOGY
 ! Stoichiometry
         rcp=117.0d0 !redfield ratio C:P
         rnp=16.0d0 !redfield ratio N:P
-        ro2ut = 170.0d0  !redfield -O2:P ratio 
-        subox = 1.0d0 !no oxic degradation below this level   ! original 
-        subdin = 4.0d0 !no denitrification below this level
+c       ro2ut = 170.0d0  !redfield -O2:P ratio 
+c       subox = 1.0d0 !no oxic degradation below this level 
+c       subdin = 4.0d0 !no denitrification below this level
 
 ! N2-Fixatioon
 ! Factors tf2, tf1 and tf0 are a polynomial (2nd order) 
@@ -136,17 +139,18 @@ C BGC PARAMETERS FOR SURFACE OCEAN BIOLOGY
         dlambda  = 0.17d0/360.0d0 !DOP remineralization rate [1/day]  (SLOW recycling)
 
 c A minimum value for the degradation of PHY and DOP
-         alimit = 1.0d-3
+c Moved this to selectable paramter by T.Tanioka (Nov 2020)
+c         alimit = 1.0d-3
 
 ! Detritus parameters
         detlambda = 0.05d0 !detritus remineralisation rate [1/d]    
-        detmartin = 0.8580d0 ! Exponent for Martin curve
+c        detmartin = 0.8580d0 ! Exponent for Martin curve
 
 ! Parameters specific to MOPS: (Kriest and Oschlies 2013, 2015)
         burdige_fac = 1.6828d0 ! factor for sediment burial (see Kriest and Oschlies, 2013)
         burdige_exp = 0.799d0  ! exponent for sediment burial (see Kriest and Oschlies, 2013)
-        ACkbaco2 = 2.0d0  !Half sat.-constant for oxic degradation (see Kriest and Oschlies, 2015) ! original code
-        ACkbacdin = 8.0d0 !Half sat.-constant for suboxic degradation (see Kriest and Oschlies, 2015) original code
+c        ACkbaco2 = 2.0d0  !Half sat.-constant for oxic degradation (see Kriest and Oschlies, 2015) 
+c        ACkbacdin = 8.0d0 !Half sat.-constant for suboxic degradation (see Kriest and Oschlies, 2015) 
 
       endif !setDefaults; anything beyond this line will be affected during optimization 
       
@@ -157,10 +161,18 @@ C Derived parameters
         detwa = detlambda/detmartin !w = a*z+b for aphotic layers
         detwb = 0.0d0 !offset for detritus sinking
 
+#ifdef ORGCARBON
+        detwa_c = detlambda/detmartin_c !w = a*z+b for aphotic layers
+        detwb_c = 0.0d0 !offset for detritus sinking
+#endif
+
 C REMINERALISATION LENGTH SCALES
 
       do k=1,bgc_kmax
         wdet(k) = detwb + (bgc_zu(k)+bgc_zu(k+1))*0.5d0*detwa
+#ifdef ORGCARBON
+        wdet_c(k) = detwb_c + (bgc_zu(k)+bgc_zu(k+1))*0.5d0*detwa_c
+#endif        
       enddo
 
 #ifdef IMPRO
