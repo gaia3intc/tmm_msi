@@ -824,7 +824,8 @@ c Explicity written as new variables (by T.Tanioka)
 #endif
 
       f4_out(k) = f4_out(k) + (remindop+remindet)*bgc_dt
-      f7_out(k) = f7_out(k) + (denitdop+denitdet)*bgc_dt
+!      f7_out(k) = f7_out(k) + (denitdop+denitdet)*bgc_dt
+      f7_out(k) = f7_out(k) + (denitdop+denitdet)*rhno3ut*bgc_dt
     
       ENDDO
 

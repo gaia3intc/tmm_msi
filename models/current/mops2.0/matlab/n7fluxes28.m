@@ -15,6 +15,7 @@ function petsc2netcdf(netcdfFileName);
 %     ocean of half a day, multiply by 2 to get the result per day
 %   All fluxes are in mmol P/m3/ocean timestep, except:
 %   "Nfixation" which is in mmol N/m3/ocean time step
+%   "Denitrification" which is in mmol N/m3/ocean time step
 %   "Sedimentation" which is in mmol P/m2/ocean timestep. Seimentation is organic POP flux into each box.
 %    (i.e., through the upper box boundary). But for layer 1, this flux is burial at the sea floor.
 
