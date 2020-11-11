@@ -28,8 +28,8 @@ C Parameter related to sinking of POC
 C Flexible C:P Stoichiometry Parameters
 #ifdef FLEXCP
          cp_option = parvec(9)            ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
-         maxcp = parvec(10)                ! Upper bound C:P
-         mincp = parvec(11)                ! Lower bound C:P
+         maxcp = parvec(10)               ! Upper bound C:P
+         mincp = parvec(11)               ! Lower bound C:P
 c Paramters related to C:P Power-law
          par_bio_pc0 = parvec(12)         ! Referennce P:C (permil) = Redfield P:C 
          par_bio_po4_ref = parvec(13)     ! Reference PO4 (mmol m-3)

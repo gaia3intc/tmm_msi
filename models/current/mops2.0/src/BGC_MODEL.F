@@ -170,7 +170,7 @@ c      real*8 alkchem(bgc_ktotal)
 ! Flexible C:P of Phytoplankton and Zooplankton
 ! Added by T.Tanioka (Nov 2020)      
 #ifdef FLEXCP
-      real*8 rcp_phyto
+      real*8 rcp_phyto,cp_phyto
 #endif
 
 ! Reset the diagnostic fluxes per ocean time step.
@@ -316,6 +316,8 @@ C INTERNAL TIME LOOP FOR BGC
 #ifdef FLEXCP
       PO4=bgc_tracer(1,ipo4)
       DIN=bgc_tracer(1,idin)
+      PHY=MAX(bgc_tracer(1,iphy)-alimit*alimit,0.0d0)
+      PHYC=MAX(bgc_tracer(1,iphyc)-alimit*alimit*117.0d0,0.0d0)
       ! Calculate C:P Phytoplankton
       if(PO4.gt.vsafe .AND. DIN.gt.vsafe) then
           CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(k),bgc_theta(k),
@@ -323,16 +325,22 @@ C INTERNAL TIME LOOP FOR BGC
       else
           rcp_phyto = rcp
       endif
+      rcp_det_ez = rcp_phyto
       ! Calculate C:P Zooplankton
-      CALL CALC_CP_ZOO(rcp_phyto,rcp_zoo)
-c      print*,"C:P option=",cp_option
-#endif
-
-#ifndef FLEXCP
+      if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then
+          cp_phyto = PHYC/PHY
+          if(cp_phyto.gt.maxcp) then
+              cp_phyto = maxcp
+          elseif(cp_phyto.lt.mincp) then
+              cp_phyto = mincp
+         endif
+      else
+          cp_phyto = rcp
+      endif
+      CALL CALC_CP_ZOO(cp_phyto,rcp_zoo)
+#else
       rcp_det_ez = rcp
       rcp_zoo = rcp
-#else
-      rcp_det_ez = rcp_phyto
 #endif      
 
 ! Biogeochemical fluxes in euphotic zone and their export
@@ -350,8 +358,8 @@ c      print*,"C:P option=",cp_option
        DOC=MAX(bgc_tracer(k,idoc)-alimit*alimit*117.0d0,0.0d0)
        POC=MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
        DIC=MAX(bgc_tracer(k,idic)-alimit*alimit*117.0d0,0.0d0)
-       PHYC=MAX(bgc_tracer(k,iphyc)-alimit*alimit*117.0d0,0.0d0)
-       ZOOC=MAX(bgc_tracer(k,izooc)-alimit*alimit*117.0d0,0.0d0)
+       PHYC=MAX(bgc_tracer(k,iphyc)-alimit*alimit*rcp_det_ez,0.0d0)
+       ZOOC=MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp_zoo,0.0d0)
 #endif       
 
 ! temperature dependence of phytoplankton growth (Eppley)
@@ -473,7 +481,7 @@ c      print*,"C:P option=",cp_option
            graz = 0.0d0
        endif
 
-! Zooplankton C fluxes = P fluxes * C:P ZOO
+! Zooplankton C fluxes = P fluxes * rcp_zoo
        if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
 ! Flux adjustment for zooplankton due to consumer and predator grazing C flux mismatch
 !    - When food C:P > C:P Zoo (P-limited), cancel mismatch by adding extra C back to DOC and POC
@@ -550,7 +558,7 @@ c      print*,"C:P option=",cp_option
         flux_u = 0.0d0
         flux_old = 0.0d0
         fdiv_old = 0.0d0
-#ifdef FLEXCP
+#ifdef ORGCARBON
         flux_u_c = 0.0d0
 #endif        
 
@@ -583,7 +591,7 @@ c      print*,"C:P option=",cp_option
         flux_old = 0.0d0
         fdiv_old = 0.0d0
 
-#ifdef FLEXCP
+#ifdef ORGCARBON
         flux_l_c = 0.0d0
 #endif        
 
@@ -591,6 +599,7 @@ c      print*,"C:P option=",cp_option
         DET = MAX(bgc_tracer(bgc_kloc,idet)-alimit*alimit,0.0d0)
         fDET = wdet(bgc_kloc)*DET
         flux_l = MIN(1.0d0,burdige_fac*fDET**burdige_exp)*fDET
+        flux_bury = flux_bury + flux_l*bgc_dt
 #ifdef NOSED
         flux_l = fDET
         flux_bury = 0.0
@@ -600,11 +609,11 @@ c      print*,"C:P option=",cp_option
         flux(bgc_kloc) = flux(bgc_kloc)+flux_u
         fdiv(bgc_kloc) = fdiv(bgc_kloc)+(flux_u-flux_l)/bgc_dz(bgc_kloc)
 #ifdef ORGCARBON
-! Assumes that Burial C:P ratio = POC:POP at the bottom cell 
+! Assumes that Burial C:P ratio = 117
 ! In other words, no preferential burial of POC or POP
         POC = MAX(bgc_tracer(bgc_kloc,ipoc)-alimit*alimit*117.0d0,0.0d0)
         if (POC .gt.0.0d0 .AND. DET.gt.0.0d0) then 
-            flux_l_c = flux_l*(POC/DET)
+            flux_l_c = flux_l*rcp
             flux_bury_c = flux_bury_c + flux_l_c*bgc_dt   
             fluxc(bgc_kloc) = fluxc(bgc_kloc)+flux_u_c
             fdivc(bgc_kloc) = fdivc(bgc_kloc)+(flux_u_c-flux_l_c)
@@ -671,8 +680,8 @@ c      print*,"C:P option=",cp_option
 #ifdef ORGCARBON
       DOC = MAX(bgc_tracer(k,idoc)-alimit*alimit*117.0d0,0.0d0)
       POC = MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
-      PHYC = MAX(bgc_tracer(k,iphyc)-alimit*alimit*117.0d0,0.0d0)
-      ZOOC = MAX(bgc_tracer(k,izooc)-alimit*alimit*117.0d0,0.0d0)
+      PHYC = MAX(bgc_tracer(k,iphyc)-alimit*alimit*rcp_det_ez,0.0d0)
+      ZOOC = MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp_zoo,0.0d0)
 #endif
 
 c AEROBIC DECAY
@@ -768,9 +777,9 @@ c restrict anaerobic processes to regions with low oxygen concentration
 
       endif
 
-! Phytoplankton and Zooplankton mortality
-c In original MOPS phymort and zoomort were included inside SMS equaation      
-c Explicity written as new variables (by T.Tanioka)      
+! Phytoplankton and Zooplankton mortality (by T.Tanioka)      
+c In original MOPS phymort and zoomort were included inside SMS equation      
+c Now mortality terms are explicity written  
 
       if(PHY.gt.0.0d0) then
          phymort = plambda*PHY
@@ -824,7 +833,6 @@ c Explicity written as new variables (by T.Tanioka)
 #endif
 
       f4_out(k) = f4_out(k) + (remindop+remindet)*bgc_dt
-!      f7_out(k) = f7_out(k) + (denitdop+denitdet)*bgc_dt
       f7_out(k) = f7_out(k) + (denitdop+denitdet)*rhno3ut*bgc_dt
     
       ENDDO
