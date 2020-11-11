@@ -7,7 +7,7 @@
 0.001
 1.39
 0
-500.0
+250.0
 50.0
 8.547
 0.57
@@ -36,7 +36,7 @@
 #07. alimit = A minimum value for the degradation of PHY and DOP (mmol/m3)      [0.001 for mops, 0.01 for mops_cp]
 #08. detmartin_c = Exponent for Martin Curve of POC                             [1.39 for MIT2.8, 1.46 for ECCO]
 #09. cp_option (1 = Power-law, 2: Galbraith and Martiny, 0: Redfield)
-#10. maxcp = upper bound C:P                                                    [500.0]
+#10. maxcp = upper bound C:P                                                    [250.0]
 #11. mincp = lower bound C:P                                                    [50.0]
 #12. par_bio_pc0 = Reference P:C (permil) for power-law                         [8.547]
 #13. par_bio_po4_ref = Reference PO4 (mmolP/m3) for power-law                   [0.57]

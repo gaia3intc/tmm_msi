@@ -8,7 +8,7 @@ C Iris Kriest skipped option #ifdef SEDIMENT and added N-cycle with N-fixation a
 C Iris Kriest modified and extended some comments (Jan 2015)
 C Iris Kriest added -DIMPRO option for use of implicit profiles, as in Kriest and Oschlies, 2011 (April 2015)
 C Iris Kriest modified slightly for use within optimization (May 2015)
-C.Moved TMM-specific parameters to ascii input file by T.Taniioka (Nov 2020)
+C.T.Tanioka moved TMM-specific parameters to ascii input file (biogem_params.txt)  (Nov 2020)
 C   - detmartin, ro2ut, nfix, subdin,  ACkbaco2, ACkbacdin
 C T.Tanioka added new parameters related to flexible C:P (Nov 2020)      
 C T.Tanioka added new parameters related to Organic C FLux attenuation (Nov 2020)      
@@ -190,24 +190,6 @@ C beside sinking and remineralization might play a role in the euphotic zone.
       enddo
 
 #endif
-
-c#ifdef FLEXCP
-c      cp_option=1                ! Which C:P model? (1=:Power-law, 2:Galbraith and Martiny, 0:Redfield)
-c      maxcp=500.0                ! Upper bound C:P
-c      mincp=50.0                 ! Lower bound C:P
-c Paramters related to C:P Power-law
-c      par_bio_pc0 = 1000.0d0/rcp ! Referennce P:C (permil) = Redfield P:C 
-c      par_bio_po4_ref = 0.57     ! Reference PO4 (mmol m-3)
-c      par_bio_no3_ref = 5.7      ! Reference NO3 (mmol m-3)
-c      par_bio_temp_ref = 18.0    ! Reference Temperature (deg C)
-c      par_bio_light_ref = 70.0   ! Reference irradiance (W m-2)
-c      par_bio_spc_p = 0.21       ! s_P:C^PO4
-c      par_bio_spc_n = 0.0        ! s_P:C^NO3
-c      par_bio_spc_i = 0.0        ! s_P:C^I
-c      par_bio_spc_t = -3.6       ! s_P:C^T
-c Parameter related to C:P of Zooplankton 
-c      par_zoo_cp_hom = 1.0d0 ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
-c#endif   
 
       return
       end
