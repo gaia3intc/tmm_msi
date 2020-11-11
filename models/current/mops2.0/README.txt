@@ -1,3 +1,17 @@
+TT, 2020-11-11
+This file documents MOPS-CP which added 4 new tracers related to organic carbon chemistry (DOC, POC, Phyto C, and ZOO C). 
+C:P uptake ratio of phytoplankton and zooplankton are flexible and are modeled using power-law formulation. It was developed from MOPS Ver2.0.
+Full documentation of SMS terms of the new tracers is currently being prepared. 
+To use  MOPS-CP:
+
+(1) Fork all the files from T. Tanioka's github TMM branch called TT_Release. src, Matlab code, MakeFile, runscripts have all been updated.
+(2) Compile mops_cp by "make mops_cp"
+(3) Make sure that all paramters are set properly in the file biogem_params.txt
+(4) In the runscript, the following options must be set
+
+    	-bgc_params_file biogem_params.txt
+        -num_bgc_params 21 
+
 TT, 2020-09-09
 I've added several matlab files that are handy for processing output files to netcdf files.
 
