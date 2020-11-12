@@ -18,6 +18,13 @@ Khatiwala, S., Schmittner, A., and Muglia, J. (2019).
   periods.
 \newblock {\em Science advances}, 5(6):eaaw4981.
 
+\bibitem[Kriest et~al., 2020]{Kriest20}
+Kriest, I., K{\"{a}}hler, P., Koeve, W., Kvale, K.~F., Sauerland, V., and
+  Oschlies, A. (2020).
+\newblock {One size fits all? Calibrating an ocean biogeochemistry model for
+  different circulations}.
+\newblock {\em Biogeosciences}, 17(12):3057--3082.
+
 \bibitem[Kriest and Oschlies, 2015]{Kriest15}
 Kriest, I. and Oschlies, A. (2015).
 \newblock Mops-1.0: modelling the regulation of the global oceanic nitrogen
@@ -58,11 +65,23 @@ Nickelsen, L., Keller, D., and Oschlies, A. (2015).
   2.9.
 \newblock {\em Geoscientific Model Development}, 8:1357--1381.
 
+\bibitem[Niemeyer et~al., 2019]{Niemeyer19}
+Niemeyer, D., Kriest, I., and Oschlies, A. (2019).
+\newblock {The effect of marine aggregate parameterisations on nutrients and
+  oxygen minimum zones in a global biogeochemical model}.
+\newblock {\em Biogeosciences}, 16(15):3095--3111.
+
 \bibitem[Oschlies and Gar{\c{c}}on, 1999]{Oschlies99}
 Oschlies, A. and Gar{\c{c}}on, V. (1999).
 \newblock An eddy-permitting coupled physical-biological model of the north
   atlantic: 1. sensitivity to advection numerics and mixed layer physics.
 \newblock {\em Global Biogeochemical Cycles}, 13(1):135--160.
+
+\bibitem[Persson et~al., 2010]{Persson10}
+Persson, J., Fink, P., Goto, A., Hood, J.~M., Jonas, J., and Kato, S. (2010).
+\newblock {To be or not to be what you eat: Regulation of stoichiometric
+  homeostasis among autotrophs and heterotrophs}.
+\newblock {\em Oikos}, 119(5):741--751.
 
 \bibitem[Schmittner et~al., 2013]{Schmittner13}
 Schmittner, A., Gruber, N., Mix, A.~C., Key, R.~M., Tagliabue, A., and
@@ -115,6 +134,12 @@ Somes, C.~J., Schmittner, A., Muglia, J., and Oschlies, A. (2017).
 \newblock A three-dimensional model of the marine nitrogen cycle during the
   last glacial maximum constrained by sedimentary isotopes.
 \newblock {\em Frontiers in Marine Science}, 4:108.
+
+\bibitem[Tanioka and Matsumoto, 2020]{Tanioka20}
+Tanioka, T. and Matsumoto, K. (2020).
+\newblock {A meta-analysis on environmental drivers of marine phytoplankton C :
+  N : P}.
+\newblock {\em Biogeosciences}, 17(11):2939--2954.
 
 \bibitem[Woolf et~al., 2019]{Woolf19}
 Woolf, D.~K., Shutler, J.~D., Goddijn-Murphy, L., Watson, A., Chapron, B.,
