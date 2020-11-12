@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  16 SEP 2020 19:10
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  12 NOV 2020 17:23
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -105,6 +105,10 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count99
 )
+(/usr/local/texlive/2019/texmf-dist/tex/latex/natbib/bibentry.sty
+Package: bibentry 2007/10/30 1.5 (PWD)
+)
+(./TMM_intro_MSI.bbl)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/mathtools/mathtools.sty
 Package: mathtools 2018/01/08 v1.21 mathematical typesetting tools
 
@@ -465,6 +469,200 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(/usr/local/texlive/2019/texmf-dist/tex/latex/mhchem/mhchem.sty
+Package: mhchem 2018/06/22 v4.08 for typesetting chemical formulae
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2019-05-07 L3 programming layer (loader) 
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/l3kernel/expl3-code.tex
+Package: expl3 2019-05-07 L3 programming layer (code)
+\c_max_int=\count146
+\l_tmpa_int=\count147
+\l_tmpb_int=\count148
+\g_tmpa_int=\count149
+\g_tmpb_int=\count150
+\g__kernel_prg_map_int=\count151
+\c__ior_term_ior=\count152
+\c_log_iow=\count153
+\l_iow_line_count_int=\count154
+\l__iow_line_target_int=\count155
+\l__iow_one_indent_int=\count156
+\l__iow_indent_int=\count157
+\c_zero_dim=\dimen169
+\c_max_dim=\dimen170
+\l_tmpa_dim=\dimen171
+\l_tmpb_dim=\dimen172
+\g_tmpa_dim=\dimen173
+\g_tmpb_dim=\dimen174
+\c_zero_skip=\skip58
+\c_max_skip=\skip59
+\l_tmpa_skip=\skip60
+\l_tmpb_skip=\skip61
+\g_tmpa_skip=\skip62
+\g_tmpb_skip=\skip63
+\c_zero_muskip=\muskip12
+\c_max_muskip=\muskip13
+\l_tmpa_muskip=\muskip14
+\l_tmpb_muskip=\muskip15
+\g_tmpa_muskip=\muskip16
+\g_tmpb_muskip=\muskip17
+\l_keys_choice_int=\count158
+\l__intarray_loop_int=\count159
+\c__intarray_sp_dim=\dimen175
+\g__intarray_font_int=\count160
+\c__fp_leading_shift_int=\count161
+\c__fp_middle_shift_int=\count162
+\c__fp_trailing_shift_int=\count163
+\c__fp_big_leading_shift_int=\count164
+\c__fp_big_middle_shift_int=\count165
+\c__fp_big_trailing_shift_int=\count166
+\c__fp_Bigg_leading_shift_int=\count167
+\c__fp_Bigg_middle_shift_int=\count168
+\c__fp_Bigg_trailing_shift_int=\count169
+\g__fp_array_int=\count170
+\l__fp_array_loop_int=\count171
+\l__sort_length_int=\count172
+\l__sort_min_int=\count173
+\l__sort_top_int=\count174
+\l__sort_max_int=\count175
+\l__sort_true_max_int=\count176
+\l__sort_block_int=\count177
+\l__sort_begin_int=\count178
+\l__sort_end_int=\count179
+\l__sort_A_int=\count180
+\l__sort_B_int=\count181
+\l__sort_C_int=\count182
+\l__tl_analysis_normal_int=\count183
+\l__tl_analysis_index_int=\count184
+\l__tl_analysis_nesting_int=\count185
+\l__tl_analysis_type_int=\count186
+\l__regex_internal_a_int=\count187
+\l__regex_internal_b_int=\count188
+\l__regex_internal_c_int=\count189
+\l__regex_balance_int=\count190
+\l__regex_group_level_int=\count191
+\l__regex_mode_int=\count192
+\c__regex_cs_in_class_mode_int=\count193
+\c__regex_cs_mode_int=\count194
+\l__regex_catcodes_int=\count195
+\l__regex_default_catcodes_int=\count196
+\c__regex_catcode_L_int=\count197
+\c__regex_catcode_O_int=\count198
+\c__regex_catcode_A_int=\count199
+\c__regex_all_catcodes_int=\count266
+\l__regex_show_lines_int=\count267
+\l__regex_min_state_int=\count268
+\l__regex_max_state_int=\count269
+\l__regex_left_state_int=\count270
+\l__regex_right_state_int=\count271
+\l__regex_capturing_group_int=\count272
+\l__regex_min_pos_int=\count273
+\l__regex_max_pos_int=\count274
+\l__regex_curr_pos_int=\count275
+\l__regex_start_pos_int=\count276
+\l__regex_success_pos_int=\count277
+\l__regex_curr_char_int=\count278
+\l__regex_curr_catcode_int=\count279
+\l__regex_last_char_int=\count280
+\l__regex_case_changed_char_int=\count281
+\l__regex_curr_state_int=\count282
+\l__regex_step_int=\count283
+\l__regex_min_active_int=\count284
+\l__regex_max_active_int=\count285
+\l__regex_replacement_csnames_int=\count286
+\l__regex_match_count_int=\count287
+\l__regex_min_submatch_int=\count288
+\l__regex_submatch_int=\count289
+\l__regex_zeroth_submatch_int=\count290
+\g__regex_trace_regex_int=\count291
+\c_empty_box=\box60
+\l_tmpa_box=\box61
+\l_tmpb_box=\box62
+\g_tmpa_box=\box63
+\g_tmpb_box=\box64
+\l__box_top_dim=\dimen176
+\l__box_bottom_dim=\dimen177
+\l__box_left_dim=\dimen178
+\l__box_right_dim=\dimen179
+\l__box_top_new_dim=\dimen180
+\l__box_bottom_new_dim=\dimen181
+\l__box_left_new_dim=\dimen182
+\l__box_right_new_dim=\dimen183
+\l__box_internal_box=\box65
+\l__coffin_internal_box=\box66
+\l__coffin_internal_dim=\dimen184
+\l__coffin_offset_x_dim=\dimen185
+\l__coffin_offset_y_dim=\dimen186
+\l__coffin_x_dim=\dimen187
+\l__coffin_y_dim=\dimen188
+\l__coffin_x_prime_dim=\dimen189
+\l__coffin_y_prime_dim=\dimen190
+\c_empty_coffin=\box67
+\l__coffin_aligned_coffin=\box68
+\l__coffin_aligned_internal_coffin=\box69
+\l_tmpa_coffin=\box70
+\l_tmpb_coffin=\box71
+\g_tmpa_coffin=\box72
+\g_tmpb_coffin=\box73
+\l__coffin_bounding_shift_dim=\dimen191
+\l__coffin_left_corner_dim=\dimen192
+\l__coffin_right_corner_dim=\dimen193
+\l__coffin_bottom_corner_dim=\dimen194
+\l__coffin_top_corner_dim=\dimen195
+\l__coffin_scaled_total_height_dim=\dimen196
+\l__coffin_scaled_width_dim=\dimen197
+\c__coffin_empty_coffin=\box74
+\l__coffin_display_coffin=\box75
+\l__coffin_display_coord_coffin=\box76
+\l__coffin_display_pole_coffin=\box77
+\l__coffin_display_offset_dim=\dimen198
+\l__coffin_display_x_dim=\dimen199
+\l__coffin_display_y_dim=\dimen256
+\g__file_internal_ior=\read1
+\l__seq_internal_a_int=\count292
+\l__seq_internal_b_int=\count293
+\c__deprecation_minus_one=\count294
+)
+(/usr/local/texlive/2019/texmf-dist/tex/latex/l3kernel/l3xdvipdfmx.def
+File: l3xdvipdfmx.def 2019-04-06 v L3 Experimental driver: xdvipdfmx
+\g__driver_image_int=\count295
+\l__driver_pdf_tmp_box=\box78
+\g__driver_pdf_object_int=\count296
+\g__driver_pdf_annotation_int=\count297
+))
+(/usr/local/texlive/2019/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+Package: l3keys2e 2019-05-03 LaTeX2e option processing using LaTeX3 keys
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/chemgreek/chemgreek.sty
+(/usr/local/texlive/2019/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2019-05-03 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count298
+\g__xparse_grabber_int=\count299
+\l__xparse_m_args_int=\count300
+\l__xparse_v_nesting_int=\count301
+)
+Package: chemgreek 2016/12/20 v1.1 interfaceforuprightgreeklettersforuseinchemi
+stry (CN)
+\l__chemgreek_tmpa_int=\count302
+\g__chemgreek_tmpa_int=\count303
+)
+\l__mhchem_ce_distanceFromLastComma_int=\count304
+\__mhchem_arrow_extPgfLength_skip=\skip64
+\mhchem@minispace@tmp=\skip65
+\mhchem@minibackspace@tmp=\skip66
+\mhchem@bondwidth=\skip67
+\mhchem@bondheight=\skip68
+\mhchem@smallbondwidth@tmpA=\skip69
+\mhchem@smallbondwidth@tmpB=\skip70
+\mhchem@smallbondwidth=\skip71
+\mhchem@bondtmp@minussidebearingleft=\skip72
+\mhchem@bondtmp@minussidebearingright=\skip73
+\l__mhchem_option_version_int=\count305
+\mhchem@option@minusmathsidebearingleft=\dimen257
+\mhchem@option@minusmathsidebearingright=\dimen258
+\mhchem@option@minustextsidebearingleft=\dimen259
+\mhchem@option@minustextsidebearingright=\dimen260
+)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/newtxtext.sty
 Package: newtxtext 2018/03/27 v1.531
 
@@ -477,7 +675,7 @@ LaTeX Info: Redefining \itshape on input line 31.
 LaTeX Info: Redefining \slshape on input line 33.
 LaTeX Info: Redefining \scshape on input line 37.
 )
-\ntx@fs=\dimen169
+\ntx@fs=\dimen261
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/xkeyval/xkeyval.sty
 Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
@@ -487,12 +685,12 @@ Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 \XKV@toks=\toks31
 \XKV@tempa@toks=\toks32
 )
-\XKV@depth=\count146
+\XKV@depth=\count306
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 (/usr/local/texlive/2019/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2018/08/19 v2.5f e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count147
+\etb@tempcnta=\count307
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
@@ -596,11 +794,11 @@ Package: newtxmath 2018/05/15 v1.553
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/centernot.sty
 Package: centernot 2016/05/16 v1.4 Centers the not symbol horizontally (HO)
 )
-\tx@cntz=\count148
+\tx@cntz=\count308
 
 (/usr/local/texlive/2019/texmf-dist/tex/generic/kastrup/binhex.tex)
-\tx@Isdigit=\count149
-\tx@IsAlNum=\count150
+\tx@Isdigit=\count309
+\tx@IsAlNum=\count310
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 171.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/ntxtlf/m/n on input line 171.
@@ -704,82 +902,100 @@ LaTeX Font Info:    Redeclaring math delimiter \rvert on input line 582.
 LaTeX Font Info:    Redeclaring math delimiter \lVert on input line 583.
 LaTeX Font Info:    Redeclaring math delimiter \rVert on input line 584.
 LaTeX Font Info:    Redeclaring math symbol \m@thbbch@rA on input line 1929.
-\ntx@numstart=\count151
-\ntx@UCstart=\count152
-\ntx@lcstart=\count153
-\ntx@tmpc=\count154
-\ntx@imath=\count155
-\ntx@jmath=\count156
+\ntx@numstart=\count311
+\ntx@UCstart=\count312
+\ntx@lcstart=\count313
+\ntx@tmpc=\count314
+\ntx@imath=\count315
+\ntx@jmath=\count316
 LaTeX Info: Redefining \not on input line 2322.
 LaTeX Info: Redefining \textsquare on input line 2352.
 LaTeX Info: Redefining \openbox on input line 2354.
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 37.
-LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 44
+(/usr/local/texlive/2019/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
+\LTleft=\skip74
+\LTright=\skip75
+\LTpre=\skip76
+\LTpost=\skip77
+\LTchunksize=\count317
+\LTcapwidth=\dimen262
+\LT@head=\box79
+\LT@firsthead=\box80
+\LT@foot=\box81
+\LT@lastfoot=\box82
+\LT@cols=\count318
+\LT@rows=\count319
+\c@LT@tables=\count320
+\c@LT@chunks=\count321
+\LT@p@ftn=\toks33
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 43.
+LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 50
 .
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 File: t1ntxtlf.fd 2015/01/17 v1.0 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 44.
+(Font)              scaled to size 10.0pt on input line 50.
 
 (./TMM_intro_MSI.aux)
 \openout1 = `TMM_intro_MSI.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 44.
-LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 44
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 50.
+LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 50
 .
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 44.
-LaTeX Font Info:    Try loading font information for U+ntxexa on input line 44.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 50.
+LaTeX Font Info:    Try loading font information for U+ntxexa on input line 50.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 44.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 44.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 50.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 50.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 44.
-LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 44
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 50.
+LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 50
 .
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 44.
-LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 4
-4.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 50.
+LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 5
+0.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    ... okay on input line 50.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -815,22 +1031,27 @@ LaTeX Font Info:    ... okay on input line 44.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@lstlisting=\count157
+\c@lstlisting=\count322
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+(/usr/local/texlive/2019/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2018/08/26 v1.4-95 longtable captions (AR)
+)
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 44.
+LaTeX Info: Redefining \microtypecontext on input line 50.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of spacing.
 Package microtype Info: No adjustment of kerning.
+
 (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-\AtBeginShipoutBox=\box60
-Package hyperref Info: Link coloring ON on input line 44.
+\AtBeginShipoutBox=\box83
+Package hyperref Info: Link coloring ON on input line 50.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -838,35 +1059,38 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count158
+\c@section@level=\count323
 )
-LaTeX Info: Redefining \ref on input line 44.
-LaTeX Info: Redefining \pageref on input line 44.
-LaTeX Info: Redefining \nameref on input line 44.
+LaTeX Info: Redefining \ref on input line 50.
+LaTeX Info: Redefining \pageref on input line 50.
+LaTeX Info: Redefining \nameref on input line 50.
 
 (./TMM_intro_MSI.out) (./TMM_intro_MSI.out)
 \@outlinefile=\write3
 \openout3 = `TMM_intro_MSI.out'.
 
-\c@mv@tabular=\count159
-\c@mv@boldtabular=\count160
+
+Package chemgreek Info: Activating mapping `newtx' on line 50.
+
+\c@mv@tabular=\count324
+\c@mv@boldtabular=\count325
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 17.28pt on input line 46.
+(Font)              scaled to size 17.28pt on input line 52.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 46.
-LaTeX Font Info:    Try loading font information for OT1+ntxtlf on input line 4
-6.
+(Font)              scaled to size 12.0pt on input line 52.
+LaTeX Font Info:    Try loading font information for OT1+ntxtlf on input line 5
+2.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ot1ntxtlf.fd
 File: ot1ntxtlf.fd 2015/01/17 v1.0 font definition file for OT1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 46.
+(Font)              scaled to size 12.0pt on input line 52.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.8pt on input line 46.
+(Font)              scaled to size 8.8pt on input line 52.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.6pt on input line 46.
-LaTeX Font Info:    Try loading font information for U+msa on input line 46.
+(Font)              scaled to size 6.6pt on input line 52.
+LaTeX Font Info:    Try loading font information for U+msa on input line 52.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -874,7 +1098,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 46.
+LaTeX Font Info:    Try loading font information for U+msb on input line 52.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -882,42 +1106,42 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+ntxmia on input line 46.
+LaTeX Font Info:    Try loading font information for U+ntxmia on input line 52.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxmia.fd
 File: untxmia.fd 2018/04/14 Fontinst v1.933 font definitions for U/ntxmia.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsym on input line 46.
+LaTeX Font Info:    Try loading font information for U+ntxsym on input line 52.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxsym.fd
 File: untxsym.fd 2015/03/20 Fontinst v1.933 font definitions for U/ntxsym.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 46.
+LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 52.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 47.
+(Font)              scaled to size 9.0pt on input line 53.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <9> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 47.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 53.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 9.0pt on input line 47.
+(Font)              scaled to size 9.0pt on input line 53.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 48.
+(Font)              scaled to size 9.0pt on input line 54.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.3pt on input line 48.
+(Font)              scaled to size 7.3pt on input line 54.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.5pt on input line 48.
+(Font)              scaled to size 5.5pt on input line 54.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 14.4pt on input line 51.
+(Font)              scaled to size 14.4pt on input line 57.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 51.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 57.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 14.4pt on input line 51.
+(Font)              scaled to size 14.4pt on input line 57.
 
 (./TMM_intro_MSI.toc
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10> not available
@@ -936,55 +1160,74 @@ File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
 
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <12> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 55.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 61.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 12.0pt on input line 55.
+(Font)              scaled to size 12.0pt on input line 61.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.0pt on input line 56.
-LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 60.
+(Font)              scaled to size 10.0pt on input line 62.
+LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 66.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtt.fd
 File: t1ntxtt.fd 2012/04/20 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 10.0pt on input line 60.
+(Font)              scaled to size 10.0pt on input line 66.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `ntxtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.0pt on input line 70.
-LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 7.0pt on input line 70.
  [1
 
-] [2]
-[3] (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2019/02/27 1.8b listings language file
-)
-[4]
-LaTeX Font Info:    Font shape `T1/ntxtt/bx/n' will be
-(Font)              scaled to size 7.0pt on input line 301.
-
-Overfull \hbox (3.89648pt too wide) in paragraph at lines 318--319
-[]\T1/ntxtlf/m/n/10 Below is the cus-tom PBS script for sub-mit-ting a new job 
-to run MOPS2 us-ing Mesabi. It's called [][]\T1/ntxtt/m/n/10 runscript_msi
+]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 7.0pt on input line 76.
+LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
+(Font)              scaled to size 7.0pt on input line 76.
+ [2]
+[3]
+Overfull \hbox (5.131pt too wide) in paragraph at lines 209--210
+[]\T1/ntxtlf/m/n/10 For each model there are model-specific source codes in the
+ di-rec-tory ([][]\T1/ntxtt/m/n/10 $TMMROOT/models/current/mops2/[]\T1/ntxtlf/m
+/n/10 )
  []
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
+) [4]
+LaTeX Font Info:    Font shape `T1/ntxtt/bx/n' will be
+(Font)              scaled to size 7.0pt on input line 307.
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
+Overfull \hbox (13.03659pt too wide) in paragraph at lines 330--331
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][] 
+ []
+
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 7.0pt on input line 322.
+(Font)              scaled to size 7.0pt on input line 342.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <7> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 328.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 352.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 7.0pt on input line 328.
- [5]
+(Font)              scaled to size 7.0pt on input line 352.
+[5]
+Overfull \hbox (0.63672pt too wide) in paragraph at lines 373--374
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (9.0368pt too wide) in paragraph at lines 394--395
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
 [6]
-Overfull \hbox (8.76114pt too wide) in paragraph at lines 449--450
+Overfull \hbox (8.76114pt too wide) in paragraph at lines 477--478
 [][][]\T1/ntxtt/m/n/10 load_output_time_avg.m[]\T1/ntxtlf/m/n/10 : This file co
 n-verts each tracer av-er-age con-cen-tra-tion .petsc file (e.g., po4avg.petsc)
 
@@ -993,71 +1236,256 @@ n-verts each tracer av-er-age con-cen-tra-tion .petsc file (e.g., po4avg.petsc)
 [7]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 487.
+(hyperref)                removing `math shift' on input line 515.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 487.
+(hyperref)                removing `subscript' on input line 515.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 487.
+(hyperref)                removing `math shift' on input line 515.
 
 [8]
-LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 5
-86.
+LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 6
+30.
  (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.0pt on input line 586.
+(Font)              scaled to size 7.0pt on input line 630.
  [9]
+Overfull \hbox (34.78076pt too wide) in paragraph at lines 671--672
+[][]\T1/ntxtt/m/n/10 ~/../tanio003/TMM2/Runs/MOPS/Testruns/Slurm/Test_co2histor
+yRCP85_slurm/analyzeoutput.jnl[]\T1/ntxtlf/m/n/10 . 
+ []
+
+
+Overfull \hbox (4.6365pt too wide) in paragraph at lines 690--691
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
 File: ./Figures_tutorial/pco2RCP85.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/pco2RCP85.pdf>
+[10]
 File: ./Figures_tutorial/airseaflux2010.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/airseaflux2010.pdf>
 File: ./Figures_tutorial/airseaflux2100.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/airseaflux2100.pdf>
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
 File: ./Figures_tutorial/Woolf19_GBC_Fig1.jpg Graphic file (type bmp)
 <./Figures_tutorial/Woolf19_GBC_Fig1.jpg>
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 File: ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf Graphic file (type
  pdf)
 <use ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf>
-[10]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
 File: ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg Graphic file (type bmp)
 <./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg>
 
-Overfull \hbox (12.78545pt too wide) in paragraph at lines 687--688
+Overfull \hbox (12.78545pt too wide) in paragraph at lines 738--739
  [][] 
  []
 
-[11] (./TMM_intro_MSI.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 698.
- [12
 
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 698.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[11] [12]
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 796--797
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][] 
+ []
+
+
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 797--798
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 798--799
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 799--800
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.43668pt too wide) in paragraph at lines 800--801
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.43668pt too wide) in paragraph at lines 801--802
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[13]
+Overfull \hbox (4.6365pt too wide) in paragraph at lines 879--880
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[14]
+File: ./Figures_tutorial/productivity_comparison.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/productivity_comparison.pdf>
+File: ./Figures_tutorial/driver_comparison.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/driver_comparison.pdf>
+File: ./Figures_tutorial/cp_comparison.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/cp_comparison.pdf>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+File: ./Figures_tutorial/doc_global.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/doc_global.pdf>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+File: ./Figures_tutorial/doc_regional.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/doc_regional.pdf>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[15]
+LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.0pt on input line 962.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 7.3pt on input line 962.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 5.5pt on input line 962.
+ [16] [17] [18]
+LaTeX Font Info:    Try loading font information for T1+txtt on input line 1058
+.
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/txfonts/t1txtt.fd
+File: t1txtt.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Font shape `T1/ntxtt/m/it' in size <7> not available
+(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 1058.
+
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `txtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+ [19] [20]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.0pt on input line 1173.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.0pt on input line 1176.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.2pt on input line 1176.
+
+Underfull \vbox (badness 10000) detected at line 1181
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1192
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1203
+ []
+
+
+Overfull \hbox (5.7777pt too wide) in paragraph at lines 1205--1207
+[]\T1/ntxtlf/b/n/10 mixing\T1/ntxtlf/m/n/10 : Vari-ables re-lated to mix-ing. M
+ost of these de-clared in [][]\T1/ntxtt/m/n/10 $UVICESCMROOT/source/mom/UVic_ES
+CM.F
+ []
+
+LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
+(Font)              scaled to size 8.0pt on input line 1214.
+
+Underfull \vbox (badness 10000) detected at line 1224
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1249
+ []
+
+[21]
+Underfull \vbox (badness 10000) detected at line 1278
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1298
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1306
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1317
+ []
+
+[22]
+Underfull \vbox (badness 10000) detected at line 1326
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1333
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1339
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1347
+ []
+
+
+Overfull \hbox (7.97206pt too wide) in paragraph at lines 1349--1350
+\T1/ntxtlf/m/n/10 OSU-[]CEOAS-[]Schmittner / UVicMOBI _ fct _ npzd _ o2 _ n _ f
+e _ ca _ caco3 _ c13 _ n15 / blob / master / updates / npzd _ src .
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1373
+ []
+
+[23] [24] (./TMM_intro_MSI.bbl
+Missing character: There is no “ in font ntx-Regular-tlf-t1!
+Missing character: There is no ” in font ntx-Regular-tlf-t1!
+ [25
+
+])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1423.
+ [26]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1423.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 698.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 698.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1423.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1423.
+
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
-(rerunfilecheck)             Checksum: 902963497082F502123FF905909F1DBA.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 698.
+(rerunfilecheck)             Checksum: 6381F7A2266E8BD4692997DF86CC3C38.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1423.
  ) 
 Here is how much of TeX's memory you used:
- 18025 strings out of 492916
- 262619 string characters out of 6133346
- 618306 words of memory out of 5000000
- 21834 multiletter control sequences out of 15000+600000
- 73107 words of font info for 104 fonts, out of 8000000 for 9000
+ 28640 strings out of 492916
+ 476152 string characters out of 6133346
+ 809791 words of memory out of 5000000
+ 32399 multiletter control sequences out of 15000+600000
+ 619282 words of font info for 140 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 36i,8n,77p,1049b,1955s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,16n,77p,1056b,1953s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on TMM_intro_MSI.pdf (12 pages).
+Output written on TMM_intro_MSI.pdf (26 pages).

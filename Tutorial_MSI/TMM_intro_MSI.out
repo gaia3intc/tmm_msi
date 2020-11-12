@@ -10,3 +10,9 @@
 \BOOKMARK [3][-]{subsubsection.1.2.7}{Step\0406:\040Displaying\040the\040model\040outputs}{subsection.1.2}% 10
 \BOOKMARK [1][-]{section.2}{Case\040Studies}{}% 11
 \BOOKMARK [2][-]{subsection.2.1}{Study\0401:\040Postindustrial\040CO2\040uptake\040with\040MOPS+MIT2.8}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.2}{Study\0402:\040Using\040MOPS+ECCO\040to\040simulate\040flexible\040C:P}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.3}{Study\0403:\040Using\040MOBI+UVic\040to\040simulate\040isotope\040dynamics,\040WORK\040IN\040PROGRESS}{section.2}% 14
+\BOOKMARK [1][-]{section.3}{Appendix}{}% 15
+\BOOKMARK [2][-]{subsection.3.1}{Downloading\040PyFerret\040on\040MSI}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.2}{General\040reference\040for\040MOPS\040and\040MOBI}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.3}{Paramters\040for\040MOBI\040\(listed\040at\040control.in\)}{section.3}% 18

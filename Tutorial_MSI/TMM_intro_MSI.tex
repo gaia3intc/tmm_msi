@@ -13,8 +13,11 @@
     basicstyle=\scriptsize\color{white}\ttfamily
 }
 \usepackage{natbib}
+\usepackage{bibentry}
+\nobibliography*
 \usepackage{mathtools,amsthm}    % some advanced mathematics notation
 \usepackage{graphicx}            % easy inclusion and manipulation of images
+%\usepackage[draft]{graphicx}            % for draft- not displaying figures, comment out if display figures
 \graphicspath{ {./Figures_tutorial/} }
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{float}
@@ -24,8 +27,10 @@
 \usepackage[hidelinks]{hyperref} % clickable references in the output, but hide them visually
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage[version=3]{mhchem}
 \usepackage{newtxtext,newtxmath}
 \usepackage{hyperref}
+\usepackage{longtable}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -201,18 +206,16 @@ For your future convenience, I would advise you to set \verb|$TMMROOT| in your \
 \noin Here, let's try compiling the biogeochemical MOPS. If you want to learn about the basic architecture of MOPS, read the model description paper by \citet{Kriest15} at \url{https://gmd.copernicus.org/articles/8/2929/2015/}. 
 
 \begin{enumerate}
-\item For each model there are model-specific source codes \\ (\verb|$TMMROOT/models/current/mops2/src/|); Matlab scripts \\ (\verb|$TMMROOT/models/current/mops2/matlab/|) to generate input data and read model output; and run scripts and other runtime data such as namelists in \\ 
-\verb|$TMMROOT/models/current/mops2/runscripts/|. 
-
-First, we create a new run directory. I make a new base directory called ``\verb|Runs|'' and in that directory, I make subdirectories for specific experiments. I call it \verb|Runs/MOPS/Test_spinup| and copy here all the files needed.
+\item For each model there are model-specific source codes in the directory (\verb|$TMMROOT/models/current/mops2/|) and we need to import some of them to the run directory. First, we create a new run directory. I make a new base directory called ``\verb|Runs|'' and in that directory, I make subdirectories for specific experiments. I call it \verb|Runs/MOPS/Test_spinup| and copy here all the files needed.
 
 \begin{lstlisting}[style=DOS]
  $ cd ~/TMM2
- $ mkdir -p Runs/MOPS/TMM_spinup
- $ cd Runs/MOPS/TMM_spinup
+ $ mkdir -p Runs/MOPS/Test_spinup
+ $ cd Runs/MOPS/Test_spinup
  $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
  $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
  $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
+ $ cp -p $TMMROOT/models/current/mops2.0/parameters/* .
 \end{lstlisting}
 
 \item Compile mops. Make sure that all the modules are loaded and \verb|$PETSC_DIR| is set correctly before you compile mops.
@@ -220,7 +223,7 @@ First, we create a new run directory. I make a new base directory called ``\verb
  $ module load intel
  $ module load impi/intel
  $ module load cmake
- $ make clean all
+ $ make cleanall
  $ make mops
 \end{lstlisting}
 
@@ -247,7 +250,7 @@ First, we create a new run directory. I make a new base directory called ``\verb
  mops_biogeochem_ini.o               tmm_profile_utils.o
  mops_biogeochem_misfit.o            tmm_timer.o
  mops_biogeochem_model.o             tmm_write.o
- mops_biogeochem_set_params.o
+ mops_biogeochem_set_params.o        biogem_params.txt
 \end{lstlisting}
 \lstset{emph={}, emphstyle=\color{green}}
 
@@ -261,7 +264,8 @@ First, we create a new run directory. I make a new base directory called ``\verb
  % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
  % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
  base_path='~/TMM2/MITgcm_2.8deg';
- 
+  %base_path='~/TMM2/MITgcm_ECCO';
+  
  addpath(genpath('~/TMM2/tmm_matlab_code'));% add tmm_matlab_code to the search path
  oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceanCarbon to the search path
  atmosDataPath=fullfile(oceanCarbonBasePath,'AtmosphericCarbonData');
@@ -284,6 +288,7 @@ First, we create a new run directory. I make a new base directory called ``\verb
  
  READ_SWRAD=0                    % Read short-wave radiation?
  useCarbon=1                     % Use simple inorganic carbon model?
+ useOrgCarbon=0                  % Use organic carbon module?
  useAtmModel=0                   % Use prognostic 1-box atmosphere?
  pCO2atm_ini=280.0               % Initial pco2?
  useTimeVaryingPrescribedCO2=0   % Use prescribed pco2 pathway?
@@ -311,92 +316,114 @@ For product information, visit www.mathworks.com.
 >> make_input_files_for_mops_model
 \end{lstlisting}
 \noin This creates a bunch of periodic forcing files (\verb|xxx_01, xxx_02,...|), initial tracer concentrations \\ (\verb|po4ini.petsc, no3ini.petsc,...|), and binary files (.bin and .petsc) related to model geometry and forcing.
+
+\item Edit the parameter file.  \verb|biogem_params.txt|. We only need to set the \textbf{first 7 parameters} because we are not using organic carbon module for this exercise. We will use the calibrated values for MOPS/MIT2.8 follwiing \cite{Kriest20}.
+
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+  1.39     #01. detmartin = Martin Curve exponent of Detritus [1.39 for MIT2.8, 1.46 for ECCO]
+  173.7    #02. ro2ut = Refield -O2:P                         [173.7 for MIT2.8, 151.1 for ECCO]
+  0.00119  #03. nfix = Max growth rate (1/d) of N-fixers      [0.00119 for MIT2.8, 0.00229 for ECCO]
+  15.8     #04. subdin = No denitrification below this level of DIN (mmol/m3)           [15.8, 16.0]
+  1.01     #05. ACkbaco2 = Half sat-constant for oxic degradation (mmol/m3)             [1.01, 1.07]
+  32.0     #06. ACkbacdin = Half sat-constant for suboxic degradation                   [32.0, 23.1]
+  0.001    #07. alimit = Min. value for the degradation of PHY and DOP [0.001 for mops, 0.01 for mops_cp]
+\end{lstlisting}
+
 \end{enumerate}
 
 \subsubsection{Step 4: Running the model}
-\noin MSI systems use job queues to efficiently and fairly manage when computations are executed. The queuing system at MSI is called PBS (Portable Batch System) and to submit a job to a PBS queue users create PBS job scripts. PBS script contains information on the resources requested for calculation, as well as the commands for executing the calculation. 
+\noin MSI systems use job queues to efficiently and fairly manage when computations are executed. The queuing system at MSI is called Slurm and to submit a job to a queue users create Slurm job scripts. The script contains information on the resources requested for calculation, as well as the commands for executing the calculation. 
 
-Below is the custom PBS script for submitting a new job to run MOPS2 using Mesabi. It's called \verb|runscript_msi| and should be in the current directory already. Here is the first 11 lines:
+Below is the custom Slurm script for submitting a new job to run MOPS2 using Mesabi. It's called \verb|runscript_msi| and should be in the current directory already.
 
 \lstset{language=sh} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
- 1  #!/bin/bash -l
- 2  #PBS -l walltime=06:00:00,nodes=1:ppn=24,pmem=2580mb
- 3  #PBS -m abe
- 4  #PBS -j oe
- 5  #PBS -M tatsurobkkuk@gmail.com
- 6
- 7  cd $PBS_O_WORKDIR
- 8
- 9  module load intel
- 10 module load impi/intel
- 11 module load cmake
- \end{lstlisting}
+#!/bin/bash -l        
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --mem-per-cpu=2gb
+#SBATCH --time=06:00:00
+#SBATCH --mail-type=ALL  
+#SBATCH --mail-user=tatsurobkkuk@gmail.com
+#SBATCH -p small
+#SBATCH --output=%j.out
 
-\noin The first line defines which type of shell the script will be read. Here we will use the \verb|bash|. The second line contains the PBS resource request. The current job will require about 6 hours, 1 node each with 24 processor cores (ppn), and 2580 megabytes of memory per core (pmem). 
+cd $SLURM_SUBMIT_DIR
 
-The two lines containing \verb|#PBS -m abe|, and \verb|#PBS -M tatsurobkkuk@gmail.com|. are both commands having to do with sending message emails to the user.  The first of these lines instructs the PBS system to send a message email when the job aborts, begins, or ends. The second command specifies the email address to be used.  Using the message emails is recommended because the reason for a job failure can often be determined using information in the emails. The seventh line sets the directory at which commands are executed and the lines 8-11 loads the necessary software modules. 
-
-The follwing lines (14$\sim$) contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments. For more information on different options available, read ``HOWTO.txt'' by S. Khatiwala located in \verb|$TMMROOT|. 
-\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
- # 360 days per year with a time step of 2 steps per day:
- 14 mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \   # number of cores, models
- 15   -numtracers 9 \   # number of tracers (i.e. state variables)
- 16   -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,
- no3ini.petsc,dicini.petsc,alkini.petsc \ # files for initialization of BGC state variables
- 17   -me Ae \   # the name of the explicit transport matrix
- 18   -mi Ai \   # the name of the implicit transport matrix
- 19   -t0 0.0 -iter0 0 \ # starting time[years] starting time[timesteps]: for initial run
- 20   -deltat_clock 0.0013888888888889 \  # ocean timestep length[years]: 2 timesteps/day
- 21   -max_steps 2160000 \   # total number of timesteps to be evaluated (here 3000 yrs)
- 22   -write_time_steps 72000 \ # output frequency(in timesteps, here every 100 yrs)
- 23   -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,
- no3out.petsc,dicout.petsc,alkout.petsc \ # files for output of 9 BGC state variables
- 24   -external_forcing \ # calculate BGC explicitly
- 25   -use_profiles \
- 26   -nzeuph 2 \   # number of layers in euphotic zone (2 for MIT2.8, 6 for ECCO)
- 27   -biogeochem_deltat 43200.0 -days_per_year 360.0 \ # ocean timestep[seconds]
- 28   -burial_sum_steps 720 \   # sum burial over a period of 720 timesteps = 1 yr
- 29   -pco2atm 280.0 \   # use fixed pCO2 of 280 ppm
- 30   -use_virtual_flux \ # use the global surface mean DIC and Alk to calculate E-P
- 31   -periodic_matrix \  # use of periodic transport matrix
- 32   -matrix_cycle_period 1.0 -matrix_num_per_period 12 \ # the unit of time is year and 
- # circulation has a periodicity of 1 year; monthly mean tranport matrix (12 TMs/year)
- 33   -periodic_biogeochem_forcing \  # periodic biogeochemical forcing
- 34   -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
- 35   -num_biogeochem_steps_per_ocean_step 8 \ # the number of BGC timestep per ocean step
- 36   -separate_biogeochem_time_stepping \  # timestep BGC model separately from ocean step
- 37   -time_avg -avg_start_time_step 2159281 -avg_time_steps 60 \ 
- # initial timestep for avg concentrations (for final year); avg over 60 timestep = 1 month
- 38   -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,
- detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc \   # avg file names
- 39   -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \
- # initial timestep for diagnostic fluxes (for final year); avg over 60 timesteps = 1 month
- 40   -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,
- fbgc7.petsc \ # diagnsotic flux files names
- 41     > log   # outputting to logfile
+module load intel
+module load impi/intel
+module load cmake
 \end{lstlisting}
 
-\noin Currently BGC model writes the following 7 diagnostics into the different files:
+\noin The first line defines which type of shell the script will be read. Here we will use the \verb|bash|. Commands for the Slurm queuing system begin with \verb|#SBATCH|. Lines 2 to 4 in the above sample script contain the Slurm resource request. The current job will require about 6 hours, 1 node each with 24 processor cores, and 2GB of memory per core . The two lines containing \verb|#SBATCH --mail| are both commands having to do with sending message emails to the user. The first of these lines instructs the Slurm system to send a message email when the job aborts, begins, or ends. The second command specifies the email address to be used. Using the message emails is recommended because the reason for a job failure can often be determined using information in the emails. A Slurm script should contain the appropriate change directory commands to get to the job execution location. A Slurm script also needs to contain module load commands for any software modules that the calculation might need. 
+
+The follwing lines (17$\sim$) in \verb|runscript_msi| contain the commands to execute and start a specific program. Different flags need to be change accordingly depending on the nature of experiments. For more information on different options available, read ``HOWTO.txt'' by S. Khatiwala located in \verb|$TMMROOT|. Do not put these  \verb|#| comments in the actual file. 
+
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+# 360 days per year with a time step of 2 steps per day:
+mpirun -np 24 ./mops \ # number of cores, models
+        -numtracers 9 \  # number of tracers (i.e. state variables)
+        -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,no3ini.petsc,
+        dicini.petsc,alkini.petsc \  # files for initialization of BGC state variables
+        -me Ae \   # the name of the explicit transport matrix
+        -mi Ai \   # the name of the implicit transport matrix
+        -t0 0.0 -iter0 0 \
+        -deltat_clock 0.0013888888888889 \  # starting time[years] starting time[timesteps]: for initial run
+        -max_steps 2160000 \   # total number of timesteps to be evaluated (here 3000 yrs)
+        -write_time_steps 72000 \   # output frequency(in timesteps, here every 100 yrs)
+        -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,no3out.petsc,
+        dicout.petsc,alkout.petsc \   # files for output of 9 BGC state variables
+        -external_forcing \   # calculate BGC explicitly
+        -use_profiles \
+        -nzeuph 2 \   # number of layers in euphotic zone (2 for MIT2.8, 6 for ECCO)
+        -biogeochem_deltat 43200.0 -days_per_year 360.0 \ # ocean timestep[seconds]
+        -burial_sum_steps 720 \  # sum burial over a period of 720 timesteps = 1 yr
+        -pco2atm 280.0 \ # use fixed pCO2 of 280 ppm
+        -use_virtual_flux \ # use the global surface mean DIC and Alk to calculate E-P
+        -periodic_matrix \ # use of periodic transport matrix # the unit of time is year and 
+ # circulation has a periodicity of 1 year; monthly mean tranport matrix (12 TMs/year)
+        -matrix_cycle_period 1.0 -matrix_num_per_period 12 \
+        -periodic_biogeochem_forcing \
+        -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
+        -num_biogeochem_steps_per_ocean_step 8 \  # the number of BGC timestep per ocean step
+        -separate_biogeochem_time_stepping \ # timestep BGC model separately from ocean step
+        -time_avg -avg_start_time_step 2159281 -avg_time_steps 60 \
+        # initial timestep for diagnostic fluxes (for final year); avg over 60 timesteps = 1 month
+        -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,detavg.petsc,no3avg.petsc,
+        dicavg.petsc,alkavg.petsc \ # avg file names
+        -bgc_params_file biogem_params.txt \   # parameter files to be read
+        -num_bgc_params 7 \   # number of parameters read
+        -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \
+        # initial timestep for diagnostic fluxes (for final year); avg over 60 timesteps = 1 month
+        -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,fbgc7.petsc,
+        fbgc8.petsc \ # diagnsotic flux files names
+        > log # outputting to logfile
+
+ \end{lstlisting}
+
+\noin Currently BGC model writes the following 8 diagnostics into the different files:
 \begin{enumerate}
-\item \verb|fbgc1.petsc|: primary production in each box [mmol P/m3/oceantimestep]
-\item \verb|fbgc2.petsc|: zooplankton grazing in each box [mmol P/m3/oceantimestep]
-\item \verb|fbgc3.petsc|: detritus sedimentation through upper boundary of \\ each box [mmol P/m2/oceantimestep]
-\item \verb|fbgc4.petsc|: remineralization of detrius and DOP in each box [mmol P/m3/oceantimestep]
-\item \verb|fbgc5.petsc|: river runoff [mmol P/m3/oceantimestep]
-\item \verb|fbgc6.petsc|: nitrogen fixation [mmol N/m3/oceantimestep]
-\item \verb|fbgc7.petsc|: denitrification [mmol P/m3/oceantimestep]
+\item \verb|fbgc1.petsc|: primary production in each box [$\mathrm{mmol P/m^3/oceantimestep}$]
+\item \verb|fbgc2.petsc|: zooplankton grazing in each box  [$\mathrm{mmol P/m^3/oceantimestep}$]
+\item \verb|fbgc3.petsc|: detritus sedimentation through upper boundary of \\ each box  [$\mathrm{mmol P/m^2/oceantimestep}$]
+\item \verb|fbgc4.petsc|: remineralization of detrius and DOP in each box [$\mathrm{mmol P/m^3/oceantimestep}$]
+\item \verb|fbgc5.petsc|: river runoff  [$\mathrm{mmol P/m^3/oceantimestep}$]
+\item \verb|fbgc6.petsc|: nitrogen fixation  [$\mathrm{mmol N/m^3/oceantimestep}$]
+\item \verb|fbgc7.petsc|: denitrification  [$\mathrm{mmol N/m^3/oceantimestep}$]
+\item \verb|fbgc8.petsc|: Irradiance at the top of every layer in euphotic zone [$\mathrm{W/m^2}$], added by T.Tanioka (2020/11)
 \end{enumerate}
 
 \noin To submit the job to the queue, type on the command line:
 \begin{lstlisting}[style=DOS]
  $ chmod u+x runscript_msi
- $ qsub runscript_msi
+ $ sbatch runscript_msi
 \end{lstlisting}
 
 \noin To check your job status at MSI, type:
 \begin{lstlisting}[style=DOS]
- $ showq -u yourusername
+ $ squeue -u yourusername
 \end{lstlisting}
 
 \subsubsection{Step 5: Processing the model outputs}
@@ -410,19 +437,19 @@ The follwing lines (14$\sim$) contain the commands to execute and start a specif
 \begin{lstlisting}[style=DOS]
  >> n7tracers28('filename1.nc')
 \end{lstlisting}
-Make sure to set the basepath correctly and useCarbon=1 (when carbon model is used) and make sure that there is no .nc file with the same name already in the directory.
+Make sure to set the basepath correctly and set useCarbon=1 (when carbon model is used) and useOrgCarbon=0. Also make sure that there is no .nc file with the same name already in the directory.
 
 \item\verb|n7tracersavg28.m|: This file converts each tracer time-averaged .petsc file (e.g., po4avg.petsc) into a single .nc file. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
  >> n7tracersavg28('filename2.nc')
 \end{lstlisting}
-Make sure to set the basepath correctly and useCarbon=1 (when carbon model is used) and make sure that there is no .nc file with the same name already in the directory.
+Make sure to set the basepath correctly and set useCarbon=1 and useOrgCarbon=0.
 
 \item\verb|n7fluxes28.m|: This file converts each diagnostic flux .petsc file (e.g., fbgc1.petsc) into a single .nc file. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
  >> n7fluxes28('filename3.nc')
 \end{lstlisting}
-Make sure to set the basepath correctly and make sure that there is no .nc file with the same name already in the directory.
+Make sure to set the basepath correctly and and set useOrgCarbon=0.
 
 \item\verb|n7physics.m|: This file makes single .c files with monthly mean temperature and salinity. The MATLAB syntax is:
 \begin{lstlisting}[style=DOS]
@@ -430,7 +457,7 @@ Make sure to set the basepath correctly and make sure that there is no .nc file 
 \end{lstlisting}
 Make sure to set the basepath correctly and make sure that there is no .nc file with the same name already in the directory.
 
-\item\verb|load_pco2.m|: This file makes a global mean atmospheric $\mathrm{pCO_{2}}$ file (``pco2.nc'') and surface $\mathrm{CO_{2}}$ air-sea flux file (``co2airseaflux.nc''). $\mathrm{CO_{2}}$ is in ppm and $\mathrm{CO_{2}}$ air-sea flux is in [mmol C/m2/timestep] (positive flux means $\mathrm{CO_{2}}$ is going into the sea from air). The MATLAB syntax is 
+\item\verb|load_pco2.m|: This file makes a global mean atmospheric $\mathrm{pCO_{2}}$ file (``pco2.nc'') and surface $\mathrm{CO_{2}}$ air-sea flux file (``co2airseaflux.nc''). $\mathrm{CO_{2}}$ is in ppm and $\mathrm{CO_{2}}$ air-sea flux is in [$\mathrm{mmol C/m^2/timestep}$] (positive flux means $\mathrm{CO_{2}}$ is going into the sea from air). The MATLAB syntax is 
 \begin{lstlisting}[style=DOS]
  >> load_pco2
 \end{lstlisting}
@@ -457,12 +484,12 @@ Make sure to set the basepath and the $\mathrm{CO_{2}}$ run options correctly.
 \begin{lstlisting}[style=DOS]
  $ ls *.nc
  filename1.nc filename2.nc filename3.nc filename4.nc co2airseaflux.nc pco2.nc
- $ module load ferret
+ $ module load ferret/7.6.0
  $ ferret
  	NOAA/PMEL TMAP
- 	FERRET v6.82
- 	Linux 2.6.32-279.1.1.el6.x86_64 64-bit - 08/03/12
- 	14-Sep-20 14:49
+ 	PyFerret v7.6 (optimized)
+ 	Linux 4.15.0-1089-azure - 06/25/20
+ 	11-Nov-20 16:51
 
 yes? load filename1.nc
 yes? sho d
@@ -482,7 +509,7 @@ yes? sho d
 I won't go into too much detail here but to learn more about Ferret, visit NOAA's website and take a tutorial at \url{https://ferret.pmel.noaa.gov/Ferret/documentation/ferret-tutorials}. You can make all kinds of graphs and figures with Ferret.
 
 \vspace{5mm}
-\noin (Option 2): If you want to visualize .mat files, I recommend the MATLAB package \verb|m_map|. Again, I would not go into much detail here but if you want to learn about it, download the package and take the tutorial from the developer's website: \url{https://www.eoas.ubc.ca/~rich/map.html}. Compared to Ferret, you have more freedom for customizing graphs but the downside is that you are going to have to write much longer codes.
+\noin (Option 2): If you want to visualize .mat files, I recommend the MATLAB package \verb|m_map|. Again, I would not go into much detail here but if you want to learn about it, download the package and take the tutorial from the developer's website: \url{https://www.eoas.ubc.ca/~rich/map.html}. Compared to Ferret, you have more freedom for customizing graphs. The downside is that you are going to have to write much longer codes.
 
 \section{Case Studies}
 \subsection{Study 1: Postindustrial $\mathrm{CO_{2}}$ uptake with MOPS+MIT2.8}
@@ -499,27 +526,37 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
 \item Make a new run directory. Let's call it \verb|Test_co2historyRCP85| and copy all the files needed into this directory.
 \begin{lstlisting}[style=DOS]
  $ cd ~/TMM2
- $ mkdir -p Runs/MOPS/TMM_co2historyRCP85
- $ cd Runs/MOPS/TMM_co2historyRCP85
+ $ mkdir -p Runs/MOPS/Test_co2historyRCP85
+ $ cd Runs/MOPS/Test_co2historyRCP85
  $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
  $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
  $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
+  $ cp -p $TMMROOT/models/current/mops2.0/parameters/* .
 \end{lstlisting}
 
 \item Compile mops as we have done in the spinup run. Don't forget to load modules and make sure that environmental variables \verb|$TMMROOT| and \verb|$PETSC_DIR| are set up properly.
 \begin{lstlisting}[style=DOS]
- $ make clean all
+ $ make cleanall
  $ make mops
 \end{lstlisting}
 
-\item Copy the file \verb|pickup.petsc| from the spinup run directory into the current working directory. This petsc files contains the tracer concentrations from the final year of the run and is required for the continuous run.
+\item Copy the file \verb|pickup.petsc| from the spinup run directory into the current working directory and give it a new name (restart.petsc). This petsc files contains the tracer concentrations from the final year of the run and is required for the continuous run.
+
 \begin{lstlisting}[style=DOS]
- $ cp ../Test_spinup/pickup.petsc .
+ $ cp ../Test_spinup/pickup.petsc restart.petsc
 \end{lstlisting}
 
 \noin Also, copy the file \verb|pickup_runoff.bin| from the spinup run directory. This binary file contains the global sedimentation from the final year of the previous run.
 \begin{lstlisting}[style=DOS]
- $ cp ../Test_spinup/pickup_runoff.bin .
+ $ cp ../Test_spinup/pickup_runoff.bin restart_runoff.bin
+\end{lstlisting}
+
+\noin (Optional) Instead of copying files, you can also create symbolink links so that you would know exactly where these restart files actually come when you do \verb|$ls -l|.
+\begin{lstlisting}[style=DOS]
+ $ ln -s ../Test_spinup/pickup.petsc restart.petsc
+ $ ln -s ../Test_spinup/pickup_runoff.bin restart_runoff.bin
+ $ ls -l restart.petsc
+ lrwxrwxrwx. 1 tanio003 matsumot 26 Sep 28 12:33 restart.petsc -> ../Test_spinup/pickup.petsc
 \end{lstlisting}
 
 \item Edit the input generation file (\verb|make_input_files_for_mops_model.m|). The key here is to set \\ \verb|useTimeVaryingPrescribedCO2=1| and choosing the appropriate \verb|co2Scenario|, in this case RCP85. 
@@ -532,6 +569,7 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
  % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
  base_path='~/TMM2/MITgcm_2.8deg';
+ %base_path='~/TMM2/MITgcm_ECCO';
  
  addpath(genpath('~/TMM2/tmm_matlab_code'));% add tmm_matlab_code to the search path
  oceanCarbonBasePath='~/TMM2/OceanCarbon';  % add OceanCarbon to the search path
@@ -540,6 +578,7 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
   
  READ_SWRAD=0                    % Read short-wave radiation?
  useCarbon=1                     % Use simple inorganic carbon model?
+ useOrgCarbon=0                  % Use organic carbon module?
  useAtmModel=0                   % Use prognostic 1-box atmosphere?
  pCO2atm_ini=280.0               % Initial pco2? (will be ignored as useAtmModel=0)
  useTimeVaryingPrescribedCO2=1   % Use prescribed pco2 pathway?
@@ -561,69 +600,81 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  >> make_input_files_for_mops_model
 \end{lstlisting}
 
-\item Edit \verb|runscript_msi|. Important changes are commented with blue. You can manually edit the script or copy my script from \verb|~/../tanio003/TMM2/Runs/MOPS/Test_co2historyRCP85|.
+\item Edit \verb|runscript_msi|. Important changes are commented with blue (do not actually put these comments after line 13 on the script). You can manually edit the script or copy my script from \\ \verb|~/../tanio003/TMM2/Runs/MOPS/Testruns/Slurm/Test_co2historyRCP85_slurm|.
 \lstset{language=sh} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
   1 #!/bin/bash -l
-  2 #PBS -l walltime=01:00:00,nodes=1:ppn=24,pmem=2580mb
-  3 #PBS -m abe
-  4 #PBS -j oe
-  5 #PBS -M tatsurobkkuk@gmail.com
-  6
-  7 cd $PBS_O_WORKDIR
-  8
-  9 module load intel
- 10 module load impi/intel
- 11 module load cmake
+  2 #SBATCH --nodes=1
+  3 #SBATCH --ntasks-per-node=24
+  4 #SBATCH --mem-per-cpu=2gb
+  5 #SBATCH --time=00:60:00
+  6 #SBATCH --mail-type=ALL
+  7 #SBATCH --mail-user=tatsurobkkuk@gmail.com
+  8 #SBATCH -p small
+  9 #SBATCH --output=%j.out
+ 10
+ 11 cd $SLURM_SUBMIT_DIR
  12
- 13 # 360 days per year with a time step of 2 steps per day:
- 14 mpiexec -np 24 -hostfile $PBS_NODEFILE ./mops \
- 15   -numtracers 9 \
- 16   -pickup pickup.petsc \   # read initial values from file
- 17   -me Ae \
- 18   -mi Ai \
- 19   -t0 1765.0 -iter0 0 \   # start from year 1765
- 20   -deltat_clock 0.0013888888888889 \   
- 21   -max_steps 360000 \  # run for 720*500 timesteps = 500 years
- 22   -write_time_steps 7200 \   # output every 720*10 timestep = 10 years
- 23   -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,
+ 13 module load intel
+ 14 module load impi/intel
+ 15 module load cmake
+ 16
+ 17 # 360 days per year with a time step of 2 steps per day:
+ 18 mpirun -np 24 ./mops \
+ 19   -numtracers 9 \
+ 20   -pickup restart.petsc \   # read initial values from file
+ 21   -me Ae \
+ 22   -mi Ai \
+ 23   -t0 1765.0 -iter0 0 \   # start from year 1765
+ 24   -deltat_clock 0.0013888888888889 \   
+ 25   -max_steps 360000 \  # run for 720*500 timesteps = 500 years
+ 26   -write_time_steps 7200 \   # output every 720*10 timestep = 10 years
+ 27   -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,
  detout.petsc,no3out.petsc,dicout.petsc,alkout.petsc \
- 24   -external_forcing \
- 25   -use_profiles \
- 26   -nzeuph 2 \
- 27   -biogeochem_deltat 43200.0 -days_per_year 360.0 \
- 28   -burial_sum_steps 720 \
- 29   -runoff_ini_file pickup_runoff.bin \ # read global sedimentation of previous run
- 30   -periodic_matrix \
- 31   -pco2atm_history TpCO2.bin,pCO2atm.bin \ # read prescribed pCO2 and time
- 32   -use_virtual_flux \
- 33   -matrix_cycle_period 1.0 -matrix_num_per_period 12 \
- 34   -periodic_biogeochem_forcing \
- 35   -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
- 36   -num_biogeochem_steps_per_ocean_step 8 \
- 37   -separate_biogeochem_time_stepping \
- 38   -time_avg -avg_start_time_step 169199 -avg_time_steps 720 \ 
+ 28   -external_forcing \
+ 29   -use_profiles \
+ 30   -nzeuph 2 \
+ 31   -biogeochem_deltat 43200.0 -days_per_year 360.0 \
+ 32   -burial_sum_steps 720 \
+ 33   -runoff_ini_file restart_runoff.bin \ # read global sedimentation of previous run
+ 34   -periodic_matrix \
+ 35   -pco2atm_history TpCO2.bin,pCO2atm.bin \ # read prescribed pCO2 and time
+ 36   -use_virtual_flux \
+ 37   -matrix_cycle_period 1.0 -matrix_num_per_period 12 \
+ 38   -periodic_biogeochem_forcing \
+ 39   -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
+ 40   -num_biogeochem_steps_per_ocean_step 8 \
+ 41   -separate_biogeochem_time_stepping \
+ 42   -time_avg -avg_start_time_step 169201 -avg_time_steps 720 \ 
  # output annual avg. from year 2000 (235 years after 1765)
- 39   -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,
+ 43   -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,
  detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc \
- 40   -calc_diagnostics -diag_start_time_step 169199 -diag_time_steps 720 \ 
+ 44    -bgc_params_file biogem_params.txt \
+ 45     -num_bgc_params 7 \
+ 46   -calc_diagnostics -diag_start_time_step 169201 -diag_time_steps 720 \ 
  # output annual mean fluxes from 2000 (235 years after 1765)
- 41   -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,
- fbgc6.petsc,fbgc7.petsc \
- 42   > log
+ 47   -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,
+ fbgc6.petsc,fbgc7.petsc,fbgc8.petsc \
+ 48   > log
+\end{lstlisting}
+
+\item Make sure that paramter file (\verb|biogem_params.txt|) is same as the one used in the spinup run. You can simply copy that file into the current directory.
+\begin{lstlisting}[style=DOS]
+ $ cp ../Test_spinup/biogem_params.txt .
 \end{lstlisting}
 
 \item Submit the job to MSI queue.
 \begin{lstlisting}[style=DOS]
- $ qsub runscript_msi
+ $ sbatch runscript_msi
 \end{lstlisting}
 
-\item Processing and outputting results. Use 5 Matlab scripts \\ (\verb|n7tracers28.m,n7tracersavg28.m,n7fluxes28.m,n7physics.m,load_pco2.m|) to create .nc files. Here, I will show you how to plot $\mathrm{CO_{2}}$ timeseries and global annual mean air-sea flux of $\mathrm{CO_{2}}$ using Ferret. The script is also at \verb|~/../tanio003/TMM2/Runs/MOPS/Test_co2historyRCP85/analyzeoutput.jnl|. 
+\item Processing and outputting results. Use 5 Matlab scripts \\ (\verb|n7tracers28.m,n7tracersavg28.m,n7fluxes28.m,n7physics.m,load_pco2.m|) to create .nc files. Here, I will show you how to plot $\mathrm{CO_{2}}$ timeseries and global annual mean air-sea flux of $\mathrm{CO_{2}}$ using Ferret. The script is also at \\ \verb|~/../tanio003/TMM2/Runs/MOPS/Testruns/Slurm/Test_co2historyRCP85_slurm/analyzeoutput.jnl|. 
 \begin{lstlisting}[style=DOS]
+ $ module load ferret/7.6.0
  $ ferret
   	NOAA/PMEL TMAP
- 	PyFerret v7.5 (optimized)
- 	Linux 4.15.0-1071-azure - 03/31/20
+ 	PyFerret v7.6 (optimized)
+ 	Linux 4.15.0-1089-azure - 06/25/20
  	16-Sep-20 14:49
  yes? use pco2.nc
  yes? use co2airseaflux.nc
@@ -632,15 +683,14 @@ I won't go into too much detail here but to learn more about Ferret, visit NOAA'
  yes? ppl YLAB pCO2 (ppm)
  yes? ppl PLOT
  yes? set w 2 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
- title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=10]*2*360/1000*(-1);go fland
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2air_to_sea_flux[l=10]*2*360/1000*(-1);go fland
  yes? set w 3 ; sha/d=2/x=-180:180/lev=(-Inf)(-4,4,0.8)(Inf)/palette=cmocean_balance/
- title="Annual CO2 flux (mol C m-2 yr-1)" co2airseaflux[l=100]*2*360/1000*(-1);go fland
+ title="Annual CO2 flux (mol C m-2 yr-1)" co2air_to_sea_flux[l=100]*2*360/1000*(-1);go fland
  yes? set w 4; plot/d=2/hlimits=2000:2100/vlimits=-7:0/
- title="Ocean-atmosphere CO2 flux (PgC yr-1)" co2airseaflux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
+ title="Ocean-atmosphere CO2 flux (PgC yr-1)" co2air_to_sea_flux[x=@din,y=@din]*2*360/1000*12/1e15*(-1)
 \end{lstlisting}
-(Note: Here, I'm actually using the new version of the Ferret called PyFerret and some of the commands may not be compatible with the older version that is pre-installed at MSI. To install PyFerret in your MSI directory, visit \url{https://github.com/NOAA-PMEL/PyFerret/} and follow instructions. \emph{I highly recommend PyFerret.})
 
-\begin{figure}[b!]   % Insert Figure 1 here
+\begin{figure}[H]   % Insert Figure 1 here
    \centering
    \includegraphics[width=10cm]{pco2RCP85.pdf}
    \caption[]{$\mathrm{CO_2}$ concentration pathway under RCP8.5 scenario \citep{Meinshausen11}.}
@@ -653,7 +703,7 @@ Figure \ref{fig:airseamap} compares annual mean $\mathrm{CO_2}$ flux in 2010 (\e
 
 Figure \ref{fig:airseamapWoolf} is a $\mathrm{CO_2}$ flux in 2010 from a study by \cite{Woolf19} who used Surface $\mathrm{CO_2}$ atlas and wind data. If you compare with the left panel of Figure  \ref{fig:airseamap}, you can see that our MOPS model does a quite good job in reproducing the large scale pattern.
 
-\begin{figure}[h!]   % Insert Figure 2 here
+\begin{figure}[H]   % Insert Figure 2 here
    \centering
    \begin{minipage}{0.45\columnwidth}
       \centering
@@ -670,29 +720,703 @@ Figure \ref{fig:airseamapWoolf} is a $\mathrm{CO_2}$ flux in 2010 from a study b
 \begin{figure}[h!]   % Insert Figure 3 here
    \centering
    \includegraphics[scale=0.1]{Woolf19_GBC_Fig1.jpg}
-   \caption[]{Map of annual $\mathrm{CO_{2}}$ flux in 2010 from $\mathrm{CO_2}$ and wind data \citep{Woolf19}. Compare this with Figure \ref{fig:airseamap}.}
+   \caption[]{Map of annual $\mathrm{CO_{2}}$ flux in 2010 from $\mathrm{CO_2}$ and wind data \citep[from][]{Woolf19}. Compare this with Figure \ref{fig:airseamap}.}
    \label{fig:airseamapWoolf}
 \end{figure}
 
 Figure \ref{fig:airseatimeseries} (\emph{Ferret:w 4}) is a globally integrated sea-air $\mathrm{CO_2}$ flux projections under RCP8.5 scenario.The negative value means net uptake of $\mathrm{CO_2}$ by ocean. For a comparison, we show the similar projection using the CESM and CMIP5 (Figure \ref{fig:airseatimeseries_cmip5}a-b.) from \cite{Lovenduski16}. Again, notice that MOPS's result is largely consistent in terms of the magnitude. 
 
-\begin{figure}[H]   % Insert Figure 4 here
+\begin{figure}[h!]   % Insert Figure 4 here
    \centering
    \includegraphics[scale=0.35]{airseaflux_timeseries2000to2100.pdf}
    \caption[]{Modeled annual-mean globally integrated sea-air $\mathrm{CO_2}$ flux projections under RCP8.5 scenario.}
    \label{fig:airseatimeseries}
 \end{figure}
 
-\begin{figure}[H]   % Insert Figure 5 here
+\begin{figure}[h!]   % Insert Figure 5 here
    \centering
    \includegraphics[trim=0 760 0 0,clip,scale=0.3]{Lovenduski16_GBC_Fig2.jpg}
-   \caption[]{Modeled annual-mean globally integrated sea-air $\mathrm{CO_2}$ flux projections \citep{Lovenduski16} with CESM (a) and CMIP5 models (b). Compare this with Figure \ref{fig:airseatimeseries}.}
+   \caption[]{Modeled annual-mean globally integrated sea-air $\mathrm{CO_2}$ flux projections \citep[from][]{Lovenduski16} with CESM (a) and CMIP5 models (b). Compare this with Figure \ref{fig:airseatimeseries}.}
    \label{fig:airseatimeseries_cmip5}
 \end{figure}
 
 \end{enumerate}
 
+\subsection{Study 2: Using MOPS+ECCO to simulate flexible C:P}
 
+In the second case study, we will use the modified MOPS code to study the spatiotemporal variability in organic matter C:P ratio under steady-state scenario. We are going to do a  3000-yr spinup run where C:P of phytoplankton is flexible but C:P of zooplankton is homeostatic (i.e. less flexible). We will use the TMM model 12 monthly mean TMs derived from the Estimating the Circulation and Climate of the Ocean (ECCO) project, which provides circulation fields that yield a best fit to hydrographic and remote sensing observations over a 10-year period, on a spatial grid of 1-by-1 degree horizontal resolution with 23 vertical levels
+
+We model P:C uptake ratio of phytoplankton using the power-law as a function of nutrients, temperature, and light following \cite{Tanioka20}:
+\begin{equation}
+   \mathrm{(P:C)_{uptake,phyto}} = \mathrm{(P:C)_{ref} \Bigl (\frac{[\ce{PO4}]}{[\ce{PO4}]_0} \Bigr )^{s^{P:C}_{PO_4}} \Bigl (\frac{[\ce{NO3}]}{[\ce{NO3}]_0} \Bigr )^{s^{P:C}_{NO_3}} \Bigl (\frac{[\ce{T}]}{[\ce{T}]_0} \Bigr )^{s^{P:C}_{T}} \Bigl (\frac{[\ce{I}]}{[\ce{I}]_0} \Bigr )^{s^{P:C}_{I}}} \label{eq:eq_pcphy}
+\end{equation}
+Exponent $\mathrm{{s^{P:C}_{driver}}}$ is constant and describe the strength of a given driver on P:C. 
+
+Zooplankton P:C uptake ratio is also computed using the power-law as a function of phytoplankton P:C of biomass:
+\begin{equation}
+   \mathrm{(P:C)_{uptake,zoo}} = \mathrm{(P:C)_{ref,zoo}^{1-H}\cdot (P:C)_{biomass,phyto}^{H}} \label{eq:eq_pczoo}
+\end{equation}
+
+Parameter $H$ is a zooplankton homeostatic parameter that describes how variable zooplankton P:C is affected by phytoplankton P:C. When $H = 0$, P:C uptale equals a fixed reference P:C and is independent of phytoplankton P:C. When $H = 1$, uptake P:C equals cellular P:C of phytoplankton. Here we will use the value of $H = 0.08$ following \cite{Persson10}, who conducted meta-analysis on zooplankton C:P.
+
+In order to cope with the mismatch between required P:C and P:C of prey, zooplankton can excrete excess P or C as dissolved and particulate organic matter. At steady state, uptake P:C ratio should equal the biomass P:C ratio for both phytoplankton and zooplankton.
+
+In implementing flexible C:P, I added 4 new tracers: (1) Phytoplankton C biomass, (2) Zooplankton C biomass. (3) DOC, and (4) POC. The total number of tracers is now 13. 
+
+\begin{enumerate}
+\item{Update source codes in your \verb|tmm| directly by doing \verb|git pull| from the remote repository.}
+\begin{lstlisting}[style=DOS]
+ $ cd $TMMROOT
+ $ git checkout TT_Release
+ $ git pull origin TT_Release
+\end{lstlisting}
+
+\item Make a new run directory. Here, we call it \verb|Test_ECCO_CP| and copy all the files needed into this directory. I also created a new directory called \verb|paramters| which contains an ASCII text file (\verb|biogem_params.txt|) with biogeochemical parameters.
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ mkdir -p Runs/MOPS/Test_ECCO_CP
+ $ cd Runs/MOPS/Test_ECCO_CP
+ $ cp -p $TMMROOT/models/current/mops2.0/src/Makefile .
+ $ cp -p -R $TMMROOT/models/current/mops2.0/matlab/* .
+ $ cp -p $TMMROOT/models/current/mops2.0/runscripts/* .
+ $ cp -p $TMMROOT/models/current/mops2.0/parameters/* .
+\end{lstlisting}
+
+\item Compile mops. The new model with flexible C:P is called \verb|mops_cp|. 
+\begin{lstlisting}[style=DOS]
+ $ make cleanall
+ $ make mops_cp
+\end{lstlisting}
+
+\item Edit the file \ \verb/make_input_files_for_mops_model.m/ and run it on Matlab. First thing to do is to make sure that variable \verb/base_path/ point to the right directory for the TMM ECCO configuration. Also make sure that option \verb|useORGCARBON| is set to 1. The options \verb|useORGCARBON| creates new initial concentrations arrays for DOC, POC, ZooC, and PhytoC. This initizalization process takes much longer than that of the first case study.
+
+\item Edit the parameter input file \verb|biogem_params.txt|. In the first run, rows 1-6 should be the default values for MOPS + ECCO follwiing \cite{Kriest20}. Parameters 12-21 correspond to the P:C power-law formulations of phytoplankton and zooplankton from Equations (\ref{eq:eq_pcphy})-(\ref{eq:eq_pczoo}). Refernce P:C for both phytoplankton and zooplankton is $1/117 = 8.547$ permil (line 12). \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+  1 1.46     #01. detmartin = Martin Curve exponent of Detritus [1.39 for MIT2.8, 1.46 for ECCO]
+  2 151.1    #02. ro2ut = Refield -O2:P                         [173.7 for MIT2.8, 151.1 for ECCO]
+  3 0.00229  #03. nfix = Max growth rate (1/d) of N-fixers      [0.00119 for MIT2.8, 0.00229 for ECCO]
+  4 16.0     #04. subdin = No denitrification below this level of DIN (mmol/m3)           [15.8, 16.0]
+  5 1.07     #05. ACkbaco2 = Half sat-constant for oxic degradation (mmol/m3)             [1.01, 1.07]
+  6 23.1     #06. ACkbacdin = Half sat-constant for suboxic degradation                   [32.0, 23.1]
+  7 0.01     #07. alimit = Min. value for the degradation of PHY and DOP [0.001 for mops, 0.01 for mops_cp]
+  8 1.46     #08. detmartin_c = Martin Curve Exponent of POC. For pref. remin, change from #01 [1.39, 1.46]
+  9 1        #09. cp_option (1 = Power-law, 2: Galbraith and Martiny, 0: Redfield)
+ 10 250.0    #10. maxcp = upper bound C:P                                                 [250.0]
+ 11 50.0     #11. mincp = lower bound C:P                                                 [50.0]
+ 12 8.547    #12. par_bio_pc0 = Reference P:C (permil) for power-law                      [8.547]
+ 13 0.57     #13. par_bio_po4_ref = Reference PO4 (mmolP/m3) for power-law                [0.57]
+ 14 5.7      #14. par_bio_no3_ref = Reference NO3 (mmolN/m3) for power-law                [5.7]
+ 15 18.0     #15. par_bio_temp_ref = Reference Temp (deg C) for power-law                 [18.0]
+ 16 70.0     #16. par_bio_light_ref = Reference Irradiance (W/m2) for power-law           [70.0]
+ 17 0.21     #17. par_bio_spc_p = s_P:C^PO4 for power-law                                 [0.21]
+ 18 0.0      #18. par_bio_spc_n = s_P:C^NO3 for power-law                                 [0.0]
+ 19 0.0      #19. par_bio_spc_i = s_P:C^I for power-law                                   [0.0]
+ 20 -3.6     #20. par_bio_spc_t = s_P:C^T for power-law                                   [-3.6]
+ 21 0.08     #21. par_zoo_cp_hom = Homeostatic parameter for Zooplankton (0-1)            [0.08]
+ 22
+\end{lstlisting}
+
+\item Edit \verb|runscript_msi|. Here we are going to run the model for 15 hours with 10 nodes, 24 processors per core. Each processor is allocated with 2GB of memory. As we are using more than 9 nodes, we submit to the queue \textit{large}. If you want the job to proceed quicker, you can increase the number of nodes from 10. (Note: Asking for more nodes will mean longer time in the queue. So this will require some trial and error to find the optimal node request.)
+
+Here is the first 12 lines of the runscript. The script is also at \\ \verb|~/../tanio003/TMM2/Runs/MOPS/Testruns_ECCO/201108b/runscript_msi|.
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+1 #!/bin/bash -l
+2 #SBATCH --nodes=10
+3 #SBATCH --ntasks-per-node=24
+4 #SBATCH --mem-per-cpu=2gb
+5 #SBATCH --time=15:00:00
+6 #SBATCH --mail-type=ALL
+7 #SBATCH --mail-user=tatsurobkkuk@gmail.com
+8 #SBATCH -p large
+9 #SBATCH --output=%j.out
+10
+11 cd $SLURM_SUBMIT_DIR
+12
+ \end{lstlisting}
+ 
+The follwing lines (13$\sim$) contain the commands to execute and start the program \verb|mops_cp|. 
+
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ 13 module load intel
+ 14 module load impi/intel
+ 15 module load cmake
+ 16
+ 17 # 360 days per year with a time step of 2 steps per day:
+ 18 mpirun -np 240 ./mops_cp \  # use 240=24*10 cores, program = mops_cp
+ 19         -numtracers 13 \   # use 13 tracers (9 tracers in mops + 4 new tracers)
+ 20         -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,
+            no3ini.petsc,dicini.petsc,alkini.petsc,docini.petsc,pocini.petsc,phycini.petsc,
+            zoocini.petsc \    # 13 initial tracer concentrations
+ 21         -me Ae \
+ 22         -mi Ai \
+ 23         -t0 0.0 -iter0 0 \
+ 24         -deltat_clock 0.0013888888888889 \
+ 25         -max_steps 2160000 \   # Run for 720 steps/year * 3000 years
+ 26         -write_time_steps 72000 \  # Output snapshot every 100 yeras
+ 27         -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,
+            no3out.petsc,dicout.petsc,alkout.petsc,docout.petsc,pocout.petsc,phycout.petsc,
+            zoocout.petsc \    # 13 output tracers 
+ 28         -external_forcing \
+ 29         -use_profiles \
+ 30         -nzeuph 6 \        # the default number of euphotic zones = 6 layers in ECCO 
+ 31         -biogeochem_deltat 43200.0 -days_per_year 360.0 \
+ 32         -burial_sum_steps 720 \
+ 33         -pco2atm 280.0 \   # Constant pCO2 at 280 ppm
+ 34         -use_virtual_flux \
+ 35         -periodic_matrix \
+ 36         -matrix_cycle_period 1.0 -matrix_num_per_period 12 \
+ 37         -periodic_biogeochem_forcing \
+ 38         -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
+ 39         -num_biogeochem_steps_per_ocean_step 8 \
+ 40         -separate_biogeochem_time_stepping \
+ 41         -time_avg -avg_start_time_step 2159281 -avg_time_steps 60 \ # monthly avg in final year
+ 42         -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,detavg.petsc,
+            no3avg.petsc,dicavg.petsc,alkavg.petsc,docavg.petsc,pocavg.petsc,phycavg.petsc,
+            zoocavg.petsc \    # 4 new time-average tracers added 
+ 43         -bgc_params_file biogem_params.txt \   # telling to read the parameter file
+ 44         -num_bgc_params 21 \                   # the number of parameters to be read = 21
+ 45         -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \ # monthly diagnostics 
+ 46         -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,
+            fbgc7.petsc,fbgc8.petsc,fbgc9.petsc,fbgc10.petsc,fbgc11.petsc \  # 11 diagnostics 
+ 47         > log
+\end{lstlisting}
+ 
+The important notes are commented with blue. The three new diagnostics related to organic carbon and flexible C:P module I added are: 
+\begin{enumerate}
+\item \verb|fbgc9.petsc|: POC sedimentation through upper boundary of each box [$\mathrm{mmol C/m^2/oceantimestep}$]
+\item \verb|fbgc10.petsc|: Phytoplankton C:P uptake ratio in molar units.
+\item \verb|fbgc11.petsc|: Zooplankton C:P uptake ratio in molar units.
+\end{enumerate}
+Monthly-averaged disgnostics as well as motnhly-averaged tracers will be computed in the final year (Year 2999) of the run.
+
+\item To submit the job to the queue, type on the command line:
+\begin{lstlisting}[style=DOS]
+ $ chmod u+x runscript_msi
+ $ sbatch runscript_msi
+\end{lstlisting}
+
+\noin To check your job status at MSI, type:
+\begin{lstlisting}[style=DOS]
+ $ squeue -u yourusername
+\end{lstlisting}
+
+\item Process the outputs using the Matlab Scripts as outlined previously. For each .m files \\
+(\verb|n7tracers28.m,n7tracersavg28.m,n7fluxes28.m,n7physics.m,load_pco2.m|), 
+make sure that variable \verb/base_path/ point to the right directory for the TMM ECCO configuration. Also make sure that option \verb|useORGCARBON| is set to 1.
+
+\item Analyze outputs. Here we will look at seasonal cycles of productivity at 4 different locations. These 4 locations are: (1) the high latitude bloomforming North Atlantic Ocean (NAT: 25W-35W, 45N-50N, black line), (2) the North Atlantic subtropical gyre (NASG: 25W-70W, 25N-35N, red line), (3) the South Pacific subtropical gyre (SPSG:90W-150W, 15S-40S, green line), and (4) the Equatorial upwelling region (EQU: 5S-5N, blue line). The  code for making figrues is in my directory \\ \verb|~/../tanio003/TMM2/Runs/MOPS/Testruns_ECCO/201108b/analyze_201108b.jnl|.
+
+Figure \ref{fig:mops_timeseries} shows the seasonal cycle of productivity (left) and the tracers/forcings (right). Notice that phytoplankton biomass exceeds zooplankton biomass throughout the year in all regions. The only exception is NAT where zooplankton biomass catches up with the phytoplankton biomass following the spring bloom. NPP peaks in early spring and export production lags NPP about a month or two. 
+
+\begin{figure}[h!]   % Insert Figure 6 here
+   \centering
+   \begin{minipage}{0.495\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{productivity_comparison.pdf}
+   \end{minipage}
+   \begin{minipage}{0.495\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{driver_comparison.pdf}
+   \end{minipage}
+   \caption[]{Modeled seasonal cycle of productivity (Left) and tracers (Right) at four geographical regions. North Atlantic Ocean (NAT: 25W-35W, 45N-50N, black line), (2) the North Atlantic subtropical gyre (NASG: 25W-70W, 25N-35N, red line), (3) the South Pacific subtropical gyre (SPSG:90W-150W, 15S-40S, green line)}
+   \label{fig:mops_timeseries}
+\end{figure}
+
+\begin{figure}[h!]   % Insert Figure 7 here
+   \centering
+   \includegraphics[scale=0.6]{cp_comparison.pdf}
+   \caption[]{Modeled seasonal C:P of (a) Phytoplankton, (b) Zooplankton, (c) Bulk POM (= Detritus + Phytoplankton + Zooplankton), and (d) Export ratio at 100 m}
+   \label{fig:cp_timeseries}
+\end{figure}
+
+Figure \ref{fig:cp_timeseries} shows the seasonal cycle of C:P. Phytoplankton C:P at NAT and NASG peaks in fall ($\sim$September) and is lowest during spring. This pattern generally follows that of SST and PO4, where low PO4/high SST leads to higher C:P. Seasonal variability of phytoplankton C:P at SPSG and EQU are smaller as the change in SST and nutrients are small. C:P of zooplankton remains around 117 even in gyres. As phytoplankton biomass is greater than that of zooplankton, C:P of bulk POM is similar in magnitude to that of phytoplankton. What's interesting is that C:P export is greater than C:P of phytoplankton and bulk POM at NASG, SPSG, and EQU. This is because excess carbon that is excreted by zooplankton is added to detrital POC pool leading to higher C:P of exported organic mater. At NAT, the different is relatively smaller because the stoichioemtric mismatch between phytoplankton C:P and zooplankton C:P is small. 
+
+\item (Optional) We can also calculate export of DOC and DOP. The  code for making figrues is in my directory \verb|~/../tanio003/TMM2/Runs/MOPS/Testruns_ECCO/201108b/analyze_dom_export.jnl|.
+
+\begin{figure}[h!]   % Insert Figure 8 here
+   \centering
+   \includegraphics[scale=0.6]{doc_global.pdf}
+   \caption[]{Modeled DOC export. (a) Monthly global DOC export at 100 m (b) Annual mean global DOC export (c) Annual mean global DOC export by advection, and (d) Annual mean global DOC export by diffusion.}
+   \label{fig:doc_global}
+\end{figure}
+
+Figure \ref{fig:doc_global} shows that the total DOC export is around 3.0 PgC/yr which is factor of 2 greater than the previous modeling studies. This is mainly due to the fact that the DOC surface concentration at the moment is too high. This is something that need to be worked on. Majority of export occurs in the subtropical gyres by advection. Export due to diapycnal diffusion occurs in equatorial upwelling regions but the maginude is utmost 10$\%$
+
+\begin{figure}[h!]   % Insert Figure 9 here
+   \centering
+   \includegraphics[scale=0.6]{doc_regional.pdf}
+   \caption[]{Modeled DOC:DOP and regional DOC export. (a) Annual mean DOC:DOP export ratio at 100 m, (b) Annual mean DOC:DOP at 4 different regions, (c) Annual mean DOC export, and (d) Annual mean surface DOC concentration.}
+   \label{fig:doc_regional}
+\end{figure}
+
+The seasonal pattern of DOC:DOP export in Figure \ref{fig:doc_regional} is similar to that of POC:POP export. Compared to POC:POP export (Fig. \ref{fig:cp_timeseries}(d)), temporal shift in DOC:DOP export is smaller. Another interesting thing is that DOC concentration (Fig. \ref{fig:doc_regional}(d)) and DOC export (Fig. \ref{fig:doc_regional}(c)) are not correlated in a predictable way. This shows the DOC export is much more nuanced as a result of interaction between physics (flow field) and biogeochemistry. DOC dynamics is something that has to be explored in more detail.
+
+\end{enumerate}
+
+
+\subsection{Study 3: Using MOBI+UVic to simulate isotope dynamics, WORK IN PROGRESS} 
+
+For this study, we will explore ocean biogeochemical dynamics using the second version of MOBI (Model of Ocean Biogeochemistry and Isotopes). MOBI includes:
+\begin{itemize}
+\item \ce{NO3}, \ce{PO4}, and DFe as interactive nutrients.
+\item 3 Phytoplankton classes (diazotrophs, coccolithophores, and other phytoplankton).
+\item Zooplankton.
+\item Detritus (dead POM).
+\item \ce{CaCO3} is a prognostic variable and its production is calculated as a fraction of the detrirus produced by coccolithophores and zooplankton and it is sinking into the deep ocean where it dissolves.
+\item Nitrogen (\ce{^15N}) and carbon (\ce{^13C}) isotopes are included in all compartments.
+\item Radiocarbon (\ce{^14C}) is included only in the DIC compartment.
+\item Dissolved \ce{O2} controls the water column denitrification. Benthic denitrification is calculated considerting subgridscale bathymetry.
+\item DOM is calculated separately for C, N, and P (DOC, DON, DOP).
+\item The most complex configuration has a total of 30 prognostic tracers.
+\end{itemize}
+\noin To learn different configurations of MOBI, refer to the primer by A. Schmittner (\url{https://github.com/tanio003/tmm/blob/TT_Release/Tutorial_MSI/MOBI2.0_Schmittner.pdf}). 
+
+\textbf{In our exercise, we will try conducting a spin-up run for 3000 yrs using 30 prognostic tracers. Instructions will mostly follow that of S. Khatiwala.}
+
+\begin{enumerate}
+
+\item Download the compatible versions of UVic ESCM 2.9 in the first level of your TMM directory
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ git clone https://github.com/your_github_username/UVic2.9
+\end{lstlisting}
+
+\item Download the TMM called \verb|UVicOSUpicdefault|. Although you can download the original TMM from the Samar's repository, I found out when I did the preliminary test that the original TMM does not have the flow field for river discharge. Therefore, I had to import the ``foreign'' river discharge field from another TMM called  \verb|UVicKielIncrIsopycDiff| (\emph{Maybe we could contact Samar to ask for the full configuration for} \verb|UVicOSUpicdefault| \emph{with river discharge?}). To copy my TMM, 
+\begin{lstlisting}[style=DOS]
+ $ cp -r ~/../tanio003/TMM2/UVicOSUpicdefault_with_discharge $HOME/TMM2/
+\end{lstlisting}
+
+\noin Currently, MOBI can only be coupled to this TMM configuration (\verb|UVicOSUpicdefault_with_discharge|) because other TMMs like MITgcm models do not have bathymetry profile and hydrothermal Fe input masks.
+
+\item Make a Run directory for TMM-MOBI. For this run, I call it \verb|Runs/MOBI/Test_spinup|. Copy \\ \verb|mobi2.0/src/Makefile| and \verb|mobi2.0/src/MOBI_TMM_OPTIONS.h| to this directory. 
+\begin{lstlisting}[style=DOS]
+ $ cd ~/TMM2
+ $ mkdir -p Runs/MOBI/TMM_spinup
+ $ cd Runs/MOBI/TMM_spinup
+ $ cp -p $TMMROOT/models/current/mobi2.0/src/Makefile .
+ $ cp -p $TMMROOT/models/current/mobi2.0/src/MOBI_TMM_OPTIONS.h . 
+\end{lstlisting}
+\noin Also, following the instructions at the top of Makefile, set the environmenta variable \verb|$UVICESCMROOT| to point to the top level of the UVic ESCM 2.9. Add this to your \verb|.bashrc| for cd your future convenience.
+\begin{lstlisting}[style=DOS]
+ $ export UVICESCMROOT=$HOME/TMM2/UVic2.9
+ echo $UVICESCMROOT
+ /home/...//TMM2/UVic2.9
+\end{lstlisting}
+
+\item Copy the contents (including the subdirectories) of \verb|mobi2.0/matlab| and  \verb|mobi2.0/runscripts| to the test directory.
+\lstset{emph={runscript,runscript_msi}, emphstyle=\color{green},emph={[2]InitialConditionProfiles}, emphstyle={[2]\color{blue}}}
+\begin{lstlisting}[style=DOS]
+ $ cp -p -R $TMMROOT/models/current/mobi2.0/matlab/* .
+ $ cp -p $TMMROOT/models/current/mobi2.0/runscripts/* .
+ $ ls
+ control.in                Makefile
+ get_mobi_diagnostic.m     make_input_files_for_mobi_model.m
+ InitialConditionProfiles  make_input_files_for_mobi_model_write_ic.m
+ load_diagnostics.m        MOBI_TMM_OPTIONS.h
+ load_output.m             MOBI_tracer_names.txt
+ load_output_sed.m         runscript
+ load_output_time_avg.m    runscript_msi
+\end{lstlisting}
+\lstset{emph={}, emphstyle=\color{green},emph={[2]}, emphstyle={[2]\color{blue}}} % reset coloring
+
+\item Edit the C preprocessor options in \verb|MOBI_TMM_OPTION.h| as necessary. In particular, you have to define the directive \verb|O_co2_user| (i.e., by \verb|# define O_co2_ccn_user|). See Appendix ??? for what each of the options mean. 
+
+\item Build the model with:
+\begin{lstlisting}[style=DOS]
+ $ make cleanall
+ $ make tmmmobi
+\end{lstlisting}
+\noin If compiled properly, you would see an executable file \verb|tmmmobi| created along with a bunch of objective .o files. Don't worry about various warnings as long as they are not fatal. 
+
+\item Generate the names tracers being simulated (as per the options set in \verb|MOBI_TMM_OPTIONS.h| and their initial consitions. To do this, first set at the top of \verb|make_input_files_for_mobi_model_write_ic.m|. 
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mobi_model_write_ic.m
+\end{lstlisting}
+\noin Execute in MATLAB.
+\begin{lstlisting}[style=DOS]
+ >> make_input_files_for_mobi_model_write_ic
+\end{lstlisting}
+
+\item Compile and execute \verb|tmmmobiwrite|. 
+\begin{lstlisting}[style=DOS]
+ $ make tmmmobiwrite
+ $ ./tmmmobiwrite
+\end{lstlisting}
+\noin This will write out \verb|MOBI_tracer_names.txt| containing the tracer names, and a corresponding set of *.dat text files (e.g., dic.dat) containing the vertical profile of tracer concentration. These names and (horizontally uniform) profiles are used by \verb|make_input_files_for_mobi_model.m| to generate initial condition files (e.g., dicini.petsc). 
+
+\item Make a directory \verb|InitialConditionProfiles| and copy the *.dat files into it. By default \\ \verb|make_input_files_for_mobi_model.m| will look in this directory for the *.dat files.
+\begin{lstlisting}[style=DOS]
+ $ cp -p *.dat InitialConditionProfiles/
+\end{lstlisting}
+
+\noin (Note-1): There are already copies of \verb|MOBI_tracer_names.txt| and \verb|InitialConditionProfiles/| in matlab/ but S.Khawtiwala recommends you still go through this step to generate tracer names consistent with your version of \verb|UVic/MOBI| and \verb|MOBI_TMM_OPTIONS.h|.
+
+\noin (Note-2): The order of tracers in \verb|MOBI_tracer_names.txt| is the same as that in which you specify initial condition, output and time average files in the TMM-MOBI run script. You can reduce the tedium (and chances of making a mistake) of generating the correct sequence to specify in the run script by executing this on the command line: 
+\begin{lstlisting}[style=DOS]
+ $ printf "%sini.petsc," `tr '\n' ' ' < MOBI_tracer_names.txt` | sed 's/,*$//g'
+\end{lstlisting}
+(The tr replaces newlines with spaces to put all tracer names on a single line, 
+the printf appends "ini.petsc," to each tracer name, and the sed strips out the 
+final comma.)
+
+\noin (Note-3): \verb|tmmmobiwrite| uses UVic routines where initial condition profiles are set. The code for this is hardwired for the standard UVic grid with 19 levels. If you're using TMs from a different ocean model you will need to modify \verb|make_input_files_for_mobi_model.m| accordingly to specify initial conditions corresponding to your grid. You will also need to change the number of levels (km) in \verb|size.h|.
+
+\item Set the path at the top of \verb|make_input_files_for_mobi_model.m| and execute in MATLAB. (See NOTE-3 in \verb|#|9.)
+\lstset{language=matlab} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ % make_input_files_for_mobi_model.m
+\end{lstlisting}
+\begin{lstlisting}[style=DOS]
+ >> make_input_files_for_mobi_model
+\end{lstlisting}
+
+\item Edit the namelists in \verb|control.in| as necessary. The important variables you 
+must set are:
+
+\begin{itemize}
+\item \verb|dtts| in the \verb|&tsteps| namelist: this MUST match the time step argument to the run time option \verb|-biogeochem_deltat| in the runscript. This is the tracer advection-diffusion timestep.
+\item \verb|co2ccn| and \verb|dc14ccn| in the \verb|&carbon| namelist. 
+\item \verb|dtnpzd| in the \verb|&npzd| namelist. Set this so that \verb|dtts| is a multiple of \verb|dtnpzd|. For stability, \verb|dtnpzd| (in seconds) should not exceed 1/3rd of a day (in seconds). 
+\end{itemize}
+\noin See Appendix \ref{subsection:mobi_params} for what each of these other options mean in \verb|control.in|. 
+
+\item Edit runscript as necessary. Also see (NOTE-2 in \verb|#|9). 
+\lstset{language=sh} 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+ # runscript_msi
+\end{lstlisting}
+\noin (NOTE-1): If turning on sediments and running on a smaller number of CPUs you should unlimit stacksize. Otherwise you may get a segmentation fault. Don't worry about this for MSI but you can check just in case by:
+\begin{lstlisting}[style=DOS]
+ $ ulimit -H -a
+ ...
+ stack size              (kbytes, -s) unlimited
+\end{lstlisting}
+
+\item Set the path at the top of the load*.m scripts to read in the output in Matlab.
+
+\item Display output files in .nc. Currently, all the .nc files are spewed out one by one. If I get a time, I can make a scirpt to put all the variables into a single .nc file. 
+
+\end{enumerate}
+
+
+\section{Appendix}
+
+\subsection{Downloading PyFerret on MSI}
+
+\begin{enumerate}
+\item Install miniconda on your home directory. This is a free cross-platform for Python distribution from Continuum Analytics. 
+\begin{lstlisting}[style=DOS]
+ $ cd ~
+ $ module purge
+ $ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+ $ bash Miniconda3-latest-Linux-x86_64.sh
+\end{lstlisting}
+\noin Follow the prompts on the installer screens. If you are unsure about any setting, accept the defaults. To make the changes take effect, close and then re-open your terminal window. Once installed you should find new directory called \verb|miniconda3| on your home directory.
+
+\item Execute the following command to install \verb|pyferret| as well as \verb|ferret_datasets| (the default Ferret datasets) into conda.
+\begin{lstlisting}[style=DOS]
+ $ conda create -n PyFERRET -c conda-forge pyferret ferret_datasets --yes
+\end{lstlisting}
+\noin \verb|PyFERRET| is the environment name where \verb|pyferret| is installed. You can change that to any name you like.
+
+\item To start using PyFerret, execute the following commands (replace \verb|PyFERRET| with whatever environment name you used):
+\begin{lstlisting}[style=DOS]
+(base) $ conda activate PyFerret
+(PyFERRET) $ pyferret
+  	NOAA/PMEL TMAP
+ 	PyFerret v7.6 (optimized)
+ 	Linux 4.15.0-1089-azure - 06/25/20
+ 	18-Sep-20 15:07
+
+yes?
+\end{lstlisting}
+
+\item (Optional) You may with to add directories to \verb|FER_DATA| and \verb|FER_GO|:
+\begin{lstlisting}[style=DOS]
+(PyFERRET) $ export FER_DATA="$FER_DATA /my/path/to/big/data/dir"
+(PyFERRET) $ export FER_GO="$FER_GO /my/path/to/custom/ferret/scripts"
+\end{lstlisting}
+
+\item Once you are done working with PyFerret you can leave this environment, if you wish, with the command:
+\begin{lstlisting}[style=DOS]
+(PyFERRET) $ conda deactivate
+(base) $
+\end{lstlisting}
+
+\end{enumerate}
+
+
+\subsection{General reference for MOPS and MOBI}
+\noin Key references for MOPS:
+\begin{itemize}
+\item \bibentry{Kriest15}
+\item \bibentry{Kriest20}
+\item \bibentry{Niemeyer19}
+\end{itemize}
+
+\noin Key references for MOBI:
+\begin{itemize}
+\item \bibentry{Khatiwala19}
+\item \bibentry{Muglia17}
+\item \bibentry{Somes17}
+\item \bibentry{Kvale15}
+\item \bibentry{Yamamoto15}
+\end{itemize}
+
+\subsection{Paramters for MOBI (listed at control.in)} \label{subsection:mobi_params}
+
+\begin{itemize}
+
+\item \textbf{contrl}:Variables related to general control. Declared in \verb|$UVICESCMROOT/source/common/switch.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters         & Description                                                                      & Unit                  & Default    \\ \hline 
+  1    & $init$             & This is a initial run (true) or from a restart                                   & [true,false]          & .false.    \\
+  2    & $runlen$           & Integration period in ``rununits"                                                & [rununits]            & 36500.     \\
+  3    & $rununits$         & Units of ``runlen". Can be days, months, or years                                & [Days/Month/Years]    & 'days'     \\
+  4    & $restrt$           & Write a restart at the end of the run                                            & [true,false]          & .true.     \\
+  5    & $runstep$          & Integration period in timesteps                                                  & [timesteps]           & 2550000    \\ \hline
+    \end{longtable}}
+\item \textbf{tsteps}: Variables related to timestepping. 
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters         & Description                                                                      & Unit                  & Default    \\ \hline 
+  1    & $dtts$             & Timestep for density and tracers                                                 & [sec]                 & 28800.     \\
+  2    & $dtuv$             & Timestep of baroclininc velocity (internal mode)                                 & [sec]                 & 1125.      \\
+  3    & $dtsf$             & Timestep of barotropic velocity                                                  & [sec]                 & 1125.      \\
+  4    & $dtatm$            & Timestep of atmospher                                                            & [sec]                 & 54000.     \\
+  5    & $namix$            & Timesteps between mixing                                                         & [timesteps]           & 10         \\
+  6    & $segtim$           & Integration time is broken into number of segments each of length ``segtim" days & [Days]                & 5.        \\ \hline
+    \end{longtable}}
+      
+\item \textbf{riglid}: Variables related to numerical analysis thresholds. 
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters         & Description                                                                      & Unit                  & Default    \\ \hline 
+  1    & $mxscan$           & Max number of allowable scans for Poisson solvers                                & [-]                   & 200        \\
+  2    & $sor$              & Over-relaxation multiplier                                                       & [-]                   & 1.60      \\
+  3    & $tolrsf$           & Tolerance for stream function calculation                                        & [-]                   & 5.e8      \\
+  4    & $tolrsp$           & Tolerance for surface pressure calcualtion                                       & [-]                   & 1.e-4     \\
+  5    & $tolrfs$           & Tolerance for implicit free surface calculation                                  & [-]                   & 1.e-4     \\ \hline
+    \end{longtable}}
+    
+\item \textbf{mixing}: Variables related to mixing. Most of these declared in \verb|$UVICESCMROOT/source/mom/UVic_ESCM.F| but no descriptions given for some.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters         & Description                                                                      & Unit                  & Default    \\ \hline 
+  1    & $am$               & ?                                                                                & ?                     & 1.5e9   \\
+  2    & $ah$               & ?                                                                                & ?                     & 8.e6    \\
+  3    & $ahbkg$            & ?                                                                                & ?                     & 0.    \\
+  4    & $ambi$             & Constant lateral biharminc viscosity coefficient for momentum                    & [-]                   & 1.e23    \\
+  5    & $ahbi$             & Constant lateral biharminc diffusion coefficient for tracers                     & [-]                   & 5.e22    \\  
+  6    & $kappa\verb|_|m$   & Constant vertical viscosity coefficient                                          & [$\mathrm{cm^2/sec}$] & 10.    \\    
+  7    & $kappa\verb|_|h$   & Constant vertical dissusion coefficient                                          & [$\mathrm{cm^2/sec}$] & 0.35    \\    
+  8    & $aidif$            & Coefficient for implicit time differencing for vertical diffusion                & [-]                   & 0.5    \\   
+  9    & $nmix$             & Number of timesteps between mixing timesteps                                     & [timesteps]           & 16    \\    
+  10   & $eb$               & Conifgures for the use of a Euler Backward mixing timestep                       & [true,false]          & .false.    \\    
+  11   & $ncon$             & Number of passes through convection routine                                      & [-]                   & 1    \\    
+  12   & $cdbot$            & Bottom drag coefficient                                                          & [-]                   & 1.3e-3    \\    
+  13   & $acor$             & Implicit Coriolis Factor (0.0 => 1.0)                                            & [-]                   & 0.    \\    
+  14   & $dampts$           & Timescale for damping surface tracers to data                                    & [Days]                & 30.,60. \\
+  15   & $dampdz$           & Ocean level thicknesss for converting Newtonian damping                          & [cm]                  & 50.e2,50.e2 \\ \hline
+    \end{longtable}}
+        
+\item \textbf{diagn}: Variables related to time integral. Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/switch.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters  & Description                                                                      & Unit               & Default    \\ \hline 
+  1    & $tsiint$    & Number of days between printing of time step integrals                           & [Days]             & 365.     \\
+  2    & $tsiper$    & Averaging period for ``\verb|time_step_monitor|"                                 & [Days]             & 365      \\
+  3    & $timavgint$ & Interval for writing time mean data from the ``averaging" grid                   & [Days]             & 36500.   \\
+  4    & $timavgper$ & Averaging period for ``\verb|time_averages|"                                     & [Days]             & 36500.   \\
+  5    & $restint$   & Days between saving restarts                                                     & [Days]             & 36500.   \\
+  6    & $tavgint$   & Days between regional tracer averages (under horizontal regions)                 & [Days]             & -365000. \\
+  7    & $itavg$     & Write regional mask info the tracer average diagnostic                           & [true,false]       & .true.   \\
+  8    & $tmbint$    & Number of days over which tracer equation in averaged in depth and longitude     & [Days]             & -365000.  \\
+  9    & $itmb$      & Write ``msktmb" for tracer meridional balance diagnostic.True for the new runs.  & [true,false]       & .true.   \\
+  10   & $trmbint$   & Days between momentum and tracer term balances                                   & [Days]             & -365000.         \\
+  11   & $itrmb$     & Write regional mask info for the term balance diagnostic                         & [true,false]       & .true.   \\
+  12   & $tbtint$    & Averaging period for writing term balances                                       & [Days]             & -365000.   \\
+  13   & $tbtper$    & Averaging period for tracer term balances                                        & [Days]             & -365.      \\
+  14   & $glenint$   & Number of days between global energetics integrals                               & [Days]             & -365000.    \\
+  15   & $vmsfint$   & Number of days between calculation of vertical and meridional stream function    & [Days]             & -365000.     \\
+  16   & $stabint$   & Number of days between sampling for various stability criteria                   & [Days]             & -365000.    \\
+  17   & $zmbcint$   & Number of days between calculation of zonal mean surface boundary conditions     & [Days]             & -365000.    \\
+  18   & $gyreint$   & Number of days between calculation of traccer northward transport                & [Days]             & -365000.   \\
+  19   & $extint$    & Number of days between printouts of external mode                                & [Days]             & -365000.   \\
+  20   & $prxzint$   & Number of days between printouts of x-z data                                     & [Days]             & -365000.    \\
+  21   & $dspint$    & Number of days between surface pressure calculation                              & [Days]             & -365000.    \\
+  22   & $trajint$   & ?                                                                                & [Days]             & -365000.    \\
+  23   & $xbtint$    & Averaging period for xriting XBT data                                            & [Days]             & -365000.   \\ \hline
+  
+    \end{longtable}}
+
+\item \textbf{io}: Variables related to ocean circulation module. Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/iounit.h| and \verb|$UVICESCMROOT/source/common/diag.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters  & Description                                                      & Unit                 & Default    \\ \hline 
+  1    & $expnam$    & 60 character text string for experiment name                     & ['Name']             & ' '     \\
+  2    & $iotavg$    & Control \verb|#| for tracer averages                             & [-]                  & 6       \\
+  3    & $iotmb$     & Control \verb|#| for writing meridional tracer budget            & [-]                  & 6       \\
+  4    & $iotrmb$    & Control \verb|#| for term balances for tracer and momentum       & [-]                  & 6    \\
+  5    & $iozmbc$    & Control \verb|#| for writing zonal mean surf boundary conditions & [-]                  & 6    \\
+  6    & $ioglen$    & Control \verb|#| for writing global energetics integrals         & [-]                  & 6    \\
+  7    & $iovmsf$    & Control \verb|#| for writing meridional stream function          & [-]                  & 6          \\
+  8    & $iogyre$    & Control \verb|#| for writing gyre transport                      & [-]                  & 6          \\
+  9    & $ioprxz$    & Control \verb|#| for writing x-z sections from latitudes         & [-]                  & 6          \\
+  10   & $ioext$     & Control \verb|#| for writing external mode (stream function)     & [-]                  & 6          \\
+  11   & $iodsp$     & Control \verb|#| for writing diagnostic surface pressure         & [-]                  & 6          \\
+  12   & $iotsi$     & Control \verb|#| for writing time step integrals                 & [-]                  & 6          \\
+  13   & $iotraj$    & ?                                                                & [?]                  & 6          \\
+  14   & $ioxbt$     & Control \verb|#| for writing time averaged xbt data              & [-]                  & 6          \\
+  15   & $mrot$      & Regional mask region for max/min overturning                     & [-]                  & 1          \\
+  16   & $jsot$      & Starting j index for max/min overturning                         & [-]                  & 65          \\
+  17   & $jeot$      & Ending j index for max/min overturning                           & [-]                  & 90          \\  
+  18   & $ksot$      & Starting k index for max/min overturning                         & [-]                  & 3          \\  
+  19   & $keot$      & Ending k index for max/min overturning                           & [-]                  & 17          \\ \hline 
+   \end{longtable}}
+
+\item \textbf{ictime}: Variables related to time management. Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/tmngr.h|, \verb|$UVICESCMROOT/source/common/tmngr.F|, and \\ \verb|$UVICESCMROOT/source/common/switch.h|. 
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $eqyear$                         & Use constant length year calendar?            & [true,false]                  & .true.     \\
+  2    & $eqmon$                          & Use 12 equal months of monlen days each?      & [true,false]                  & .false.    \\
+  3    & $refinit$                        & reference to initial condition time           & [true,false]                  & .true.     \\
+  4    & $refrun$                         & referenced to the start of each run           & [true,false]                  & .false.    \\
+  5    & $init\verb|_|time\verb|_|in$     & sets input restart to initial time            & [true,false]                  & .false.    \\
+  6    & $init\verb|_|time\verb|_|out$    & sets output restart to initial time           & [true,false]                  & .false.    \\
+  7    & $year0$                          & year of initial conditions                    & [year]                        & 0          \\
+  8    & $month0$                         & month of initial conditions                   & [month]                       & 1          \\
+  9    & $day0$                           & day of initial conditions                     & [day]                         & 1          \\
+  10   & $hour0$                          & hour of initial conditions                    & [hour]                        & 0          \\
+  11   & $min0$                           & minute of initial conditions                  & [minute]                      & 0          \\
+  12   & $sec0$                           & second of initial conditions                  & [second]                      & 0          \\ \hline 
+  
+   \end{longtable}}
+   
+   
+\item \textbf{blmix}: Variables related to Bryan-Lewis mixing model. 
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $AHV$                            & Vertical diffusion coefficient                & [-]                           & 0.6        \\ \hline
+   \end{longtable}}
+\item \textbf{hlmix}: Variables related to horizontal mixing. Default = not given.
+\item \textbf{isopyc}: Variables related to the isopycnal mixing scheme. Descriptions are found in \\ \verb|$UVICESCMROOT/source/mom/isopycnal.F|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $slmx$                           & max slope of isopycnals                       & [-]                           & 0.01       \\
+  2    & $ahisop$                         & isopycnal tracer diffusivity                  & [$\mathrm{cm^2/sec}]$         & 1.2e7      \\
+  3    & $athkdf$                         & isopycnal thickness diffusivity               & [$\mathrm{cm^2/sec}]$         & 8.e6       \\
+  4    & $del\verb|_|dm$                  & transition for scaling diffusion coefficient  & [$\mathrm{cm^2/sec}]$         & 0.4e-2     \\
+  5    & $s\verb|_|dm$                    & half width scaling for diffusion coefficient  & [$\mathrm{cm^2/sec}]$         & 0.1e-2     \\ \hline
+   \end{longtable}}
+
+\item \textbf{ppmix}: Variables related to the Pacanowski/Philander vertical mixing scheme. Default = not given.
+\item \textbf{smagnl}: Variables related to the Smagorinsky nonlinear horizontal viscosity. Default = not given.
+\item \textbf{embm}: Variables related to the energy balance atmosphere model.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $adiff$                          & atmospheric diffusivity?                      & [?]                           & 0.03       \\ \hline
+   \end{longtable}}
+\item \textbf{carbon}:Variables related to carbon cycle in the energy balance atmosphere model. Descriptions are found in \verb|$UVICESCMROOT/source/common/cembm.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $co2ccn$                         & atmospheric CO2 concentration                 & [ppmv]                        & 277.4412   \\
+  2    & $dc14ccn$                        & atmospheric dC14 concentration                & [permil]                      & 0.0        \\ \hline
+   \end{longtable}}
+\item \textbf{paleo}: Variable related to paleoclimatology and paleoceanography. Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/cembm.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $pyear$                          & default paleo calendar year (-/+ = BC/AD)     & [year]                        & 1765.       \\ \hline
+   \end{longtable}}
+\item \textbf{ice}:  Variables related to ice module. Default = not given.
+\item \textbf{veg}: Variables related to land/vegetation module. Default = not given.
+\item \textbf{mtlm}:Variables related to land-surface and vegetation model.Descriptions are found in \\ \verb|$UVICESCMROOT/source/common/mtlm.h|.
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters                       & Description                                   & Unit                          & Default    \\ \hline 
+  1    & $BF$                             & Burn fraction                                 & [-]                           & 0.0     \\    \hline
+   \end{longtable}}
+   
+\item \textbf{npzd}: Parameters related to biogeochemical NPZD model. Descriptions are from \url{https://github.com/OSU-CEOAS-Schmittner/UVicMOBI_fct_npzd_o2_n_fe_ca_caco3_c13_n15/blob/master/updates/npzd_src.F}
+
+{\footnotesize
+\begin{longtable}{lllll} \hline
+  Num  & Parameters         & Description                                                 & Unit                          & Default    \\ \hline 
+   1   & $k1n$              & Half saturation constant for N uptake                       & [$mmol/m^3$]                  & 0.7        \\
+   2   & $capr$             & carbonate to carbon production ratio                        & [$molar$]                     & 0.055      \\
+   3   & $abio\verb|_|P$    & $a$; Maximum growth rate parameter                          & [$1/day$]                     & 0.6         \\
+   4   & $alpha$            & Initial slope P-I curve                                     & [$(W/m^2)^{-1}/day$]          & 0.16        \\
+   5   & $nup$              & Specific mortality rate (Phytoplankton)                     & [$1/day$]                     & 0.03        \\
+   6   & $nupt0$            & Fast-recycling  mortality rate (Phytoplankton)              & [$1/day$]                     & 0.001       \\
+   7   & $redctn$           & C/N Redfield ratio                                          & [$molar$]                     & 7           \\
+   8   & $geZ$              & Zooplankton growth efficiency                               & [-]                           & 0.54        \\
+   9   & $redotn$           & O2/N Redfield ratio                                         & [$molar$]                     & 11.0        \\
+   10  & $kfemin$           & Minimum half saturation constant for Fe limitation          & [$mmol Fe / m^3$]             & 0.04e-3     \\
+   11  & $kfemax$           & Maximum half saturation constant for Fe limitation          & [$mmol Fe / m^3$]             & 0.4e-3     \\
+   12  & $kfemin\verb|_|C$  & Minimum half saturation constant for Fe limitation (Cocco)  & [$mmol Fe / m^3$]             & 0.04e-3     \\
+   13  & $kfemax\verb|_|C$  & Maximum half saturation constant for Fe limitation (Cocco)  & [$mmol Fe / m^3$]             & 0.4e-3     \\
+   14  & $kfe\verb|_|D$     & Half saturation constant for Diaz Fe limitation             & [$mmol Fe / m^3$]             & 0.1e-3     \\
+   15  & $zprefC$           & Zooplankton preference for C                                & [-]                           & 0.21       \\
+   16  & $zprefP$           & Zooplankton preference for P                                & [-]                           & 0.24       \\ 
+   17  & $dissk0$           & initial dissolution rate parameter                          & [-]                           & 0.013      \\
+   18  & $gbio$             &  Maximum grazing rate                                        & [$1/day$]                     & 0.37       \\
+   19  & $wd0$              &  Sinking speed of detritus at surface                        & [$m/day$]                     & 15         \\
+   20  & $nuz$              & Quadratic mortality (zpk)                                   & [$(mmol/m^3)^{-2}day^{-1}$]   & 0.06       \\
+   21  & $jdiar$            & factor reducing the growth rate of diazotrophs              & [-]                           & 0.2        \\
+   22  & $nud0$             & detritus remineralization rate                              & [$1/day$]                     & 0.07       \\
+   23  & $sgbdfac$          & sub-grid benthic denitrification rate factor                & [-]                           & 2.0        \\
+   24  & $diazntp$          & diazotroph N:P ratio                                        & [molar]                       & 40.0       \\
+   25  & $nup\verb|_|D$     & Specific mortaility rate (Diazotrophs)                      & [$1/day$]                     & 0.0001     \\
+   26  & $abio\verb|_|C$    & $a$; Maximum growth rate parameter (Cocco)                  & [$1/day$]                     & 0.3        \\
+   27  & $k1n\verb|_|C$     & Half sat const for N uptake (Cocco)                         & [$mmol/m^3$]                  & 0.35       \\
+   28  & $alpha\verb|_|C$   & Initial slope P-I curve (Cocco)                             & [$(W/m^2)^{-1}/day$]          & 0.1        \\
+   29  & $nuct0$            & Fast-recycling mortality rate (Cocco)                       & [$1/day$]                     & 0.013      \\
+   30  & $nupt0\verb|_|D$   & Fast-recyling mortality rate (Diazotrophs)                  & [$1/day$]                     & 0.001      \\
+   31  & $dfr$              & phyt mortality refractory/semi-labile DOM fraction          & [-]                           & 0.1        \\
+   32  & $dfrt$             & phyt fast-recy refracotyr/semi-labile DOM fraction          & [-]                           & 0.08       \\
+   33  & $dtnpzd$           & time step of biology                                        & [s]                           & 14400.0    \\
+   34  & $hdop$             & DOP growth rate handicap                                    & [-]                           & 0.4       \\
+   35  & $nudop0$           & DOP remineralization rate                                   & [$1/day$]                     & 2.0e-5    \\
+   35  & $nudon0$           & DON remineralization rate                                   & [$1/day$]                     & 1.0e-5    \\
+   36  & $eps\verb|_|assim$ & Scaling factor for assimilation                             & [-]                           & 6.0       \\
+   37  & $eps\verb|_|excr$  & Scaling factor for excretion                                & [-]                           & 4.0       \\
+   38  & $eps\verb|_|recy$  & Scaling factor for recycling                                & [-]                           & 1.3       \\
+   39  & $eps\verb|_|wcdeni$& Scaling factor for water column denitrification             & [-]                           & 25.0      \\
+   40  & $eps\verb|_|bdeni0$& Scaling factor for benthic denitrification                  & [-]                           & 4.0      \\
+   41  & $eps\verb|_|nfix$  & Scaling factor for benthic N fixation                       & [-]                           & 1.0      \\
+   42  & $mwz$              & Depth where sinking below remains constant                  & [$cm$]                        & 100000    \\
+   43  & $mw$               & Sinking speed increase with depth                           & [$s^{-1}$]                    & 0.055     \\ \hline
+   \end{longtable}}
+
+\noin To find out what these paramters actually do in the model, you may need to refer to several description papers:
+\begin{itemize}
+\item Original NPZD model \citep{Oschlies99, Giraud00,Schmittner05,Schmittner08}. 
+\item Zooplankton grazing formulation \citep{Keller12}
+\item Nitrogen isotope model \citep{Somes10grl,Somes10gbc,Somes13}
+\item Carbon isotope (\ce{^13C}) model \citep{Schmittner13}
+\item Prognostic \ce{CaCO3}, Coccolithophores, and balast \citep{Kvale15}
+\item Iron Model \citep{Nickelsen15}
+\item Benthic denitrification and sedimentary iron release \citep{Somes15,Muglia17}
+\end{itemize}
+   
+\item \textbf{sed}: Variables related to sediment module. Default = not given.
+
+\end{itemize}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Reference
 \clearpage
 \bibliography{reference} 
 \bibliographystyle{apalike}
