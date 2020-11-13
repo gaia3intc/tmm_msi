@@ -790,7 +790,8 @@ In implementing flexible C:P, I added 4 new tracers: (1) Phytoplankton C biomass
 
 \item Edit the file \ \verb/make_input_files_for_mops_model.m/ and run it on Matlab. First thing to do is to make sure that variable \verb/base_path/ point to the right directory for the TMM ECCO configuration. Also make sure that option \verb|useORGCARBON| is set to 1. The options \verb|useORGCARBON| creates new initial concentrations arrays for DOC, POC, ZooC, and PhytoC. This initizalization process takes much longer than that of the first case study.
 
-\item Edit the parameter input file \verb|biogem_params.txt|. In the first run, rows 1-6 should be the default values for MOPS + ECCO follwiing \cite{Kriest20}. Parameters 12-21 correspond to the P:C power-law formulations of phytoplankton and zooplankton from Equations (\ref{eq:eq_pcphy})-(\ref{eq:eq_pczoo}). Refernce P:C for both phytoplankton and zooplankton is $1/117 = 8.547$ permil (line 12). \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+\item Edit the parameter input file \verb|biogem_params.txt|. In the first run, rows 1-6 should be the default values for MOPS + ECCO follwiing \cite{Kriest20}. Parameters 12-21 correspond to the P:C power-law formulations of phytoplankton and zooplankton from Equations (\ref{eq:eq_pcphy})-(\ref{eq:eq_pczoo}). Refernce P:C for both phytoplankton and zooplankton is $1/117 = 8.547$ permil (line 12). 
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
   1 1.46     #01. detmartin = Martin Curve exponent of Detritus [1.39 for MIT2.8, 1.46 for ECCO]
   2 151.1    #02. ro2ut = Refield -O2:P                         [173.7 for MIT2.8, 151.1 for ECCO]
   3 0.00229  #03. nfix = Max growth rate (1/d) of N-fixers      [0.00119 for MIT2.8, 0.00229 for ECCO]
@@ -1164,6 +1165,123 @@ yes?
 \item \bibentry{Kvale15}
 \item \bibentry{Yamamoto15}
 \end{itemize}
+
+\subsection{TMM options for MOBI (listed at MOBI\_TMM\_OPTIONS.h)} \label{subsection:mobi_options}
+The default setting is shown in the [define/undef]. To run MOBI2.0 with 30 tracers, these switches must be turned on:
+\begin{enumerate}
+\item O\_npzd --- NPZD model
+\item O\_npzd\_o2 --- O2 gas-exchange and aerobic remineralization
+\item O\_npzd\_nitrogen --- N fixation, Denitirication and NO3 
+\item O\_npzd\_nitrogen\_15 --- N15 of Phyto, Zoo, Detritus, DON, NO3
+\item O\_npzd\_iron --- dFe, pFe and Fe from sediment and dust, scavenging, hydrothermal
+\item O\_carbon --- CO2 has exchange, carbon speciation
+\item O\_npzd\_alk --- Alkalinity
+\item O\_npzd\_caco3 --- Carbonate chemistry
+\item O\_carbon\_13 --- C13 of DIC,DOC,POC,CaCO3 and plankton
+\end{enumerate}
+\begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
+O_TMM                                # use TMM?                [define]
+O_co2ccn_user                        # you must define thi     [define]
+O_TMM_interactive_atmosphere         # interactive atmosphere? [undef]
+O_npzd_iron_diagnostics              # NPZD with iron?         [define]
+O_even_fluxes                        #                         [define]
+O_read_my_kmt                        #                         [undef]
+O_read_my_grid                       #                         [define]
+O_cyclic                             # cyclic grid?            [define]
+O_time_averages                      # accumulate or "average and write" time mean data?   [undef]
+O_time_step_monitor                  # accumulate or "average and write" time mean integrated data? [undef]
+O_sbc_in_memory                      #                         [define]
+O_fourfil                            # Fourier filtering?      [define]
+O_constant_flux_reference            #                         [define]
+O_embm                               # Atmospheric energy moisture balance model? [define]
+O_embm_mgrid                         # EMBM on multigrid solver? [define]
+O_embm_awind                         #                         [undef]
+O_embm_adiff                         #                         [define]
+O_save_embm_diff                     #                         [define]
+O_save_embm_wind                     #                         [define]
+O_ice                                # ice model?              [define]
+O_ice_evp                            # ice model with elastic-viscous-plastic rheology? [define]
+O_ice_fourfil                        # Fourier filtering on ice model? [define]
+O_mtlm                               # land surface and vegetation model? [undef]
+O_mtlm_segday                        #                         [undef]
+O_gthflx                             #                         [undef]
+O_mom                                # Modular ocean model?    [define] 
+O_ramdrive                           # mom related             [define]
+O_conjugate_gradient                 # mom related             [define]
+O_sf_5_point                         # mom related             [define]
+O_stream_function                    # mom related             [define]
+O_consthmix                          # mom related             [define]
+O_constvmix                          # mom related             [define]
+O_fullconvect                        # mom related             [define]
+O_save_convection                    # mom related             [define]
+O_stability_tests                    # mom related             [define]
+O_gyre_components                    # mom related             [undef]
+O_term_balances                      # mom related             [define]
+O_energy_analysis                    # mom related             [define]
+O_meridional_overturning             # mom related             [define]
+O_tracer_averages                    # accumulate tracers for averages under horizontal regions [define]
+O_gent_mcwilliams                    # Gent-McWilliams parameterization? [define]
+O_isopycmix                          # Isopycnal mixing?       [define]
+O_fct                                # mom related             [define]
+O_npzd                               # NPZD model?             [define]
+O_npzd_alk                           # NPZD with DIC and ALK?  [define]
+O_npzd_caco3                         # NPZD with CaCO3?        [define]
+O_kk_ballast                         # Ballasting?             [undef]
+O_npzd_nitrogen                      # NPZD with N cycle?      [define]
+O_npzd_nitrogen_15                   # NPZD wih N15?           [define]
+O_npzd_no_vflux                      # No vertical flux?       [undef]
+O_npzd_o2                            # NPZD with O2?           [define]
+O_save_npzd                          #                         [define]
+O_save_kv                            #                         [define]
+O_tidal_kv                           #                         [define]
+O_anisotropic_viscosity              #                         [define]
+O_save_anisotropic_viscosity         #                         [define]
+O_npzd_iron                          # NPZD with iron cycle?   [define]
+O_npzd_iron_diagnostics              # Iron Diagnostics?       [undef]
+O_npzd_extra_diagnostics             #                         [undef]
+
+O_carbon                             # carbon chemistry?       [define]
+O_carbon_13                          # 13C with C chemistry?   [define]
+O_carbon_13_coupled                  #                         [undef]
+O_c13ccn_data                        # 13C forcing data?       [undef]
+O_carbon_14                          # 14C of DIC?             [define]
+O_save_carbon_carbonate_chem         #                         [define]
+O_co2ccn_data                        # CO2 forcing data?       [undef]
+O_agric_data                         #                         [define]
+O_landice_data                       #                         [define]
+O_solar_data                         # Insolation forcing data? [undef]
+O_tai_otsf                           #                         [define]
+O_tai_ns                             #                         [define]
+O_tai_lo                             #                         [define]
+O_tai_slh                            #                         [define]
+O_tai_rad                            #                         [define]
+O_units_temperature_Celsius          # temp in degC?           [define]
+O_units_time_years                   # time in years?          [define]
+O_save_time_relyear0                 # save time from year 0   [define]
+
+O_embm_annual                        # update EMBM annually?   [define]
+O_volcano_data                       #                         [undef]
+O_volcano_data_transient             #                         [undef]
+O_co2emit_data_transient             # CO2 transient emission forcing? [undef]
+O_co2ccn_data_transient              # CO2 transient concentration forcing? [undef]
+O_co2emit_track_co2                  # Track CO2 emissions     [undef]
+O_co2emit_track_sat                  # Tracks surface air temp? [undef]
+O_embm_vcs                           # CO2 from tracking air temp? [undef]
+O_c14ccn_data                        # 14C forcing?             [undef]
+O_c14ccn_data_transient              # 14C concentration transient? [undef]
+O_aggfor_data                        # Aggregating greenhouse gas forcing? [undef]
+O_aggfor_data_transient              # Greenhouse gas forcing transient? [undef]
+O_sealev_data_transient              # Sealevel transient?      [undef]
+O_ice_cpts                           # cpts option for ice model? [undef]
+O_crop_data_transient                # Transient crop data? [undef]
+O_pasture_data_transient             # Transient pasture data? [undef]
+O_agric_data_transient               # Transient agricultural data? [undef]
+O_carbon_fnpzd                       # Read fixed fluxes for cabon and alkalinity? [undef]
+
+O_sed                                # Dynamic sediment model? [undef]
+O_sed_weath_diag                     # Diagostic sedimentary weathering? [define]
+O_sed_constrain_rainr                # Set limits on rain ratio by limiting effective organic rain? [define]
+\end{lstlisting}
 
 \subsection{Paramters for MOBI (listed at control.in)} \label{subsection:mobi_params}
 

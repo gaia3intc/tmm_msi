@@ -15,4 +15,5 @@
 \contentsline {section}{\numberline {3}Appendix}{20}{section.3}% 
 \contentsline {subsection}{\numberline {3.1}Downloading PyFerret on MSI}{20}{subsection.3.1}% 
 \contentsline {subsection}{\numberline {3.2}General reference for MOPS and MOBI}{20}{subsection.3.2}% 
-\contentsline {subsection}{\numberline {3.3}Paramters for MOBI (listed at control.in)}{21}{subsection.3.3}% 
+\contentsline {subsection}{\numberline {3.3}TMM options for MOBI (listed at MOBI\_TMM\_OPTIONS.h)}{21}{subsection.3.3}% 
+\contentsline {subsection}{\numberline {3.4}Paramters for MOBI (listed at control.in)}{22}{subsection.3.4}% 

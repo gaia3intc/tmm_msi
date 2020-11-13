@@ -1,18 +1,19 @@
-\BOOKMARK [1][-]{section.1}{Setting\040up}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Flow\040Chart}{section.1}% 2
+\BOOKMARK [1][-]{section.1}{Setting up}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Flow Chart}{section.1}% 2
 \BOOKMARK [2][-]{subsection.1.2}{Steps}{section.1}% 3
-\BOOKMARK [3][-]{subsubsection.1.2.1}{Step\0400:\040Logging\040into\040MSI\040and\040Mesabi}{subsection.1.2}% 4
-\BOOKMARK [3][-]{subsubsection.1.2.2}{Step\0401:\040Installing\040and\040configuring\040PETSc}{subsection.1.2}% 5
-\BOOKMARK [3][-]{subsubsection.1.2.3}{Step\0402:\040Downloading\040all\040the\040scripts\040and\040transport\040matrices}{subsection.1.2}% 6
-\BOOKMARK [3][-]{subsubsection.1.2.4}{Step\0403:\040Compiling\040the\040model}{subsection.1.2}% 7
-\BOOKMARK [3][-]{subsubsection.1.2.5}{Step\0404:\040Running\040the\040model}{subsection.1.2}% 8
-\BOOKMARK [3][-]{subsubsection.1.2.6}{Step\0405:\040Processing\040the\040model\040outputs}{subsection.1.2}% 9
-\BOOKMARK [3][-]{subsubsection.1.2.7}{Step\0406:\040Displaying\040the\040model\040outputs}{subsection.1.2}% 10
-\BOOKMARK [1][-]{section.2}{Case\040Studies}{}% 11
-\BOOKMARK [2][-]{subsection.2.1}{Study\0401:\040Postindustrial\040CO2\040uptake\040with\040MOPS+MIT2.8}{section.2}% 12
-\BOOKMARK [2][-]{subsection.2.2}{Study\0402:\040Using\040MOPS+ECCO\040to\040simulate\040flexible\040C:P}{section.2}% 13
-\BOOKMARK [2][-]{subsection.2.3}{Study\0403:\040Using\040MOBI+UVic\040to\040simulate\040isotope\040dynamics,\040WORK\040IN\040PROGRESS}{section.2}% 14
+\BOOKMARK [3][-]{subsubsection.1.2.1}{Step 0: Logging into MSI and Mesabi}{subsection.1.2}% 4
+\BOOKMARK [3][-]{subsubsection.1.2.2}{Step 1: Installing and configuring PETSc}{subsection.1.2}% 5
+\BOOKMARK [3][-]{subsubsection.1.2.3}{Step 2: Downloading all the scripts and transport matrices}{subsection.1.2}% 6
+\BOOKMARK [3][-]{subsubsection.1.2.4}{Step 3: Compiling the model}{subsection.1.2}% 7
+\BOOKMARK [3][-]{subsubsection.1.2.5}{Step 4: Running the model}{subsection.1.2}% 8
+\BOOKMARK [3][-]{subsubsection.1.2.6}{Step 5: Processing the model outputs}{subsection.1.2}% 9
+\BOOKMARK [3][-]{subsubsection.1.2.7}{Step 6: Displaying the model outputs}{subsection.1.2}% 10
+\BOOKMARK [1][-]{section.2}{Case Studies}{}% 11
+\BOOKMARK [2][-]{subsection.2.1}{Study 1: Postindustrial CO2 uptake with MOPS+MIT2.8}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.2}{Study 2: Using MOPS+ECCO to simulate flexible C:P}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.3}{Study 3: Using MOBI+UVic to simulate isotope dynamics, WORK IN PROGRESS}{section.2}% 14
 \BOOKMARK [1][-]{section.3}{Appendix}{}% 15
-\BOOKMARK [2][-]{subsection.3.1}{Downloading\040PyFerret\040on\040MSI}{section.3}% 16
-\BOOKMARK [2][-]{subsection.3.2}{General\040reference\040for\040MOPS\040and\040MOBI}{section.3}% 17
-\BOOKMARK [2][-]{subsection.3.3}{Paramters\040for\040MOBI\040\(listed\040at\040control.in\)}{section.3}% 18
+\BOOKMARK [2][-]{subsection.3.1}{Downloading PyFerret on MSI}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.2}{General reference for MOPS and MOBI}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.3}{TMM options for MOBI \(listed at MOBI\137TMM\137OPTIONS.h\)}{section.3}% 18
+\BOOKMARK [2][-]{subsection.3.4}{Paramters for MOBI \(listed at control.in\)}{section.3}% 19
