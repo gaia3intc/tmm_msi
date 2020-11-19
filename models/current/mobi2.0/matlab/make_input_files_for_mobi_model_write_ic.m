@@ -1,8 +1,10 @@
 % Set toplevel path to GCMs configuration
-base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+% base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+base_path='~/TMM2/UVicOSUpicdefault_with_discharge';
+addpath(genpath('~/TMM2/tmm_matlab_code'));
 
 % Set path names, etc.
 load(fullfile(base_path,'config_data'))

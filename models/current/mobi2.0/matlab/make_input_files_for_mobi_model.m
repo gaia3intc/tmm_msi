@@ -1,8 +1,10 @@
 % Set toplevel path to GCMs configuration
-base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+% base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+base_path='~/TMM2/UVicOSUpicdefault_with_discharge';
+addpath(genpath('~/TMM2/tmm_matlab_code'));
 
 periodicForcing=1
 periodicMatrix=1
@@ -216,8 +218,10 @@ if READ_SWRAD
 end
 
 % river discharge
-load(freshWaterForcingFile,'Frivdischgcm')
-dischb=gridToMatrix(Frivdischgcm,Ib,boxFile,gridFile,1);
+%load(freshWaterForcingFile,'Frivdischgcm')
+%dischb=gridToMatrix(Frivdischgcm,Ib,boxFile,gridFile,1);
+load(freshWaterForcingFile,'dischgcm')
+dischb=gridToMatrix(dischgcm,Ib,boxFile,gridFile,1);
 dischb=dischb*1e3/1e4; % [kg/m^2/s] -> [g/cm^2/s]
 if ~periodicForcing
   dischb=mean(dischb,2);
