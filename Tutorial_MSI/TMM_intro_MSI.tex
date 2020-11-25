@@ -31,6 +31,7 @@
 \usepackage{newtxtext,newtxmath}
 \usepackage{hyperref}
 \usepackage{longtable}
+\usepackage{enumitem}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -744,7 +745,7 @@ Figure \ref{fig:airseatimeseries} (\emph{Ferret:w 4}) is a globally integrated s
 
 \subsection{Study 2: Using MOPS+ECCO to simulate flexible C:P}
 
-In the second case study, we will use the modified MOPS code to study the spatiotemporal variability in organic matter C:P ratio under steady-state scenario. We are going to do a  3000-yr spinup run where C:P of phytoplankton is flexible but C:P of zooplankton is homeostatic (i.e. less flexible). We will use the TMM model 12 monthly mean TMs derived from the Estimating the Circulation and Climate of the Ocean (ECCO) project, which provides circulation fields that yield a best fit to hydrographic and remote sensing observations over a 10-year period, on a spatial grid of 1-by-1 degree horizontal resolution with 23 vertical levels
+In the second case study, we will use the modified MOPS code to study the spatiotemporal variability in organic matter C:P ratio under steady-state scenario. We are going to do a  1000-yr spinup run where C:P of phytoplankton is flexible but C:P of zooplankton is homeostatic (i.e. less flexible). We will use the TMM model 12 monthly mean TMs derived from the Estimating the Circulation and Climate of the Ocean (ECCO) project, which provides circulation fields that yield a best fit to hydrographic and remote sensing observations over a 10-year period, on a spatial grid of 1-by-1 degree horizontal resolution with 23 vertical levels
 
 We model P:C uptake ratio of phytoplankton using the power-law as a function of nutrients, temperature, and light following \cite{Tanioka20}:
 \begin{equation}
@@ -757,7 +758,7 @@ Zooplankton P:C uptake ratio is also computed using the power-law as a function 
    \mathrm{(P:C)_{uptake,zoo}} = \mathrm{(P:C)_{ref,zoo}^{1-H}\cdot (P:C)_{biomass,phyto}^{H}} \label{eq:eq_pczoo}
 \end{equation}
 
-Parameter $H$ is a zooplankton homeostatic parameter that describes how variable zooplankton P:C is affected by phytoplankton P:C. When $H = 0$, P:C uptale equals a fixed reference P:C and is independent of phytoplankton P:C. When $H = 1$, uptake P:C equals cellular P:C of phytoplankton. Here we will use the value of $H = 0.08$ following \cite{Persson10}, who conducted meta-analysis on zooplankton C:P.
+Parameter $H$ is a zooplankton homeostatic parameter that describes how variable zooplankton P:C is affected by phytoplankton P:C. When $H = 0$, P:C uptale equals a fixed reference P:C and is independent of phytoplankton P:C. When $H = 1$, uptake P:C equals cellular P:C of phytoplankton ("you are what you eat"). Here we will use the value of $H = 0.08$ following \cite{Persson10}, who conducted meta-analysis on zooplankton C:P.
 
 In order to cope with the mismatch between required P:C and P:C of prey, zooplankton can excrete excess P or C as dissolved and particulate organic matter. At steady state, uptake P:C ratio should equal the biomass P:C ratio for both phytoplankton and zooplankton.
 
@@ -789,6 +790,8 @@ In implementing flexible C:P, I added 4 new tracers: (1) Phytoplankton C biomass
 \end{lstlisting}
 
 \item Edit the file \ \verb/make_input_files_for_mops_model.m/ and run it on Matlab. First thing to do is to make sure that variable \verb/base_path/ point to the right directory for the TMM ECCO configuration. Also make sure that option \verb|useORGCARBON| is set to 1. The options \verb|useORGCARBON| creates new initial concentrations arrays for DOC, POC, ZooC, and PhytoC. This initizalization process takes much longer than that of the first case study.
+
+\noin (Optional) Instead of creating input matrix files each time, \textbf{you can create symbolic links} to the TMM matrices using the script "\verb|link_inputs.sh|" in the directory \verb|~/TMM2/tmm/models/current/mops2.0/runscripts|. This way it saves a lot of time and disc storage.
 
 \item Edit the parameter input file \verb|biogem_params.txt|. In the first run, rows 1-6 should be the default values for MOPS + ECCO follwiing \cite{Kriest20}. Parameters 12-21 correspond to the P:C power-law formulations of phytoplankton and zooplankton from Equations (\ref{eq:eq_pcphy})-(\ref{eq:eq_pczoo}). Refernce P:C for both phytoplankton and zooplankton is $1/117 = 8.547$ permil (line 12). 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
@@ -854,7 +857,7 @@ The follwing lines (13$\sim$) contain the commands to execute and start the prog
  23         -t0 0.0 -iter0 0 \
  24         -deltat_clock 0.0013888888888889 \
  25         -max_steps 2160000 \   # Run for 720 steps/year * 3000 years
- 26         -write_time_steps 72000 \  # Output snapshot every 100 yeras
+ 26         -write_time_steps 720000 \  # Output snapshot every 1000 years
  27         -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,
             no3out.petsc,dicout.petsc,alkout.petsc,docout.petsc,pocout.petsc,phycout.petsc,
             zoocout.petsc \    # 13 output tracers 
@@ -973,7 +976,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{itemize}
 \noin To learn different configurations of MOBI, refer to the primer by A. Schmittner (\url{https://github.com/tanio003/tmm/blob/TT_Release/Tutorial_MSI/MOBI2.0_Schmittner.pdf}). 
 
-\textbf{In our exercise, we will try conducting a spin-up run for 3000 yrs using 30 prognostic tracers. Instructions will mostly follow that of S. Khatiwala.}
+\textbf{In this exercise, we will try conducting a spin-up run for 1000 yrs using 28 prognostic tracers. Instructions will mostly follow that of S. Khatiwala.} MOBI is coupled to the UViC model which consists of ocean general circulation at coarse resolution (1.8\times3.6 degrees, 19 vertical levels), a one-layer energy moisture balance atmaospheric component, a dynamic/thermodynamic sea ice model, and a land surface/dynamic vegetation module. 
 
 \begin{enumerate}
 
@@ -993,8 +996,8 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \item Make a Run directory for TMM-MOBI. For this run, I call it \verb|Runs/MOBI/Test_spinup|. Copy \\ \verb|mobi2.0/src/Makefile| and \verb|mobi2.0/src/MOBI_TMM_OPTIONS.h| to this directory. 
 \begin{lstlisting}[style=DOS]
  $ cd ~/TMM2
- $ mkdir -p Runs/MOBI/TMM_spinup
- $ cd Runs/MOBI/TMM_spinup
+ $ mkdir -p Runs/MOBI/Test_spinup
+ $ cd Runs/MOBI/Test_spinup
  $ cp -p $TMMROOT/models/current/mobi2.0/src/Makefile .
  $ cp -p $TMMROOT/models/current/mobi2.0/src/MOBI_TMM_OPTIONS.h . 
 \end{lstlisting}
@@ -1021,7 +1024,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{lstlisting}
 \lstset{emph={}, emphstyle=\color{green},emph={[2]}, emphstyle={[2]\color{blue}}} % reset coloring
 
-\item Edit the C preprocessor options in \verb|MOBI_TMM_OPTION.h| as necessary. In particular, you have to define the directive \verb|O_co2_user| (i.e., by \verb|# define O_co2_ccn_user|). See Appendix ??? for what each of the options mean. 
+\item Edit the C preprocessor options in \verb|MOBI_TMM_OPTION.h| as necessary. In particular, you have to define the directive \verb|O_co2_user| (i.e., by \verb|# define O_co2_ccn_user|). See Appendix \ref{subsection:mobi_options} for what each of the options mean. 
 
 \item Build the model with:
 \begin{lstlisting}[style=DOS]
@@ -1030,10 +1033,18 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{lstlisting}
 \noin If compiled properly, you would see an executable file \verb|tmmmobi| created along with a bunch of objective .o files. Don't worry about various warnings as long as they are not fatal. 
 
-\item Generate the names tracers being simulated (as per the options set in \verb|MOBI_TMM_OPTIONS.h| and their initial consitions. To do this, first set at the top of \verb|make_input_files_for_mobi_model_write_ic.m|. 
+\item Generate the names tracers being simulated (as per the options set in \verb|MOBI_TMM_OPTIONS.h|) and their initial consitions. To do this, first set at the top of \verb|make_input_files_for_mobi_model_write_ic.m|. 
 \lstset{language=matlab} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  % make_input_files_for_mobi_model_write_ic.m
+  1 % Set toplevel path to GCMs configuration
+  2 % base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+  3 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
+  4 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
+  5 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+  6 base_path='~/TMM2/UVicOSUpicdefault_with_discharge';
+  7 addpath(genpath('~/TMM2/tmm_matlab_code'));
+ 
 \end{lstlisting}
 \noin Execute in MATLAB.
 \begin{lstlisting}[style=DOS]
@@ -1046,6 +1057,38 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
  $ ./tmmmobiwrite
 \end{lstlisting}
 \noin This will write out \verb|MOBI_tracer_names.txt| containing the tracer names, and a corresponding set of *.dat text files (e.g., dic.dat) containing the vertical profile of tracer concentration. These names and (horizontally uniform) profiles are used by \verb|make_input_files_for_mobi_model.m| to generate initial condition files (e.g., dicini.petsc). 
+
+28 tracers created are:
+\begin{enumerate}[label=(\arabic*)]
+	\item \verb|imobipo4| = \ce{PO4} $[\mathrm{mmolP \ m^{-3}]}$
+	\item \verb|imobiphyt| = Phytoplankton biomass $[\mathrm{mmolN \ m^{-3}]}$
+	\item \verb|imobizoop| = Zooplankton biomass $[\mathrm{mmolN \ m^{-3}]}$
+	\item \verb|imobidetr| = Detritus $[\mathrm{mmolN \ m^{-3}]}$
+	\item \verb|imobidic| = DIC $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobidic13| = \ce{DI^{13}C} $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobiphytc13| = \ce{^13C} of Phytoplankton $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobizoopc13| = \ce{^13C} of Zooplankton $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobidetrc13| = \ce{^13C} of Detritus $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobidoc13| = \ce{DO^13C} $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobidiazc13| = \ce{^13C} of Diazotrophs $[\mathrm{mmol \ m^{-3}]}$		
+	\item \verb|imobicoccc13| = \ce{^13C} of Coccolithophores $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobicaco3c13| = \ce{Ca^13CO_3} $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobidop| = \ce{DOP} $[\mathrm{mmolP \ m^{-3}]}$
+	\item \verb|imobino3| = \ce{NO3} $[\mathrm{mmolN \ m^{-3}]}$
+	\item \verb|imobidon| = \ce{DON} $[\mathrm{mmolN \ m^{-3}]}$	
+	\item \verb|imobidiaz| = Diazotroph biomass $[\mathrm{mmolN \ m^{-3}]}$
+	\item \verb|imobidin15| = \ce{DI^15N} $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobidon15| = \ce{DO^15N} $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobiphytn15| = \ce{^15N} of Phytoplankton $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobizoopn15| = \ce{^15N} of Zooplankton $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobidetrn15| = \ce{^15N} of Detritus $[\mathrm{mmol \ m^{-3}]}$		
+	\item \verb|imobidiazn15| = \ce{^15N} of Diazotrophs $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobicoccn15| = \ce{^15N} of Coccolithophores $[\mathrm{mmol \ m^{-3}]}$	
+	\item \verb|imobicocc| = Coccolithophores biomass $[\mathrm{mmolN \ m^{-3}]}$
+	\item \verb|imobicaco3| = Calcium carbonate $[\mathrm{mmol \ m^{-3}]}$
+	\item \verb|imobidfe| = Dissolved iron $[\mathrm{nmol \ m^{-3}]}$
+	\item \verb|imobidetrfe| = Detrital iron $[\mathrm{nmol \ m^{-3}]}$
+\end{enumerate}
 
 \item Make a directory \verb|InitialConditionProfiles| and copy the *.dat files into it. By default \\ \verb|make_input_files_for_mobi_model.m| will look in this directory for the *.dat files.
 \begin{lstlisting}[style=DOS]
@@ -1062,12 +1105,25 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 the printf appends "ini.petsc," to each tracer name, and the sed strips out the 
 final comma.)
 
-\noin (Note-3): \verb|tmmmobiwrite| uses UVic routines where initial condition profiles are set. The code for this is hardwired for the standard UVic grid with 19 levels. If you're using TMs from a different ocean model you will need to modify \verb|make_input_files_for_mobi_model.m| accordingly to specify initial conditions corresponding to your grid. You will also need to change the number of levels (km) in \verb|size.h|.
+\noin (Note-3): \verb|tmmmobiwrite| uses UVic routines where initial condition profiles are set. The code for this is hardwired for the standard UVic grid with 19 levels. If you're using TMs from a different ocean model you will need to modify \verb|make_input_files_for_mobi_model.m| accordingly to specify initial conditions corresponding to your grid. You will also need to change the number of levels (in kilometers) in \verb|size.h|.
 
-\item Set the path at the top of \verb|make_input_files_for_mobi_model.m| and execute in MATLAB. (See NOTE-3 in \verb|#|9.)
+\item Set the path at the top of \verb|make_input_files_for_mobi_model.m| and execute in MATLAB. (See NOTE-3 in \verb|#|9.). Make sure to set the correct timestep of 28800 seconds. 
 \lstset{language=matlab} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  % make_input_files_for_mobi_model.m
+  1 % Set toplevel path to GCMs configuration
+  2 % base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+  3 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
+  4 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
+  5 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
+  6 base_path='~/TMM2/UVicOSUpicdefault_with_discharge';
+  7 addpath(genpath('~/TMM2/tmm_matlab_code'));
+  8
+  9 periodicForcing=1
+ 10 periodicMatrix=1
+ 11
+ 12 dt=28800; % time step to use
+ ....
 \end{lstlisting}
 \begin{lstlisting}[style=DOS]
  >> make_input_files_for_mobi_model
@@ -1077,13 +1133,14 @@ final comma.)
 must set are:
 
 \begin{itemize}
-\item \verb|dtts| in the \verb|&tsteps| namelist: this MUST match the time step argument to the run time option \verb|-biogeochem_deltat| in the runscript. This is the tracer advection-diffusion timestep.
+\item \verb|dtts| in the \verb|&tsteps| namelist: this MUST match the time step argument to the run time option \verb|-biogeochem_deltat| in the runscript. This is the tracer advection-diffusion timestep (28800 [seconds] for UVIc model). 
 \item \verb|co2ccn| and \verb|dc14ccn| in the \verb|&carbon| namelist. 
-\item \verb|dtnpzd| in the \verb|&npzd| namelist. Set this so that \verb|dtts| is a multiple of \verb|dtnpzd|. For stability, \verb|dtnpzd| (in seconds) should not exceed 1/3rd of a day (in seconds). 
+\item \verb|dtnpzd| in the \verb|&npzd| namelist. Set this so that \verb|dtts| is a multiple of \verb|dtnpzd|. For stability, \verb|dtnpzd| (in seconds) should not exceed 1/3\textsuperscript{rd} of a day (in seconds). The default is \verb|dtpnzd|=14400 = 1/2 of ocean timestep. 
 \end{itemize}
 \noin See Appendix \ref{subsection:mobi_params} for what each of these other options mean in \verb|control.in|. 
 
-\item Edit runscript as necessary. Also see (NOTE-2 in \verb|#|9). 
+\item Edit runscript as necessary. Also see (NOTE-2 in \verb|#|9). It takes about 8 hours to complete 1000 yr run with 2 nodes (48 cores). In this rerun, we will output monthly tracer averages as well as diagnostic fluxes in the final year of the run. Tracer snapshot concentrations will be outputted every 100 years.
+
 \lstset{language=sh} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  # runscript_msi
@@ -1095,9 +1152,36 @@ must set are:
  stack size              (kbytes, -s) unlimited
 \end{lstlisting}
 
-\item Set the path at the top of the load*.m scripts to read in the output in Matlab.
+\item Set the path at the top of the load*.m scripts to read in the output in Matlab. To make all the output netcdf files in matlab at once, run \verb|process_output.m|. Currently,the sedimentary output is suppressed. 
 
-\item Display output files in .nc. Currently, all the .nc files are spewed out one by one. If I get a time, I can make a scirpt to put all the variables into a single .nc file. 
+\noin Each .nc file is spewed out one by one. There are different kinds of output produced that are being produced:
+\begin{itemize}
+ \item F\_**.nc (e.g., F\_dic.nc): Surface Downward Fluxes [mol $\mathrm{m^{-2} s^{-1}}$]. Edit "available\_diagnostics.txt" to select which fluxes to create.
+ \item O\_**.nc (e.g., O\_phytnpp.nc): Various biogeochemical fluxes and concentrations that are calculated in the model. Units are in [mol $\mathrm{m^{-2} s^{-1}}$] or [mol $\mathrm{m^{-2}}$]. Edit "available\_diagnostics.txt" to select which fluxes to create.
+ \item **.nc (e.g., PO4.nc): A snapshot concentration of a tracer. Edit "MOBI\_tracer\_names.txt" to select which tracers to convert to .nc files.
+ \item **mmavg.nc (e.g., PO4mmavg.nc): A time-averaged concetration of a tracer. Edit "MOBI\_tracer\_names.txt" to select which tracers to convert to .nc files.
+\end{itemize}
+
+\item Display outputs. Here, we will make figures for \Delta\ce{^14C} [permil] and \delta\ce{^13C} [permil] at the final year of the run and compare with observations. The code for making the following two figures is my directory \verb|~/../tanio003/TMM2/Runs/MOBI/Test_spinup/analyze_mobi_spinup.jnl|.
+
+\begin{figure}[h!]   % Insert Figure 10 here
+   \centering
+   \includegraphics[scale=0.5]{MOBI_WOCE_C14.pdf}
+   \caption[]{Observed and modeled natural \Delta\ce{^14C} and \ce{^14C} age at 3000 m. (a) Data-derived estimtate of \Delta\ce{^14C} from WOCE \citep{Key04} at 3000 m (b) Modeled  \Delta\ce{^14C} by MOBI at Year 1000 (c) Observed \ce{^14C} age at 3000 m, and (d) Modeled \ce{^14C} age at 3000 m.}
+   \label{fig:c14_mobi}
+\end{figure}
+
+Figure \ref{fig:c14_mobi} compares observed and modeled radiocarbon ages. Although \ce{^14C} has not fully reached steady-state after 1000 yrs (figure not shown), the MOBI seems to reproduce observed pattern of deep-sea natural radiocarbon quite well. 
+
+\begin{figure}[h!]   % Insert Figure 11 here
+   \centering
+   \includegraphics[scale=0.5]{MOBI_OBS_C13.pdf}
+   \caption[]{Observed and modeled \delta\ce{^13C} at the surface and the depth profile. (a) Observed \delta\ce{^13C} of DIC at 0-100 m from years 1990 to 2005 \citep{Schmittner13}  (b) Modeled surface \delta\ce{^13C} by MOBI at Year 1000 (c) Observed (black) and Modeled (red) zonal average surface \delta\ce{^13C} (d) Global mean depth-profile of observed (black) and modeled (red) \delta\ce{^13C}.}
+   \label{fig:c13_mobi}
+\end{figure}
+
+Figure \ref{fig:c13_mobi} compares observed and modeled \delta\ce{^13C}. In general, modeleded \delta\ce{^13C} overestimates the observed value in the surface ocean, but it captures the large-scale pattern qualitatively. Biological fractionation and the sinking of isotopically light \delta\ce{^13C} organic matter from the surface into the interior ocean leads to low \delta\ce{^13C} DIC values at depths and in high latitude surface waters and high values in the upper ocean at low latitudes with maxima in the subtropics. Below 1000 m, model reproduces the observed pattern fairly well.
+
 
 \end{enumerate}
 

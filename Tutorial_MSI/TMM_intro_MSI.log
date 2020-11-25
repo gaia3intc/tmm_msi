@@ -1,4 +1,4 @@
-This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  13 NOV 2020 12:20
+This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  24 NOV 2020 18:26
  restricted system commands enabled.
  file:line:error style messages enabled.
 **TMM_intro_MSI.tex
@@ -49,7 +49,7 @@ Inserting `luaotfload.aux.set_capheight' at position 3 in `luaotfload.patch_font
 '.
 Inserting `luaotfload.rewrite_fontname' at position 4 in `luaotfload.patch_font'
 .
-luaotfload | main : initialization completed in 0.074 seconds
+luaotfload | main : initialization completed in 0.069 seconds
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
@@ -966,69 +966,78 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
 \c@LT@chunks=\count317
 \LT@p@ftn=\toks34
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 43.
-LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 50.
+(/usr/local/texlive/2019/texmf-dist/tex/latex/enumitem/enumitem.sty
+Package: enumitem 2019/02/04 v3.8 Customized lists
+\labelindent=\skip79
+\enit@outerparindent=\dimen263
+\enit@toks=\toks35
+\enit@inbox=\box82
+\enit@count@id=\count318
+\enitdp@description=\count319
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 44.
+LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 51.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 File: t1ntxtlf.fd 2015/01/17 v1.0 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 50.
+(Font)              scaled to size 10.0pt on input line 51.
 
 (./TMM_intro_MSI.aux)
 \openout1 = TMM_intro_MSI.aux
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 50.
-LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 50.
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 51.
+LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 51.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 50.
-LaTeX Font Info:    Try loading font information for U+ntxexa on input line 50.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 51.
+LaTeX Font Info:    Try loading font information for U+ntxexa on input line 51.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 50.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 50.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 51.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 51.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 50.
-LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 50.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 51.
+LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 51.
 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 50.
-LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 50
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 51.
+LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 51
 .
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    ... okay on input line 51.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: luatex
@@ -1066,17 +1075,17 @@ LaTeX Font Info:    ... okay on input line 50.
 
 (/usr/local/texlive/2019/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count318
-\scratchdimen=\dimen263
-\scratchbox=\box82
-\nofMPsegments=\count319
-\nofMParguments=\count320
-\everyMPshowfont=\toks35
-\MPscratchCnt=\count321
-\MPscratchDim=\dimen264
-\MPnumerator=\count322
-\makeMPintoPDFobject=\count323
-\everyMPtoPDFconversion=\toks36
+\scratchcounter=\count320
+\scratchdimen=\dimen264
+\scratchbox=\box83
+\nofMPsegments=\count321
+\nofMParguments=\count322
+\everyMPshowfont=\toks36
+\MPscratchCnt=\count323
+\MPscratchDim=\dimen265
+\MPnumerator=\count324
+\makeMPintoPDFobject=\count325
+\everyMPtoPDFconversion=\toks37
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -1094,7 +1103,7 @@ Package grfext Info: Graphics extension search list:
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 ))
-\c@lstlisting=\count324
+\c@lstlisting=\count326
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
@@ -1104,7 +1113,7 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2018/08/26 v1.4-95 longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 50.
+LaTeX Info: Redefining \microtypecontext on input line 51.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1118,8 +1127,8 @@ Package microtype Info: No adjustment of kerning.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-\AtBeginShipoutBox=\box83
-Package hyperref Info: Link coloring ON on input line 50.
+\AtBeginShipoutBox=\box84
+Package hyperref Info: Link coloring ON on input line 51.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -1127,38 +1136,38 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count325
+\c@section@level=\count327
 )
-LaTeX Info: Redefining \ref on input line 50.
-LaTeX Info: Redefining \pageref on input line 50.
-LaTeX Info: Redefining \nameref on input line 50.
+LaTeX Info: Redefining \ref on input line 51.
+LaTeX Info: Redefining \pageref on input line 51.
+LaTeX Info: Redefining \nameref on input line 51.
 
 (./TMM_intro_MSI.out) (./TMM_intro_MSI.out)
 \@outlinefile=\write3
 
 \openout3 = TMM_intro_MSI.out
 
-Package chemgreek Info: Activating mapping `newtx' on line 50.
+Package chemgreek Info: Activating mapping `newtx' on line 51.
 
-\c@mv@tabular=\count326
-\c@mv@boldtabular=\count327
+\c@mv@tabular=\count328
+\c@mv@boldtabular=\count329
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 17.28pt on input line 52.
+(Font)              scaled to size 17.28pt on input line 53.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 52.
-LaTeX Font Info:    Try loading font information for OT1+ntxtlf on input line 52
+(Font)              scaled to size 12.0pt on input line 53.
+LaTeX Font Info:    Try loading font information for OT1+ntxtlf on input line 53
 .
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ot1ntxtlf.fd
 File: ot1ntxtlf.fd 2015/01/17 v1.0 font definition file for OT1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 52.
+(Font)              scaled to size 12.0pt on input line 53.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.8pt on input line 52.
+(Font)              scaled to size 8.8pt on input line 53.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.6pt on input line 52.
-LaTeX Font Info:    Try loading font information for U+msa on input line 52.
+(Font)              scaled to size 6.6pt on input line 53.
+LaTeX Font Info:    Try loading font information for U+msa on input line 53.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -1166,7 +1175,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 52.
+LaTeX Font Info:    Try loading font information for U+msb on input line 53.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1174,39 +1183,39 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+ntxmia on input line 52.
+LaTeX Font Info:    Try loading font information for U+ntxmia on input line 53.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxmia.fd
 File: untxmia.fd 2018/04/14 Fontinst v1.933 font definitions for U/ntxmia.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsym on input line 52.
+LaTeX Font Info:    Try loading font information for U+ntxsym on input line 53.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxsym.fd
 File: untxsym.fd 2015/03/20 Fontinst v1.933 font definitions for U/ntxsym.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 52.
+LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 53.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 53.
+(Font)              scaled to size 9.0pt on input line 54.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <9> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 53.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 54.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 9.0pt on input line 53.
-LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
 (Font)              scaled to size 9.0pt on input line 54.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.3pt on input line 54.
+(Font)              scaled to size 9.0pt on input line 55.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.5pt on input line 54.
+(Font)              scaled to size 7.3pt on input line 55.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 5.5pt on input line 55.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 14.4pt on input line 57.
+(Font)              scaled to size 14.4pt on input line 58.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 57.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 58.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 14.4pt on input line 57.
+(Font)              scaled to size 14.4pt on input line 58.
 
 (./TMM_intro_MSI.toc
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10> not available
@@ -1220,18 +1229,18 @@ LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
 
 \openout4 = TMM_intro_MSI.toc
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <12> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 61.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 62.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 12.0pt on input line 61.
+(Font)              scaled to size 12.0pt on input line 62.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.0pt on input line 62.
-LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 66.
+(Font)              scaled to size 10.0pt on input line 63.
+LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 67.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtt.fd
 File: t1ntxtt.fd 2012/04/20 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 10.0pt on input line 66.
+(Font)              scaled to size 10.0pt on input line 67.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `ntxtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
@@ -1240,20 +1249,20 @@ Package microtype Info: Loading generic protrusion settings for font family
 
 {/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.0pt on input line 76.
+(Font)              scaled to size 7.0pt on input line 77.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 7.0pt on input line 76.
+(Font)              scaled to size 7.0pt on input line 77.
  [2] [3]
 (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 ) [4]
 LaTeX Font Info:    Font shape `T1/ntxtt/bx/n' will be
-(Font)              scaled to size 7.0pt on input line 307.
+(Font)              scaled to size 7.0pt on input line 308.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
-Overfull \hbox (13.03659pt too wide) in paragraph at lines 330--331
+Overfull \hbox (13.03659pt too wide) in paragraph at lines 331--332
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1261,24 +1270,24 @@ Overfull \hbox (13.03659pt too wide) in paragraph at lines 330--331
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 7.0pt on input line 342.
+(Font)              scaled to size 7.0pt on input line 343.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <7> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 352.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 353.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 7.0pt on input line 352.
+(Font)              scaled to size 7.0pt on input line 353.
 [5]
-Overfull \hbox (0.63672pt too wide) in paragraph at lines 373--374
+Overfull \hbox (0.63672pt too wide) in paragraph at lines 374--375
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (9.0368pt too wide) in paragraph at lines 394--395
+Overfull \hbox (9.0368pt too wide) in paragraph at lines 395--396
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [6]
-Overfull \hbox (2.61597pt too wide) in paragraph at lines 477--478
+Overfull \hbox (2.61597pt too wide) in paragraph at lines 478--479
 [][]\T1/ntxtt/m/n/10 load_output_time_avg.m\T1/ntxtlf/m/n/10 : This file con-ve
 rts each tracer av-er-age con-cen-tra-tion .petsc file (e.g., po4avg.petsc)
  []
@@ -1286,32 +1295,32 @@ rts each tracer av-er-age con-cen-tra-tion .petsc file (e.g., po4avg.petsc)
 [7]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 515.
+(hyperref)                removing `math shift' on input line 516.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 515.
+(hyperref)                removing `subscript' on input line 516.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 515.
+(hyperref)                removing `math shift' on input line 516.
 
 [8]
 LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 63
-0.
+1.
  (/usr/local/texlive/2019/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.0pt on input line 630.
+(Font)              scaled to size 7.0pt on input line 631.
  [9]
-Overfull \hbox (33.68076pt too wide) in paragraph at lines 671--672
+Overfull \hbox (33.68076pt too wide) in paragraph at lines 672--673
 []\T1/ntxtt/m/n/10 ~/../tanio003/TMM2/Runs/MOPS/Testruns/Slurm/Test_co2historyR
 CP85_slurm/analyzeoutput.jnl\T1/ntxtlf/m/n/10 . 
  []
 
 
-Overfull \hbox (4.6365pt too wide) in paragraph at lines 690--691
+Overfull \hbox (4.6365pt too wide) in paragraph at lines 691--692
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
@@ -1319,26 +1328,26 @@ Overfull \hbox (4.6365pt too wide) in paragraph at lines 690--691
 File: ./Figures_tutorial/pco2RCP85.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/pco2RCP85.pdf>
 Package luatex.def Info: ./Figures_tutorial/pco2RCP85.pdf  used on input line 69
-5.
+6.
 (luatex.def)             Requested size: 284.52756pt x 245.1161pt.
 [10]
 <./Figures_tutorial/airseaflux2010.pdf, id=625, 520.94624pt x 449.68pt>
 File: ./Figures_tutorial/airseaflux2010.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/airseaflux2010.pdf>
 Package luatex.def Info: ./Figures_tutorial/airseaflux2010.pdf  used on input li
-ne 710.
+ne 711.
 (luatex.def)             Requested size: 203.83417pt x 175.95085pt.
 <./Figures_tutorial/airseaflux2100.pdf, id=626, 673.51625pt x 582.175pt>
 File: ./Figures_tutorial/airseaflux2100.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/airseaflux2100.pdf>
 Package luatex.def Info: ./Figures_tutorial/airseaflux2100.pdf  used on input li
-ne 714.
+ne 715.
 (luatex.def)             Requested size: 203.83417pt x 176.19064pt.
 <./Figures_tutorial/Woolf19_GBC_Fig1.jpg, id=627, 1553.44pt x 962.14pt>
 File: ./Figures_tutorial/Woolf19_GBC_Fig1.jpg Graphic file (type jpg)
 <use ./Figures_tutorial/Woolf19_GBC_Fig1.jpg>
 Package luatex.def Info: ./Figures_tutorial/Woolf19_GBC_Fig1.jpg  used on input 
-line 722.
+line 723.
 (luatex.def)             Requested size: 155.3531pt x 96.21964pt.
 
 
@@ -1350,7 +1359,7 @@ File: ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf Graphic file (type
 pdf)
 <use ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf>
 Package luatex.def Info: ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf 
- used on input line 731.
+ used on input line 732.
 (luatex.def)             Requested size: 167.92987pt x 144.7429pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -1359,10 +1368,10 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg Graphic file (type jpg)
 <use ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg>
 Package luatex.def Info: ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg  used on i
-nput line 738.
+nput line 739.
 (luatex.def)             Requested size: 466.0356pt x 121.32637pt.
 
-Overfull \hbox (13.0677pt too wide) in paragraph at lines 738--739
+Overfull \hbox (13.0677pt too wide) in paragraph at lines 739--740
  [][] 
  []
 
@@ -1373,7 +1382,14 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 igures_tutorial/airseaflux2100.pdf>] [12<./Figures_tutorial/Lovenduski16_GBC_Fig
 2.jpg><./Figures_tutorial/Woolf19_GBC_Fig1.jpg><./Figures_tutorial/airseaflux_ti
 meseries2000to2100.pdf>]
-Overfull \hbox (0.43646pt too wide) in paragraph at lines 797--798
+Overfull \hbox (6.10121pt too wide) in paragraph at lines 794--795
+\T1/ntxtlf/m/n/10 us-ing the script "[]\T1/ntxtt/m/n/10 link_inputs.sh\T1/ntxtl
+f/m/n/10 " in the di-rec-tory []\T1/ntxtt/m/n/10 ~/TMM2/tmm/models/current/mops
+2.0/runscripts\T1/ntxtlf/m/n/10 .
+ []
+
+
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 800--801
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1381,27 +1397,27 @@ Overfull \hbox (0.43646pt too wide) in paragraph at lines 797--798
  []
 
 
-Overfull \hbox (0.43646pt too wide) in paragraph at lines 798--799
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 801--802
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (0.43646pt too wide) in paragraph at lines 799--800
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 802--803
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (0.43646pt too wide) in paragraph at lines 800--801
+Overfull \hbox (0.43646pt too wide) in paragraph at lines 803--804
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (21.43668pt too wide) in paragraph at lines 801--802
+Overfull \hbox (21.43668pt too wide) in paragraph at lines 804--805
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1409,54 +1425,54 @@ Overfull \hbox (21.43668pt too wide) in paragraph at lines 801--802
  []
 
 
-Overfull \hbox (21.43668pt too wide) in paragraph at lines 802--803
+Overfull \hbox (21.43668pt too wide) in paragraph at lines 805--806
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [13]
-Overfull \hbox (4.6365pt too wide) in paragraph at lines 880--881
+Overfull \hbox (4.6365pt too wide) in paragraph at lines 883--884
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [14]
-<./Figures_tutorial/productivity_comparison.pdf, id=813, 674.52pt x 582.175pt>
+<./Figures_tutorial/productivity_comparison.pdf, id=808, 674.52pt x 582.175pt>
 File: ./Figures_tutorial/productivity_comparison.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/productivity_comparison.pdf>
 Package luatex.def Info: ./Figures_tutorial/productivity_comparison.pdf  used on
- input line 917.
+ input line 920.
 (luatex.def)             Requested size: 224.21689pt x 193.51302pt.
-<./Figures_tutorial/driver_comparison.pdf, id=814, 674.52pt x 582.2553pt>
+<./Figures_tutorial/driver_comparison.pdf, id=809, 674.52pt x 582.2553pt>
 File: ./Figures_tutorial/driver_comparison.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/driver_comparison.pdf>
 Package luatex.def Info: ./Figures_tutorial/driver_comparison.pdf  used on input
- line 921.
+ line 924.
 (luatex.def)             Requested size: 224.21689pt x 193.5397pt.
-<./Figures_tutorial/cp_comparison.pdf, id=815, 674.52pt x 582.2553pt>
+<./Figures_tutorial/cp_comparison.pdf, id=810, 674.52pt x 582.2553pt>
 File: ./Figures_tutorial/cp_comparison.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/cp_comparison.pdf>
 Package luatex.def Info: ./Figures_tutorial/cp_comparison.pdf  used on input lin
-e 929.
+e 932.
 (luatex.def)             Requested size: 404.71512pt x 349.35587pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./Figures_tutorial/doc_global.pdf, id=817, 616.3025pt x 531.9875pt>
+<./Figures_tutorial/doc_global.pdf, id=812, 616.3025pt x 531.9875pt>
 File: ./Figures_tutorial/doc_global.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/doc_global.pdf>
 Package luatex.def Info: ./Figures_tutorial/doc_global.pdf  used on input line 9
-40.
+43.
 (luatex.def)             Requested size: 369.78435pt x 319.19496pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./Figures_tutorial/doc_regional.pdf, id=819, 674.52pt x 582.2553pt>
+<./Figures_tutorial/doc_regional.pdf, id=814, 674.52pt x 582.2553pt>
 File: ./Figures_tutorial/doc_regional.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/doc_regional.pdf>
 Package luatex.def Info: ./Figures_tutorial/doc_regional.pdf  used on input line
- 949.
+ 952.
 (luatex.def)             Requested size: 404.71512pt x 349.35587pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -1464,111 +1480,143 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [15<./Figures_tutorial/productivity_comparison.pdf><./Figures_tutorial/driver_co
 mparison.pdf>]
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 963.
+(Font)              scaled to size 10.0pt on input line 966.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.3pt on input line 963.
+(Font)              scaled to size 7.3pt on input line 966.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.5pt on input line 963.
+(Font)              scaled to size 5.5pt on input line 966.
  [16<./Figures_tutorial/cp_comparison.pdf>] [17<./Figures_tutorial/doc_global.pd
 f>] [18<./Figures_tutorial/doc_regional.pdf>]
-LaTeX Font Info:    Try loading font information for T1+txtt on input line 1059.
+Overfull \hbox (8.83655pt too wide) in paragraph at lines 1041--1042
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][] 
+ []
 
+[19]
+LaTeX Font Info:    Try loading font information for T1+txtt on input line 1102.
 
-(/usr/local/texlive/2019/texmf-dist/tex/latex/txfonts/t1txtt.fd
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/txfonts/t1txtt.fd
 File: t1txtt.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/it' in size <7> not available
-(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 1059.
+(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 1102.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `txtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [19] [20]
-[21]
-Overfull \hbox (0.63672pt too wide) in paragraph at lines 1283--1284
+
+Overfull \hbox (8.83655pt too wide) in paragraph at lines 1115--1116
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][] 
+ []
+
+[20]
+Overfull \hbox (13.74629pt too wide) in paragraph at lines 1162--1163
+[]\T1/ntxtlf/m/n/10 **mmavg.nc (e.g., PO4mmavg.nc): A time-averaged con-ce-tra-
+tion of a tracer. Edit "MOBI_tracer_names.txt"
+ []
+
+<./Figures_tutorial/MOBI_WOCE_C14.pdf, id=1249, 673.51625pt x 582.175pt>
+File: ./Figures_tutorial/MOBI_WOCE_C14.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/MOBI_WOCE_C14.pdf>
+Package luatex.def Info: ./Figures_tutorial/MOBI_WOCE_C14.pdf  used on input lin
+e 1169.
+(luatex.def)             Requested size: 336.7573pt x 291.08679pt.
+<./Figures_tutorial/MOBI_OBS_C13.pdf, id=1255, 673.51625pt x 582.175pt>
+File: ./Figures_tutorial/MOBI_OBS_C13.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/MOBI_OBS_C13.pdf>
+Package luatex.def Info: ./Figures_tutorial/MOBI_OBS_C13.pdf  used on input line
+ 1178.
+(luatex.def)             Requested size: 336.7573pt x 291.08679pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[21<./Figures_tutorial/MOBI_WOCE_C14.pdf>] [22<./Figures_tutorial/MOBI_OBS_C13.p
+df>] [23] [24]
+Overfull \hbox (0.63672pt too wide) in paragraph at lines 1367--1368
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][] 
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1291.
+(Font)              scaled to size 8.0pt on input line 1375.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1294.
+(Font)              scaled to size 8.0pt on input line 1378.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.2pt on input line 1294.
+(Font)              scaled to size 6.2pt on input line 1378.
 
-Underfull \vbox (badness 10000) detected at line 1299
+Underfull \vbox (badness 10000) detected at line 1383
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1310
+Underfull \vbox (badness 10000) detected at line 1394
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1321
+Underfull \vbox (badness 10000) detected at line 1405
  []
 
-[22]
-Overfull \hbox (1.80008pt too wide) in paragraph at lines 1323--1325
+
+Overfull \hbox (1.80008pt too wide) in paragraph at lines 1407--1409
 []\T1/ntxtlf/bx/n/10 mix-ing\T1/ntxtlf/m/n/10 : Vari-ables re-lated to mix-ing.
  Most of these de-clared in []\T1/ntxtt/m/n/10 $UVICESCMROOT/source/mom/UVic_ES
 CM.F
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1332.
+(Font)              scaled to size 8.0pt on input line 1416.
 
-Underfull \vbox (badness 10000) detected at line 1342
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1367
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1396
- []
-
-[23]
-Underfull \vbox (badness 10000) detected at line 1416
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1424
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1435
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1444
+Underfull \vbox (badness 10000) detected at line 1426
  []
 
 
 Underfull \vbox (badness 10000) detected at line 1451
  []
 
-
-Underfull \vbox (badness 10000) detected at line 1457
- []
-
-[24]
-Underfull \vbox (badness 10000) detected at line 1465
+[25]
+Underfull \vbox (badness 10000) detected at line 1480
  []
 
 
-Overfull \hbox (6.09569pt too wide) in paragraph at lines 1467--1468
+Underfull \vbox (badness 10000) detected at line 1500
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1508
+ []
+
+[26]
+Underfull \vbox (badness 10000) detected at line 1519
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1528
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1535
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1541
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1549
+ []
+
+
+Overfull \hbox (6.09569pt too wide) in paragraph at lines 1551--1552
 \T1/ntxtlf/m/n/10 OSU-[]CEOAS-[]Schmittner/UVicMOBI_fct_npzd_o2_n_fe_ca_caco3_c
 13_n15/blob/master/updates/npzd_src.F$[][] 
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1491
+Underfull \vbox (badness 10000) detected at line 1575
  []
 
-[25] [26] (./TMM_intro_MSI.bbl
+[27] [28] (./TMM_intro_MSI.bbl
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Khati
 wala19'
 
@@ -1586,7 +1634,7 @@ a17'
 
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Nieme
 yer19'
-[27
+[29
 
 Missing character: There is no “ (U+201C) in font ntx-Regular-tlf-t1!
 Missing character: There is no ” (U+201D) in font ntx-Regular-tlf-t1!
@@ -1597,28 +1645,28 @@ warning  (pdf backend): ignoring duplicate destination with the name 'cite.Somes
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Yamam
 oto15'
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1541.
- [28]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1541.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1625.
+ [30]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1625.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1541.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1541.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1625.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1625.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
 (rerunfilecheck)             Checksum: 57DB7DC5E51F7C6FB0F0598DF5A24A00;1606.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1541.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1625.
 )
 
 Here is how much of LuaTeX's memory you used:
- 27871 strings out of 494291
- 156267,794899 words of node,token memory allocated
- 4407 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 546 kern, 1 glyph, 286 attribute, 67 glue_s
-pec, 286 attribute_list, 1 write, 3 pdf_action nodes
-   avail lists: 1:2,2:5408,3:313,4:1308,5:2344,6:71,7:9361,8:233,9:5037,10:21,11
-:501
- 30147 multiletter control sequences out of 65536+600000
+ 28271 strings out of 494291
+ 244179,794899 words of node,token memory allocated
+ 4794 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 599 kern, 1 glyph, 315 attribute, 67 glue_s
+pec, 315 attribute_list, 1 write, 4 pdf_action nodes
+   avail lists: 1:3,2:7805,3:313,4:1966,5:3535,6:88,7:10774,8:233,9:8005,10:21,1
+1:485
+ 30471 multiletter control sequences out of 65536+600000
  319 fonts using 24469631 bytes
- 41i,16n,78p,1047b,1304s stack positions out of 5000i,500n,10000p,200000b,100000s
+ 48i,20n,78p,1047b,1346s stack positions out of 5000i,500n,10000p,200000b,100000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texl
 ive/2019/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc}{/usr/local/texlive/2019/
 texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{/usr/local/texlive/2019/texmf-d
@@ -1632,12 +1680,13 @@ xmi.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/newtx/rtxmi7.pfb>
 cal/texlive/2019/texmf-dist/fonts/type1/public/txfonts/t1xbtt.pfb></usr/local/te
 xlive/2019/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2
 019/texmf-dist/fonts/type1/public/newtx/txexs.pfb></usr/local/texlive/2019/texmf
--dist/fonts/type1/public/newtx/txsys.pfb></usr/local/texlive/2019/texmf-dist/fon
-ts/type1/urw/times/utmri8a.pfb>
-Output written on TMM_intro_MSI.pdf (28 pages, 3212267 bytes).
+-dist/fonts/type1/public/txfonts/txmia.pfb></usr/local/texlive/2019/texmf-dist/f
+onts/type1/public/newtx/txsys.pfb></usr/local/texlive/2019/texmf-dist/fonts/type
+1/urw/times/utmri8a.pfb>
+Output written on TMM_intro_MSI.pdf (30 pages, 3956624 bytes).
 
-PDF statistics: 1513 PDF objects out of 1728 (max. 8388607)
- 1329 compressed objects within 14 object streams
- 852 named destinations out of 1000 (max. 131072)
+PDF statistics: 1602 PDF objects out of 1728 (max. 8388607)
+ 1408 compressed objects within 15 object streams
+ 905 named destinations out of 1000 (max. 131072)
  163 words of extra memory for PDF output out of 10000 (max. 100000000)
 
