@@ -1,4 +1,6 @@
-base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+% base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+base_path='~/TMM2/UVicOSUpicdefault_with_discharge';
+addpath(genpath('~/TMM2/tmm_matlab_code'));
 
 load(fullfile(base_path,'config_data'))
 
@@ -12,7 +14,10 @@ load(gridFile,'nx','ny','nz','x','y','z','gridType')
 
 load(profilesFile,'Irr')
 
-Tavg=[1/24:1/12:1-1/24]';
+timeFile='time_average_output_time.txt';
+[hdr,tdat]=hdrload(timeFile);
+Tavg = tdat(:,2)';
+%Tavg=[1/24:1/12:1-1/24]';
 nt=length(Tavg);
 
 trNames=readtable('MOBI_tracer_names.txt','ReadVariableNames',0);
