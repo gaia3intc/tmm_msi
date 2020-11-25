@@ -959,7 +959,7 @@ The seasonal pattern of DOC:DOP export in Figure \ref{fig:doc_regional} is simil
 \end{enumerate}
 
 
-\subsection{Study 3: Using MOBI+UVic to simulate isotope dynamics, WORK IN PROGRESS} 
+\subsection{Study 3: Using MOBI+UVic to simulate isotope dynamics} 
 
 For this study, we will explore ocean biogeochemical dynamics using the second version of MOBI (Model of Ocean Biogeochemistry and Isotopes). MOBI includes:
 \begin{itemize}
@@ -1001,7 +1001,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
  $ cp -p $TMMROOT/models/current/mobi2.0/src/Makefile .
  $ cp -p $TMMROOT/models/current/mobi2.0/src/MOBI_TMM_OPTIONS.h . 
 \end{lstlisting}
-\noin Also, following the instructions at the top of Makefile, set the environmenta variable \verb|$UVICESCMROOT| to point to the top level of the UVic ESCM 2.9. Add this to your \verb|.bashrc| for cd your future convenience.
+\noin Also, following the instructions at the top of Makefile, set the environmental variable \verb|$UVICESCMROOT| to point to the top level of the UVic ESCM 2.9. Add this to your \verb|.bashrc| for your future convenience.
 \begin{lstlisting}[style=DOS]
  $ export UVICESCMROOT=$HOME/TMM2/UVic2.9
  echo $UVICESCMROOT
@@ -1024,7 +1024,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 \end{lstlisting}
 \lstset{emph={}, emphstyle=\color{green},emph={[2]}, emphstyle={[2]\color{blue}}} % reset coloring
 
-\item Edit the C preprocessor options in \verb|MOBI_TMM_OPTION.h| as necessary. In particular, you have to define the directive \verb|O_co2_user| (i.e., by \verb|# define O_co2_ccn_user|). See Appendix \ref{subsection:mobi_options} for what each of the options mean. 
+\item Edit the C preprocessor options in \verb|MOBI_TMM_OPTION.h| as necessary. In particular, you have to define the directive \verb|O_co2_user| (i.e., by \verb|# define O_co2_ccn_user|). See Appendix \ref{subsection:mobi_options} for what each of these options mean. 
 
 \item Build the model with:
 \begin{lstlisting}[style=DOS]
@@ -1046,7 +1046,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
   7 addpath(genpath('~/TMM2/tmm_matlab_code'));
  
 \end{lstlisting}
-\noin Execute in MATLAB.
+\noin Then execute in MATLAB.
 \begin{lstlisting}[style=DOS]
  >> make_input_files_for_mobi_model_write_ic
 \end{lstlisting}
@@ -1056,7 +1056,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
  $ make tmmmobiwrite
  $ ./tmmmobiwrite
 \end{lstlisting}
-\noin This will write out \verb|MOBI_tracer_names.txt| containing the tracer names, and a corresponding set of *.dat text files (e.g., dic.dat) containing the vertical profile of tracer concentration. These names and (horizontally uniform) profiles are used by \verb|make_input_files_for_mobi_model.m| to generate initial condition files (e.g., dicini.petsc). 
+\noin This will write out \verb|MOBI_tracer_names.txt| containing the tracer names, and a corresponding set of *.dat text files (e.g., dic.dat) containing the vertical profile of tracer concentration. These names and initial profiles are used by \verb|make_input_files_for_mobi_model.m| to generate initial condition files (e.g., dicini.petsc). 
 
 28 tracers created are:
 \begin{enumerate}[label=(\arabic*)]
@@ -1090,7 +1090,7 @@ For this study, we will explore ocean biogeochemical dynamics using the second v
 	\item \verb|imobidetrfe| = Detrital iron $[\mathrm{nmol \ m^{-3}]}$
 \end{enumerate}
 
-\item Make a directory \verb|InitialConditionProfiles| and copy the *.dat files into it. By default \\ \verb|make_input_files_for_mobi_model.m| will look in this directory for the *.dat files.
+\item Make a directory \verb|InitialConditionProfiles| and copy the *.dat files into it. By default \\ \verb|make_input_files_for_mobi_model.m| (mentioned later) will look in this directory for the *.dat files.
 \begin{lstlisting}[style=DOS]
  $ cp -p *.dat InitialConditionProfiles/
 \end{lstlisting}
@@ -1107,7 +1107,7 @@ final comma.)
 
 \noin (Note-3): \verb|tmmmobiwrite| uses UVic routines where initial condition profiles are set. The code for this is hardwired for the standard UVic grid with 19 levels. If you're using TMs from a different ocean model you will need to modify \verb|make_input_files_for_mobi_model.m| accordingly to specify initial conditions corresponding to your grid. You will also need to change the number of levels (in kilometers) in \verb|size.h|.
 
-\item Set the path at the top of \verb|make_input_files_for_mobi_model.m| and execute in MATLAB. (See NOTE-3 in \verb|#|9.). Make sure to set the correct timestep of 28800 seconds. 
+\item Set the path at the top of \verb|make_input_files_for_mobi_model.m| and execute in MATLAB. Make sure to set the correct timestep of 28800 seconds. 
 \lstset{language=matlab} 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
  % make_input_files_for_mobi_model.m
@@ -1133,7 +1133,7 @@ final comma.)
 must set are:
 
 \begin{itemize}
-\item \verb|dtts| in the \verb|&tsteps| namelist: this MUST match the time step argument to the run time option \verb|-biogeochem_deltat| in the runscript. This is the tracer advection-diffusion timestep (28800 [seconds] for UVIc model). 
+\item \verb|dtts| in the \verb|&tsteps| namelist: this MUST match the time step argument to the run time option called \verb|-biogeochem_deltat| in the runscript. This sets the tracer advection-diffusion timestep (28800 [seconds] for UVIc model). 
 \item \verb|co2ccn| and \verb|dc14ccn| in the \verb|&carbon| namelist. 
 \item \verb|dtnpzd| in the \verb|&npzd| namelist. Set this so that \verb|dtts| is a multiple of \verb|dtnpzd|. For stability, \verb|dtnpzd| (in seconds) should not exceed 1/3\textsuperscript{rd} of a day (in seconds). The default is \verb|dtpnzd|=14400 = 1/2 of ocean timestep. 
 \end{itemize}
@@ -1152,14 +1152,19 @@ must set are:
  stack size              (kbytes, -s) unlimited
 \end{lstlisting}
 
-\item Set the path at the top of the load*.m scripts to read in the output in Matlab. To make all the output netcdf files in matlab at once, run \verb|process_output.m|. Currently,the sedimentary output is suppressed. 
+\item Submit your job to MSI queue.
+\begin{lstlisting}[style=DOS]
+ $ sbatch runscript_msi
+\end{lstlisting}
+
+\item Whilte you wait for the run to be completed, set the path at the top of the load*.m scripts to read in the output in Matlab. To make all the output netcdf files in matlab at once, run \verb|process_output.m|. For this exercise, the sedimentary module, hence the sedimentary output is suppressed. 
 
 \noin Each .nc file is spewed out one by one. There are different kinds of output produced that are being produced:
 \begin{itemize}
  \item F\_**.nc (e.g., F\_dic.nc): Surface Downward Fluxes [mol $\mathrm{m^{-2} s^{-1}}$]. Edit "available\_diagnostics.txt" to select which fluxes to create.
  \item O\_**.nc (e.g., O\_phytnpp.nc): Various biogeochemical fluxes and concentrations that are calculated in the model. Units are in [mol $\mathrm{m^{-2} s^{-1}}$] or [mol $\mathrm{m^{-2}}$]. Edit "available\_diagnostics.txt" to select which fluxes to create.
- \item **.nc (e.g., PO4.nc): A snapshot concentration of a tracer. Edit "MOBI\_tracer\_names.txt" to select which tracers to convert to .nc files.
- \item **mmavg.nc (e.g., PO4mmavg.nc): A time-averaged concetration of a tracer. Edit "MOBI\_tracer\_names.txt" to select which tracers to convert to .nc files.
+ \item **.nc (e.g., PO4.nc): Snapshot concentrations of tracers. Edit "MOBI\_tracer\_names.txt" to select which tracers you want to convert to .nc files.
+ \item **mmavg.nc (e.g., PO4mmavg.nc): Time-averaged concetrations of tracers. Edit "MOBI\_tracer\_names.txt" to select which tracers you want to convert to .nc files.
 \end{itemize}
 
 \item Display outputs. Here, we will make figures for \Delta\ce{^14C} [permil] and \delta\ce{^13C} [permil] at the final year of the run and compare with observations. The code for making the following two figures is my directory \verb|~/../tanio003/TMM2/Runs/MOBI/Test_spinup/analyze_mobi_spinup.jnl|.
@@ -1171,7 +1176,7 @@ must set are:
    \label{fig:c14_mobi}
 \end{figure}
 
-Figure \ref{fig:c14_mobi} compares observed and modeled radiocarbon ages. Although \ce{^14C} has not fully reached steady-state after 1000 yrs (figure not shown), the MOBI seems to reproduce observed pattern of deep-sea natural radiocarbon quite well. 
+Figure \ref{fig:c14_mobi} compares observed and modeled radiocarbon ages. Although \ce{^14C} has not fully reached steady-state after 1000 yrs (figure not shown), the MOBI seems to reproduce the observed pattern of deep-sea natural radiocarbon age quite well. 
 
 \begin{figure}[h!]   % Insert Figure 11 here
    \centering
@@ -1180,7 +1185,7 @@ Figure \ref{fig:c14_mobi} compares observed and modeled radiocarbon ages. Althou
    \label{fig:c13_mobi}
 \end{figure}
 
-Figure \ref{fig:c13_mobi} compares observed and modeled \delta\ce{^13C}. In general, modeleded \delta\ce{^13C} overestimates the observed value in the surface ocean, but it captures the large-scale pattern qualitatively. Biological fractionation and the sinking of isotopically light \delta\ce{^13C} organic matter from the surface into the interior ocean leads to low \delta\ce{^13C} DIC values at depths and in high latitude surface waters and high values in the upper ocean at low latitudes with maxima in the subtropics. Below 1000 m, model reproduces the observed pattern fairly well.
+Figure \ref{fig:c13_mobi} compares observed and modeled \delta\ce{^13C}. In general, modeleded \delta\ce{^13C} overestimates the observed value in the surface ocean, but it captures the large-scale pattern. Biological fractionation and the sinking of isotopically light \delta\ce{^13C} organic matter from the surface into the interior ocean leads to low \delta\ce{^13C} DIC values at depths and in high latitude surface waters and high values in the upper ocean at low latitudes with maxima in the subtropics. Below 1000 m, model reproduces the observed pattern fairly well.
 
 
 \end{enumerate}

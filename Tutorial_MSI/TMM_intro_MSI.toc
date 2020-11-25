@@ -11,7 +11,7 @@
 \contentsline {section}{\numberline {2}Case Studies}{8}{section.2}% 
 \contentsline {subsection}{\numberline {2.1}Study 1: Postindustrial $\mathrm {CO_{2}}$ uptake with MOPS+MIT2.8}{8}{subsection.2.1}% 
 \contentsline {subsection}{\numberline {2.2}Study 2: Using MOPS+ECCO to simulate flexible C:P}{12}{subsection.2.2}% 
-\contentsline {subsection}{\numberline {2.3}Study 3: Using MOBI+UVic to simulate isotope dynamics, WORK IN PROGRESS}{16}{subsection.2.3}% 
+\contentsline {subsection}{\numberline {2.3}Study 3: Using MOBI+UVic to simulate isotope dynamics}{16}{subsection.2.3}% 
 \contentsline {section}{\numberline {3}Appendix}{22}{section.3}% 
 \contentsline {subsection}{\numberline {3.1}Downloading PyFerret on MSI}{22}{subsection.3.1}% 
 \contentsline {subsection}{\numberline {3.2}General reference for MOPS and MOBI}{23}{subsection.3.2}% 
