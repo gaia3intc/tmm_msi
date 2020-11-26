@@ -1,4 +1,4 @@
-This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  25 NOV 2020 19:08
+This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  25 NOV 2020 19:11
  restricted system commands enabled.
  file:line:error style messages enabled.
 **TMM_intro_MSI.tex
@@ -49,7 +49,7 @@ Inserting `luaotfload.aux.set_capheight' at position 3 in `luaotfload.patch_font
 '.
 Inserting `luaotfload.rewrite_fontname' at position 4 in `luaotfload.patch_font'
 .
-luaotfload | main : initialization completed in 0.084 seconds
+luaotfload | main : initialization completed in 0.120 seconds
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
@@ -1683,7 +1683,7 @@ xlive/2019/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2
 -dist/fonts/type1/public/txfonts/txmia.pfb></usr/local/texlive/2019/texmf-dist/f
 onts/type1/public/newtx/txsys.pfb></usr/local/texlive/2019/texmf-dist/fonts/type
 1/urw/times/utmri8a.pfb>
-Output written on TMM_intro_MSI.pdf (30 pages, 3955567 bytes).
+Output written on TMM_intro_MSI.pdf (30 pages, 3955542 bytes).
 
 PDF statistics: 1605 PDF objects out of 1728 (max. 8388607)
  1411 compressed objects within 15 object streams
