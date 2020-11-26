@@ -3,7 +3,7 @@
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO';
 % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_ECCO_v4';
-base_path='~/TMM2/UVicOSUpicdefault_with_discharge';
+base_path='~/TMM2/UVicOSUpicdefault';
 addpath(genpath('~/TMM2/tmm_matlab_code'));
 
 % Set path names, etc.

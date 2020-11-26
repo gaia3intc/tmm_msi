@@ -1,4 +1,5 @@
-base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+% base_path='/data2/spk/UVic_OSU_Matrix/LGM_WindPerturbation_Experiments/no_embm_awind2/picdefault';
+base_path='~/TMM2/UVicOSUpicdefault';
 load(fullfile(base_path,'config_data'))
 
 matrixPath=fullfile(base_path,matrixPath);
