@@ -532,18 +532,18 @@ C INTERNAL TIME LOOP FOR BGC
         todoc(k)= graztodop*(1.0d0-ACeff)*grazc
      &           +graztodop*(phycexu+zoocloss)
      &           +phycloss
-     &           +zoocrel*graztodop
+     &           +zoocrel*par_excrtodoc
         tophyc(k)= phycgrow-grazc-phycexu-phycloss
         tozooc(k)=  ACeff*grazc-zoocexu-zoocloss
      &           -zoocrel    
         topoc(k) = (1.0d0-graztodop)*(1.0d0-ACeff)*grazc
      &           + (1.0d0-graztodop)*(phycexu+zoocloss)
-     &           + zoocrel*(1.0d0-graztodop) 
+     &           + zoocrel*(1.0d0-par_excrtodoc) 
         ! Adjustments on P content of zooplankton and DOP and POP 
         if(zooprel.gt.0.0d0) then 
            tozoo(k) = tozoo(k) - zooprel
-           todop(k) = todop(k) + zooprel*graztodop
-           todet(k) = todet(k) + zooprel*(1.0d0-graztodop)
+           todop(k) = todop(k) + zooprel*par_excrtodoc
+           todet(k) = todet(k) + zooprel*(1.0d0-par_excrtodoc)
         endif
 
         ! Store C:P Uptake for Phytoplankton and Zooplankton
