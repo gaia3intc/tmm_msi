@@ -39,6 +39,7 @@ RPROGRAM = rmops
 IPROGRAM = imops
 IRPROGRAM = irmops
 FNSEDPROGRAM = mops_cp
+FNSEDGASPROGRAM = mops_cp_fastgas
 
 SRCTMM = tmm_main.c tmm_forward_step.c tmm_write.c tmm_forcing_utils.c \
         tmm_profile_utils.c tmm_timer.c petsc_signal_utils.c petsc_matvec_utils.c
@@ -73,6 +74,7 @@ endif
 # option -DNOSED to instantly remineralize detritus reaching ocean bottom
 # option -DNOSED_POC to instantly remineralize POC reaching ocean bottom
 # option -DFLEXCP for dynamic C:P stoichiometry
+# option -DFASTGAS for fast equilibration of DIC
 # option -DASCIIPARAMS to use ASCII parameter file as default
 
 # use surface supply of buried P
@@ -96,6 +98,11 @@ $(FNSEDPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)
 	 $(FPPFLAG)-DFLEXCP
 $(FNSEDPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DFLEXCP
 	
+# mops with flexible C:P and equilibrated DIC
+$(FNSEDGASPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON \
+	 $(FPPFLAG)-DFLEXCP $(FPPFLAG)-DFASTGAS
+$(FNSEDGASPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DFLEXCP -DFASTGAS
+
 OBJTMM = $(SRCTMM:.c=.o)
 OBJCMODEL = $(SRCMODEL:.c=.o)
 OBJFMODEL = $(SRF90MODEL:.F90=.o) $(SRFMODEL:.F=.o)
@@ -124,6 +131,9 @@ $(IRPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
 
 $(FNSEDPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(FNSEDGASPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
 
 cleanall:

@@ -287,6 +287,15 @@ C INTERNAL TIME LOOP FOR BGC
 
 #endif
 
+#ifdef FASTGAS
+! For Surface CO2 to be in equilibtrium with atmosphere
+! added by T.Tanioka, Dec 2020
+      co2airseaflux = co2airseaflux - co2gasex*bgc_dt  ! undo old gas exchange
+      co2gasex = co2gasex*bgc_dz(1)/bgc_dt
+      co2airseaflux = co2airseaflux + co2gasex*bgc_dt  ! new exchange
+#endif      
+
+
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
