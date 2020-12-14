@@ -269,6 +269,12 @@ C atmpres= atmospheric pressure in atmospheres (1 atm==1013.25mbar)
       co2starair = co2sol*pco2atm*atmosp ! equilibrium CO2aq in mol/m^3
       co2ex=-KWexch*(co2star - co2starair)*convert_mol_to_mmol
 
+#ifdef FASTGAS
+! Surface CO2 in equilibrium with atmospheric CO2 
+! (added by T.Tanioka, Dec 2020)
+      co2ex=-1.0*(co2star - co2starair)*convert_mol_to_mmol
+#endif
+      
 C E-P: emp in m/s
       co2emp = dicgave*emp*86400.0d0
       
