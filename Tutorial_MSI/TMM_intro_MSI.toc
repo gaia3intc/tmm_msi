@@ -12,8 +12,9 @@
 \contentsline {subsection}{\numberline {2.1}Study 1: Postindustrial $\mathrm {CO_{2}}$ uptake with MOPS+MIT2.8}{8}{subsection.2.1}% 
 \contentsline {subsection}{\numberline {2.2}Study 2: Using MOPS+ECCO to simulate flexible C:P}{12}{subsection.2.2}% 
 \contentsline {subsection}{\numberline {2.3}Study 3: Using MOBI+UVic to simulate isotope dynamics}{16}{subsection.2.3}% 
-\contentsline {section}{\numberline {3}Appendix}{22}{section.3}% 
-\contentsline {subsection}{\numberline {3.1}Downloading PyFerret on MSI}{22}{subsection.3.1}% 
-\contentsline {subsection}{\numberline {3.2}General reference for MOPS and MOBI}{23}{subsection.3.2}% 
-\contentsline {subsection}{\numberline {3.3}TMM options for MOBI (listed at MOBI\_TMM\_OPTIONS.h)}{23}{subsection.3.3}% 
-\contentsline {subsection}{\numberline {3.4}Paramters for MOBI (listed at control.in)}{25}{subsection.3.4}% 
+\contentsline {subsection}{\numberline {2.4}Study 4: Using Transport Matrix to Caluclate Steady State Model Circulation Age}{22}{subsection.2.4}% 
+\contentsline {section}{\numberline {3}Appendix}{25}{section.3}% 
+\contentsline {subsection}{\numberline {3.1}Downloading PyFerret on MSI}{25}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {3.2}General reference for MOPS and MOBI}{25}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.3}TMM options for MOBI (listed at MOBI\_TMM\_OPTIONS.h)}{26}{subsection.3.3}% 
+\contentsline {subsection}{\numberline {3.4}Paramters for MOBI (listed at control.in)}{27}{subsection.3.4}% 

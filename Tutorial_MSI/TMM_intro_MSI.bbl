@@ -19,11 +19,23 @@ Key, R.~M., Kozyr, A., Sabine, C.~L., Lee, K., Wanninkhof, R., Bullister,
   Project (GLODAP)}.
 \newblock {\em Global Biogeochemical Cycles}, 18(4):1--23.
 
+\bibitem[Khatiwala, 2007]{Khatiwala07}
+Khatiwala, S. (2007).
+\newblock {A computational framework for simulation of biogeochemical tracers
+  in the ocean}.
+\newblock {\em Global Biogeochemical Cycles}, 21(3).
+
 \bibitem[Khatiwala et~al., 2019]{Khatiwala19}
 Khatiwala, S., Schmittner, A., and Muglia, J. (2019).
 \newblock Air-sea disequilibrium enhances ocean carbon storage during glacial
   periods.
 \newblock {\em Science advances}, 5(6):eaaw4981.
+
+\bibitem[Khatiwala et~al., 2005]{Khatiwala05}
+Khatiwala, S., Visbeck, M., and Cane, M.~A. (2005).
+\newblock {Accelerated simulation of passive tracers in ocean circulation
+  models}.
+\newblock {\em Ocean Modelling}, 9(1):51--69.
 
 \bibitem[Kriest et~al., 2020]{Kriest20}
 Kriest, I., K{\"{a}}hler, P., Koeve, W., Kvale, K.~F., Sauerland, V., and
@@ -147,6 +159,12 @@ Tanioka, T. and Matsumoto, K. (2020).
 \newblock {A meta-analysis on environmental drivers of marine phytoplankton C :
   N : P}.
 \newblock {\em Biogeosciences}, 17(11):2939--2954.
+
+\bibitem[Toggweiler et~al., 1989]{Toggweiler89}
+Toggweiler, J.~R., Dixon, K., and Bryan, K. (1989).
+\newblock {Simulations of radiocarbon in a coarse-resolution world ocean model:
+  1. Steady state prebomb distributions}.
+\newblock {\em Journal of Geophysical Research}, 94(C6):8217.
 
 \bibitem[Woolf et~al., 2019]{Woolf19}
 Woolf, D.~K., Shutler, J.~D., Goddijn-Murphy, L., Watson, A., Chapron, B.,

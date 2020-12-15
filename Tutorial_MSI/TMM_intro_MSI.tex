@@ -760,7 +760,7 @@ Zooplankton P:C uptake ratio is also computed using the power-law as a function 
 
 Parameter $H$ is a zooplankton homeostatic parameter that describes how variable zooplankton P:C is affected by phytoplankton P:C. When $H = 0$, P:C uptale equals a fixed reference P:C and is independent of phytoplankton P:C. When $H = 1$, uptake P:C equals cellular P:C of phytoplankton ("you are what you eat"). Here we will use the value of $H = 0.08$ following \cite{Persson10}, who conducted meta-analysis on zooplankton C:P.
 
-In order to cope with the mismatch between required P:C and P:C of prey, zooplankton can excrete excess P or C as dissolved and particulate organic matter. At steady state, uptake P:C ratio should equal the biomass P:C ratio for both phytoplankton and zooplankton.
+In order to cope with the mismatch between required P:C and P:C of prey, zooplankton can excrete excess P or C as dissolved and particulate organic matter. In teh default setting, all the excess material will be routed towards particulate phase. This can be changed by adjusting the parameter \verb|par_excrtodoc| (default value = 0.0). At steady state, uptake P:C ratio should equal the biomass P:C ratio for both phytoplankton and zooplankton.
 
 In implementing flexible C:P, I added 4 new tracers: (1) Phytoplankton C biomass, (2) Zooplankton C biomass. (3) DOC, and (4) POC. The total number of tracers is now 13. 
 
@@ -793,7 +793,7 @@ In implementing flexible C:P, I added 4 new tracers: (1) Phytoplankton C biomass
 
 \noin (Optional) Instead of creating input matrix files each time, \textbf{you can create symbolic links} to the TMM matrices using the script "\verb|link_inputs.sh|" in the directory \verb|~/TMM2/tmm/models/current/mops2.0/runscripts|. This way it saves a lot of time and disc storage.
 
-\item Edit the parameter input file \verb|biogem_params.txt|. In the first run, rows 1-6 should be the default values for MOPS + ECCO follwiing \cite{Kriest20}. Parameters 12-21 correspond to the P:C power-law formulations of phytoplankton and zooplankton from Equations (\ref{eq:eq_pcphy})-(\ref{eq:eq_pczoo}). Refernce P:C for both phytoplankton and zooplankton is $1/117 = 8.547$ permil (line 12). 
+\item Edit the parameter input file \verb|biogem_params.txt|. In the first run, rows 1-6 should be the default values for MOPS + ECCO follwiing \cite{Kriest20}. Parameters 12-22 correspond to the P:C power-law formulations of phytoplankton and zooplankton from Equations (\ref{eq:eq_pcphy})-(\ref{eq:eq_pczoo}). Refernce P:C for both phytoplankton and zooplankton is $1/117 = 8.547$ permil (line 12). 
 \begin{lstlisting}[frame=single,basicstyle=\scriptsize,commentstyle=\color{blue}]
   1 1.46     #01. detmartin = Martin Curve exponent of Detritus [1.39 for MIT2.8, 1.46 for ECCO]
   2 151.1    #02. ro2ut = Refield -O2:P                         [173.7 for MIT2.8, 151.1 for ECCO]
@@ -816,7 +816,7 @@ In implementing flexible C:P, I added 4 new tracers: (1) Phytoplankton C biomass
  19 0.0      #19. par_bio_spc_i = s_P:C^I for power-law                                   [0.0]
  20 -3.6     #20. par_bio_spc_t = s_P:C^T for power-law                                   [-3.6]
  21 0.08     #21. par_zoo_cp_hom = Homeostatic parameter for Zooplankton (0-1)            [0.08]
- 22
+ 22 0.0      #22. par_excrtodoc = Fraction of zooplankton adujstment flux going to DOC    [0.0]
 \end{lstlisting}
 
 \item Edit \verb|runscript_msi|. Here we are going to run the model for 15 hours with 10 nodes, 24 processors per core. Each processor is allocated with 2GB of memory. As we are using more than 9 nodes, we submit to the queue \textit{large}. If you want the job to proceed quicker, you can increase the number of nodes from 10. (Note: Asking for more nodes will mean longer time in the queue. So this will require some trial and error to find the optimal node request.)
@@ -879,7 +879,7 @@ The follwing lines (13$\sim$) contain the commands to execute and start the prog
             no3avg.petsc,dicavg.petsc,alkavg.petsc,docavg.petsc,pocavg.petsc,phycavg.petsc,
             zoocavg.petsc \    # 4 new time-average tracers added 
  43         -bgc_params_file biogem_params.txt \   # telling to read the parameter file
- 44         -num_bgc_params 21 \                   # the number of parameters to be read = 21
+ 44         -num_bgc_params 22 \                   # the number of parameters to be read = 22
  45         -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \ # monthly diagnostics 
  46         -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,
             fbgc7.petsc,fbgc8.petsc,fbgc9.petsc,fbgc10.petsc,fbgc11.petsc \  # 11 diagnostics 
@@ -1187,10 +1187,90 @@ Figure \ref{fig:c14_mobi} compares observed and modeled radiocarbon ages. Althou
 
 Figure \ref{fig:c13_mobi} compares observed and modeled \delta\ce{^13C}. In general, modeleded \delta\ce{^13C} overestimates the observed value in the surface ocean, but it captures the large-scale pattern. Biological fractionation and the sinking of isotopically light \delta\ce{^13C} organic matter from the surface into the interior ocean leads to low \delta\ce{^13C} DIC values at depths and in high latitude surface waters and high values in the upper ocean at low latitudes with maxima in the subtropics. Below 1000 m, model reproduces the observed pattern fairly well.
 
+\end{enumerate}
 
+%%%%%%%%%%%%%%%
+\subsection{Study 4: Using Transport Matrix to Caluclate Steady State Model Circulation Age}
+Here, we will breifly go over how to calculate steady state model circulation age anf radiocarbon distributions. For full mathematical details, refer to \citet{Khatiwala05} and  \citet{Khatiwala07}. 
+
+In TMM, tracer vector \textbf{c} at timestep \textit{n+1} can be calculated from the concentration and the transport matrix \textbf{A} at time step \textit{n}:
+\begin{equation}
+   \mathbf{c}^{n+1}= \mathbf{A}_i^{n}(\mathbf{A}_e^{n}\mathbf{c}^{n} + \mathbf{q}^n)   \label{eq:eq_tmm1}
+\end{equation}
+where $\mathbf{A}_e$ is the TM for the explicit-in-time component of advection-diffusion, and $\mathbf{A}_i$ the matrix for implicit transport. \textbf{q} represents the source and sinks. The TMs $\mathbf{A}_e$ and $\mathbf{A}_i$ are both extremely sparse. Physically, this is because of the finite speed of advection and diffusion (i.e., in a single timestep tracer can only communicate with their nearest neighbors). In the vertical, convection can spread the tracer further but this is restricted to small regions in high latitudes and is captured entirely by $\mathbf{A}_i$. 
+
+In some cases, tracers are subject to a prescribed concentration (BC) at the surface. To solve such equations, we convert Equation (\ref{eq:eq_tmm1}) into an equation for the time evolution of the interior tracer field as follows:
+\begin{equation}
+   \mathbf{c}_I^{n+1}= \mathbf{A}_i^{I}(\mathbf{A}_e^{I}\mathbf{c}_I^{n} + \mathbf{B}_e\mathbf{c}_B^{n} + \mathbf{q}_I^n) + \mathbf{B}_i\mathbf{c}_B^{n+1}   \label{eq:eq_tmm2}
+\end{equation}
+where $\mathbf{c}_I$ is the vector of interior tracer concentrations, $\mathbf{c}_B$ the vector of prescribed, possibly time-dependent surface boundary values, and $\mathbf{q}_I$ the interior source/sink term. Notice that we split $\mathbf{A}_e$ into an ``interior'' matrix $\mathbf{A}_e^{I}$ and a ``boundary'' matrix $\mathbf{B}_e$. Implicit matrix $\mathbf{A}_i$ is split into an interior and a boundary component in the same manner. The square interor matrix describes the transport of tracer between interior grid points. The rectangular boundary matrix describes the exchange of tracer between the surface boundary points and the inteior.
+
+In many cases, we are interested in the equilibrium solutions. Using Equations (\ref{eq:eq_tmm1}) and (\ref{eq:eq_tmm2}), we can directly compute stead-state distributions of tracers without the need for long transient integrations, for example if the source/sink and boundary terms are simple linear terms. Steady-state solutions can be analytically obtained by setting  $\mathbf{c} \equiv \mathbf{c}^{n+1}=\mathbf{c}^{n}$ in Equation (\ref{eq:eq_tmm1}) and solving for \textbf{c}. For an illustration, we will compute using this method: (1) the steady state ideal age (mean age), and (2) radiocarbon $\Delta^{14}\mathrm{C}$. 
+
+\begin{enumerate}[label=(\arabic*)]
+\item Ideal age $\boldsymbol{\tau}_m$: In a conventional GCM, calculation of mean age requires integrating a tracer with a unit source in the interior and a surface BC of zero concentration to steady state, an expensive computation even at coarse resolution. In our notation of Equation (\ref{eq:eq_tmm2}), $\mathbf{c}_B = \mathbf{0}$ and $\mathbf{q}_I = dt\mathbf{1}$, where \textbf{1} is a vector of 1's and \textit{dt} is the time step. In ECCO, \textit{dt} is 1/16 d = 5400 seconds, which is same as that of MOPS-ECCO. (In MIT2.8, I recommend using \textit{dt} of 1/2 d.). Substituting these in Equation (\ref{eq:eq_tmm2}), we get 
+\begin{equation}
+   (\mathbf{A}_i^{I}\mathbf{A}_e^{I}-\mathbf{I})\boldsymbol{\tau}_m = -dt\mathbf{A}_i^{I}\mathbf{1}   \label{eq:eq_tmm3}
+\end{equation}
+which can be readily solved for $\boldsymbol{\tau}_m$ by,
+\begin{equation}
+   \boldsymbol{\tau}_m = (\mathbf{A}_i^{I}\mathbf{A}_e^{I}-\mathbf{I})^{-1}(-dt\mathbf{A}_i^{I}\mathbf{1})   \label{eq:eq_tmm4}
+\end{equation}
+
+\begin{figure}[h!]   % Insert Figure 12 here
+   \centering
+   \includegraphics[scale=0.65]{meanage_ecco.pdf}
+   \caption[]{Modeled annual mean circulation age (in years) for the ECCO model at 4 different depths.}
+   \label{fig:meanage_ecco}
+\end{figure}
+
+Figure \ref{fig:meanage_ecco} shows the mean age at four different depths obtained with the annual mean TM for ECCO model. MATLAB codes used in calculating mean age are available in the directory \\ ``\verb|/home/matsumot/tanio003/TMM2/steady_state/ecco_meanage.m|''. To run this file, you need to use the shell script \verb|ecco_meanage.sh| in the same directory and takes 10 minutes or so on MSI. Note that I used the function \verb|calc_steadystate_tracer| in the directory ``\verb|~/TMM2/tmm_matlab_code/TMM|'' created by S. Khatiwala. See that file for more details on the syntax. 
+
+\item Radiocarbon $\Delta^{14}\mathrm{C}$ [Method 1]: In the first method of calculating $\Delta^{14}\mathrm{C}$, we prescribe the surface value using the gridded GLODAP data by \cite{Key04} and compute steady state interior concentration. In our notation of Equation (\ref{eq:eq_tmm2}), $\mathbf{q}_I = -\lambda\mathbf{c}$, where \lambda \ is the decay constant for \ce{^14C} (half-lie of 5370 years) and $\mathbf{c}_B$ is the surface boundary concentration from GLODAP. Following \cite{Toggweiler89}, \textbf{c} is related to conventional $\Delta^{14}\mathrm{C}$ units by,
+\begin{equation}
+   \Delta^{14}\mathrm{C} \ (\mathrm{permil}) = (c - 100)\times 10   \label{eq:eq_tmm5}
+\end{equation}
+In other words, we compute \textbf{c} first then convert to  $\Delta^{14}\mathrm{C}$ via Equation (\ref{eq:eq_tmm5})).
+
+We can write Equation (\ref{eq:eq_tmm2}) as, 
+\begin{equation}
+   (\mathbf{A}_i^{I}\mathbf{A}_e^{I}-\lambda\mathbf{A}_i^{I}-\mathbf{I})\mathbf{c} =-\mathbf{A}_i^{I}\mathbf{B}_e\mathbf{c}_B - \mathbf{B}_i\mathbf{c}_B = -\mathbf{A}_i^{I}(\mathbf{B}_e\mathbf{c}_B+(\mathbf{A}_i^{I})^{-1}\mathbf{B}_i\mathbf{c}_B)   \label{eq:eq_tmm6}
+\end{equation}
+The second term on the right hand side of the equation is collected by $\mathbf{A}_i^{I}$ for the later convenience. In the MATLAB code, the second terms needs to be divided by \textit{dt} because $\mathbf{B}_i\mathbf{c}_B$ is measured on the discrete time, while $\mathbf{B}_e\mathbf{c}_B$ is on the continuous time. We solve for \textbf{c} in Equation (\ref{eq:eq_tmm6}) by,
+\begin{equation}
+   \mathbf{c} = -(\mathbf{A}_i^{I}\mathbf{A}_e^{I}-\lambda\mathbf{A}_i^{I}-\mathbf{I})^{-1}\mathbf{A}_i^{I}(\mathbf{B}_e\mathbf{c}_B+(\mathbf{A}_i^{I})^{-1}\mathbf{B}_i\mathbf{c}_B)   \label{eq:eq_tmm7}
+\end{equation}
+then convert to $\Delta^{14}\mathrm{C}$ by Equation (\ref{eq:eq_tmm5}). 
+
+\begin{figure}[h!]   % Insert Figure 13 here
+   \centering
+   \includegraphics[scale=0.65]{D14C_ecco.pdf}
+   \caption[]{Modeled (Left) and GLODAP-derived (right) natural annual mean $\Delta^{14}\mathrm{C}$ (in permil) at 2 different depths. Model used is ECCO and GLODAP map is from \cite{Key04}.}
+   \label{fig:c14_ecco}
+\end{figure}
+
+Figure \ref{fig:c14_ecco} shows the modeled (left panel) and GLODAP-based $\Delta^{14}\mathrm{C}$ (right panel) at 500 m and at 1500-5000 m. We can see that modeled $\Delta^{14}\mathrm{C}$ does a good job in reproducing the observed radiocarbon pattern. In the deep ocean, modeled radiocarbon is slightly older than that of observation.  MATLAB codes used in calculating radiocarbon and its \ce{14C} age (figures not shown) are available in the directory \\ ``\verb|/home/matsumot/tanio003/TMM2/steady_state/ecco_radiocarbon_bc.m|''. To run this file, you need to use the shell script \verb|ecco_radiocarbon_bc.sh| in the same directory and takes 10 minutes or so on MSI. You would also need to copy the GLODAP surface boundary condition file ``\verb|bkgc14_cdiac_regird.mat|'' in the same directory, which is a surface backgroud radiocarbon concentration regridded to the ECCO grid.
+
+\item Radiocarbon $\Delta^{14}\mathrm{C}$ [Method 2]: Alternatively, we can impose the surface boundary condition where $\Delta^{14}\mathrm{C}$ is restored to 0 ($\mathbf{c} = \mathbf{100} $) with a wind speed-dependent timescale, as done in \cite{Khatiwala05} and \cite{Khatiwala07}. In this case, we can write Equation (\ref{eq:eq_tmm1}) as, 
+\begin{equation}
+   \mathbf{c}^{n+1}= \mathbf{A}_i^{n}(\mathbf{A}_e^{n}\mathbf{c}^{n} -k(\mathbf{c}-\mathbf{100}) - \lambda\mathbf{c})   \label{eq:eq_tmm9}
+\end{equation}
+where \textit{k} is the wind speed depdendent timescale following Equation (11) of \cite{Toggweiler89}:
+\begin{equation}
+   k \ [\mathrm{days^{-1}}]= \frac{3.5\times(w-2) \ [\mathrm{mol\ m^{-2} \ yr^{-1}}]}{2.0 \ [\mathrm{mol\ m^{-3} }]\times DZ_1 \times 365 \ [\mathrm{days\ yr^{-1} }]  }\times 1.2   \label{eq:eq_tmm10}
+\end{equation}
+where \textit{w} is the spatially-variable wind speed in $\mathrm{m \ s^{-1}}$ and $DZ_1$ is the depth of the surface layer in meters (5 m in ECCO). Windspeed \ $w = 0$ when the grid box is completely covered by ice. Equation (\ref{eq:eq_tmm9}) can be rearranged and solved for \textbf{c} 
+\begin{equation}
+   \mathbf{c} = -(\mathbf{A}_i^{I}\mathbf{A}_e^{I}-\lambda\mathbf{A}_i^{I}- k\mathbf{A}_i^{I}- \mathbf{I})^{-1}\mathbf{A}_i^{I}(\mathbf{100}k)   \label{eq:eq_tmm11}
+\end{equation}
+There is a MATLAB script called in my directory \\ ``\verb|/home/matsumot/tanio003/TMM2/steady_state/ecco_radiocarbon.m|'' that computes $\Delta^{14}\mathrm{C}$ and age this way. The result is very similar to that of the first method (Figure not shown). All the netcdf files are in my output directory ``\verb|/home/matsumot/tanio003/TMM2/steady_state/output|''.
+ 
 \end{enumerate}
 
 
+%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%
 \section{Appendix}
 
 \subsection{Downloading PyFerret on MSI}

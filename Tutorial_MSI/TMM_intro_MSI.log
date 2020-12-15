@@ -1,4 +1,4 @@
-This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  25 NOV 2020 19:11
+This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  15 DEC 2020 15:32
  restricted system commands enabled.
  file:line:error style messages enabled.
 **TMM_intro_MSI.tex
@@ -49,7 +49,7 @@ Inserting `luaotfload.aux.set_capheight' at position 3 in `luaotfload.patch_font
 '.
 Inserting `luaotfload.rewrite_fontname' at position 4 in `luaotfload.patch_font'
 .
-luaotfload | main : initialization completed in 0.120 seconds
+luaotfload | main : initialization completed in 0.070 seconds
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
@@ -1324,26 +1324,26 @@ Overfull \hbox (4.6365pt too wide) in paragraph at lines 691--692
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-<./Figures_tutorial/pco2RCP85.pdf, id=551, 528.97626pt x 455.7025pt>
+<./Figures_tutorial/pco2RCP85.pdf, id=557, 528.97626pt x 455.7025pt>
 File: ./Figures_tutorial/pco2RCP85.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/pco2RCP85.pdf>
 Package luatex.def Info: ./Figures_tutorial/pco2RCP85.pdf  used on input line 69
 6.
 (luatex.def)             Requested size: 284.52756pt x 245.1161pt.
 [10]
-<./Figures_tutorial/airseaflux2010.pdf, id=625, 520.94624pt x 449.68pt>
+<./Figures_tutorial/airseaflux2010.pdf, id=630, 520.94624pt x 449.68pt>
 File: ./Figures_tutorial/airseaflux2010.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/airseaflux2010.pdf>
 Package luatex.def Info: ./Figures_tutorial/airseaflux2010.pdf  used on input li
 ne 711.
 (luatex.def)             Requested size: 203.83417pt x 175.95085pt.
-<./Figures_tutorial/airseaflux2100.pdf, id=626, 673.51625pt x 582.175pt>
+<./Figures_tutorial/airseaflux2100.pdf, id=631, 673.51625pt x 582.175pt>
 File: ./Figures_tutorial/airseaflux2100.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/airseaflux2100.pdf>
 Package luatex.def Info: ./Figures_tutorial/airseaflux2100.pdf  used on input li
 ne 715.
 (luatex.def)             Requested size: 203.83417pt x 176.19064pt.
-<./Figures_tutorial/Woolf19_GBC_Fig1.jpg, id=627, 1553.44pt x 962.14pt>
+<./Figures_tutorial/Woolf19_GBC_Fig1.jpg, id=632, 1553.44pt x 962.14pt>
 File: ./Figures_tutorial/Woolf19_GBC_Fig1.jpg Graphic file (type jpg)
 <use ./Figures_tutorial/Woolf19_GBC_Fig1.jpg>
 Package luatex.def Info: ./Figures_tutorial/Woolf19_GBC_Fig1.jpg  used on input 
@@ -1353,7 +1353,7 @@ line 723.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./Figures_tutorial/airseaflux_timeseries2000to2100.pdf, id=638, 479.7925pt x 41
+<./Figures_tutorial/airseaflux_timeseries2000to2100.pdf, id=643, 479.7925pt x 41
 3.545pt>
 File: ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf Graphic file (type 
 pdf)
@@ -1364,7 +1364,7 @@ Package luatex.def Info: ./Figures_tutorial/airseaflux_timeseries2000to2100.pdf
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg, id=639, 1553.44pt x 1167.27pt>
+<./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg, id=644, 1553.44pt x 1167.27pt>
 File: ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg Graphic file (type jpg)
 <use ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg>
 Package luatex.def Info: ./Figures_tutorial/Lovenduski16_GBC_Fig2.jpg  used on i
@@ -1437,19 +1437,19 @@ Overfull \hbox (4.6365pt too wide) in paragraph at lines 883--884
  []
 
 [14]
-<./Figures_tutorial/productivity_comparison.pdf, id=808, 674.52pt x 582.175pt>
+<./Figures_tutorial/productivity_comparison.pdf, id=813, 674.52pt x 582.175pt>
 File: ./Figures_tutorial/productivity_comparison.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/productivity_comparison.pdf>
 Package luatex.def Info: ./Figures_tutorial/productivity_comparison.pdf  used on
  input line 920.
 (luatex.def)             Requested size: 224.21689pt x 193.51302pt.
-<./Figures_tutorial/driver_comparison.pdf, id=809, 674.52pt x 582.2553pt>
+<./Figures_tutorial/driver_comparison.pdf, id=814, 674.52pt x 582.2553pt>
 File: ./Figures_tutorial/driver_comparison.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/driver_comparison.pdf>
 Package luatex.def Info: ./Figures_tutorial/driver_comparison.pdf  used on input
  line 924.
 (luatex.def)             Requested size: 224.21689pt x 193.5397pt.
-<./Figures_tutorial/cp_comparison.pdf, id=810, 674.52pt x 582.2553pt>
+<./Figures_tutorial/cp_comparison.pdf, id=815, 674.52pt x 582.2553pt>
 File: ./Figures_tutorial/cp_comparison.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/cp_comparison.pdf>
 Package luatex.def Info: ./Figures_tutorial/cp_comparison.pdf  used on input lin
@@ -1459,7 +1459,7 @@ e 932.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./Figures_tutorial/doc_global.pdf, id=812, 616.3025pt x 531.9875pt>
+<./Figures_tutorial/doc_global.pdf, id=817, 616.3025pt x 531.9875pt>
 File: ./Figures_tutorial/doc_global.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/doc_global.pdf>
 Package luatex.def Info: ./Figures_tutorial/doc_global.pdf  used on input line 9
@@ -1468,7 +1468,7 @@ Package luatex.def Info: ./Figures_tutorial/doc_global.pdf  used on input line 9
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./Figures_tutorial/doc_regional.pdf, id=814, 674.52pt x 582.2553pt>
+<./Figures_tutorial/doc_regional.pdf, id=819, 674.52pt x 582.2553pt>
 File: ./Figures_tutorial/doc_regional.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/doc_regional.pdf>
 Package luatex.def Info: ./Figures_tutorial/doc_regional.pdf  used on input line
@@ -1516,13 +1516,13 @@ Overfull \hbox (10.5144pt too wide) in paragraph at lines 1167--1168
 ons of trac-ers. Edit "MOBI_tracer_names.txt"
  []
 
-<./Figures_tutorial/MOBI_WOCE_C14.pdf, id=1254, 673.51625pt x 582.175pt>
+<./Figures_tutorial/MOBI_WOCE_C14.pdf, id=1259, 673.51625pt x 582.175pt>
 File: ./Figures_tutorial/MOBI_WOCE_C14.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/MOBI_WOCE_C14.pdf>
 Package luatex.def Info: ./Figures_tutorial/MOBI_WOCE_C14.pdf  used on input lin
 e 1174.
 (luatex.def)             Requested size: 336.7573pt x 291.08679pt.
-<./Figures_tutorial/MOBI_OBS_C13.pdf, id=1260, 673.51625pt x 582.175pt>
+<./Figures_tutorial/MOBI_OBS_C13.pdf, id=1265, 673.51625pt x 582.175pt>
 File: ./Figures_tutorial/MOBI_OBS_C13.pdf Graphic file (type pdf)
 <use ./Figures_tutorial/MOBI_OBS_C13.pdf>
 Package luatex.def Info: ./Figures_tutorial/MOBI_OBS_C13.pdf  used on input line
@@ -1531,92 +1531,125 @@ Package luatex.def Info: ./Figures_tutorial/MOBI_OBS_C13.pdf  used on input line
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[21<./Figures_tutorial/MOBI_WOCE_C14.pdf>] [22<./Figures_tutorial/MOBI_OBS_C13.p
-df>] [23] [24]
-Overfull \hbox (0.63672pt too wide) in paragraph at lines 1372--1373
+[21<./Figures_tutorial/MOBI_WOCE_C14.pdf>]
+LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
+(Font)              scaled to size 10.0pt on input line 1198.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
+(Font)              scaled to size 7.3pt on input line 1198.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
+(Font)              scaled to size 5.5pt on input line 1198.
+ [22<./Figures_tutorial/MOBI_OBS_C13.pdf>]
+<./Figures_tutorial/meanage_ecco.pdf, id=1314, 616.3025pt x 531.9875pt>
+File: ./Figures_tutorial/meanage_ecco.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/meanage_ecco.pdf>
+Package luatex.def Info: ./Figures_tutorial/meanage_ecco.pdf  used on input line
+ 1222.
+(luatex.def)             Requested size: 400.59187pt x 345.78778pt.
+ [23<./Figures_tutorial/meanage_ecco.pdf>]
+<./Figures_tutorial/D14C_ecco.pdf, id=1340, 674.52pt x 582.175pt>
+File: ./Figures_tutorial/D14C_ecco.pdf Graphic file (type pdf)
+<use ./Figures_tutorial/D14C_ecco.pdf>
+Package luatex.def Info: ./Figures_tutorial/D14C_ecco.pdf  used on input line 12
+47.
+(luatex.def)             Requested size: 438.4328pt x 378.40927pt.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
+(Font)              scaled to size 9.0pt on input line 1248.
+
+Overfull \hbox (5.74051pt too wide) in paragraph at lines 1252--1253
+\T1/ntxtlf/m/n/10 MSI. You would also need to copy the GLO-DAP sur-face bound-a
+ry con-di-tion file ``[]\T1/ntxtt/m/n/10 bkgc14_cdiac_regird.mat\T1/ntxtlf/m/n/
+10 ''
+ []
+
+[24<./Figures_tutorial/D14C_ecco.pdf>] [25] [26]
+Overfull \hbox (0.63672pt too wide) in paragraph at lines 1452--1453
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][] 
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1380.
+(Font)              scaled to size 8.0pt on input line 1460.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1383.
+(Font)              scaled to size 8.0pt on input line 1463.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.2pt on input line 1383.
+(Font)              scaled to size 6.2pt on input line 1463.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
+(Font)              scaled to size 8.0pt on input line 1463.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
+(Font)              scaled to size 6.2pt on input line 1463.
 
-Underfull \vbox (badness 10000) detected at line 1388
+Underfull \vbox (badness 10000) detected at line 1468
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1399
+Underfull \vbox (badness 10000) detected at line 1479
+ []
+
+[27]
+Underfull \vbox (badness 10000) detected at line 1490
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1410
- []
-
-
-Overfull \hbox (1.80008pt too wide) in paragraph at lines 1412--1414
+Overfull \hbox (1.80008pt too wide) in paragraph at lines 1492--1494
 []\T1/ntxtlf/bx/n/10 mix-ing\T1/ntxtlf/m/n/10 : Vari-ables re-lated to mix-ing.
  Most of these de-clared in []\T1/ntxtt/m/n/10 $UVICESCMROOT/source/mom/UVic_ES
 CM.F
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1421.
+(Font)              scaled to size 8.0pt on input line 1501.
 
-Underfull \vbox (badness 10000) detected at line 1431
+Underfull \vbox (badness 10000) detected at line 1511
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1456
- []
-
-[25]
-Underfull \vbox (badness 10000) detected at line 1485
+Underfull \vbox (badness 10000) detected at line 1536
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1505
+Underfull \vbox (badness 10000) detected at line 1565
+ []
+
+[28]
+Underfull \vbox (badness 10000) detected at line 1585
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1513
- []
-
-[26]
-Underfull \vbox (badness 10000) detected at line 1524
+Underfull \vbox (badness 10000) detected at line 1593
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1533
+Underfull \vbox (badness 10000) detected at line 1604
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1540
+Underfull \vbox (badness 10000) detected at line 1613
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1546
+Underfull \vbox (badness 10000) detected at line 1620
+ []
+
+[29]
+Underfull \vbox (badness 10000) detected at line 1626
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1554
+Underfull \vbox (badness 10000) detected at line 1634
  []
 
 
-Overfull \hbox (6.09569pt too wide) in paragraph at lines 1556--1557
+Overfull \hbox (6.09569pt too wide) in paragraph at lines 1636--1637
 \T1/ntxtlf/m/n/10 OSU-[]CEOAS-[]Schmittner/UVicMOBI_fct_npzd_o2_n_fe_ca_caco3_c
 13_n15/blob/master/updates/npzd_src.F$[][] 
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1580
+Underfull \vbox (badness 10000) detected at line 1660
  []
 
-[27] [28] (./TMM_intro_MSI.bbl
+[30] [31] (./TMM_intro_MSI.bbl
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Khati
 wala19'
 
@@ -1634,10 +1667,8 @@ a17'
 
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Nieme
 yer19'
-[29
+[32
 
-Missing character: There is no “ (U+201C) in font ntx-Regular-tlf-t1!
-Missing character: There is no ” (U+201D) in font ntx-Regular-tlf-t1!
 ]
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Somes
 17'
@@ -1645,48 +1676,53 @@ warning  (pdf backend): ignoring duplicate destination with the name 'cite.Somes
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Yamam
 oto15'
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1630.
- [30]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1630.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1710.
+ [33
+Missing character: There is no “ (U+201C) in font ntx-Regular-tlf-t1!
+Missing character: There is no ” (U+201D) in font ntx-Regular-tlf-t1!
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1710.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1630.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1630.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1710.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1710.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
-(rerunfilecheck)             Checksum: 0D0ED58E3A2718710E8E80B8BD6315CA;1588.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1630.
+(rerunfilecheck)             Checksum: 54088B862DD0CB3F065B77B09EA0B482;1717.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1710.
 )
 
 Here is how much of LuaTeX's memory you used:
- 28276 strings out of 494291
- 244175,794899 words of node,token memory allocated
- 4781 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 598 kern, 1 glyph, 313 attribute, 67 glue_s
-pec, 313 attribute_list, 1 write, 4 pdf_action nodes
-   avail lists: 1:3,2:7915,3:313,4:1998,5:3561,6:88,7:10503,8:233,9:8087,10:21,1
-1:482
- 30473 multiletter control sequences out of 65536+600000
- 319 fonts using 24469631 bytes
+ 28494 strings out of 494291
+ 195342,794899 words of node,token memory allocated
+ 5318 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 659 kern, 1 glyph, 371 attribute, 67 glue_s
+pec, 371 attribute_list, 1 write, 4 pdf_action nodes
+   avail lists: 1:2,2:6608,3:314,4:1591,5:2688,6:71,7:9720,8:233,9:6309,10:21,11
+:542
+ 30560 multiletter control sequences out of 65536+600000
+ 403 fonts using 29708199 bytes
  48i,20n,78p,1047b,1346s stack positions out of 5000i,500n,10000p,200000b,100000s
-{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texl
-ive/2019/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc}{/usr/local/texlive/2019/
-texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{/usr/local/texlive/2019/texmf-d
-ist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}</usr/local/texlive/2019/texmf-dist/fo
+{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}{/usr/
+local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/20
+19/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc}{/usr/local/texlive/2019/texmf-
+dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}</usr/local/texlive/2019/texmf-dist/fo
 nts/type1/public/tex-gyre/qtmb.pfb></usr/local/texlive/2019/texmf-dist/fonts/typ
 e1/public/tex-gyre/qtmr.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/publ
 ic/tex-gyre/qtmri.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/new
-tx/rntxmi7.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/txfonts/rt
-xmi.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/newtx/rtxmi7.pfb>
-</usr/local/texlive/2019/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/lo
-cal/texlive/2019/texmf-dist/fonts/type1/public/txfonts/t1xbtt.pfb></usr/local/te
-xlive/2019/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2
-019/texmf-dist/fonts/type1/public/newtx/txexs.pfb></usr/local/texlive/2019/texmf
--dist/fonts/type1/public/txfonts/txmia.pfb></usr/local/texlive/2019/texmf-dist/f
-onts/type1/public/newtx/txsys.pfb></usr/local/texlive/2019/texmf-dist/fonts/type
-1/urw/times/utmri8a.pfb>
-Output written on TMM_intro_MSI.pdf (30 pages, 3955542 bytes).
+tx/rntxmi.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/newtx/rntxm
+i7.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/newtx/rtxbmi-rev.p
+fb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></us
+r/local/texlive/2019/texmf-dist/fonts/type1/public/newtx/rtxmi7.pfb></usr/local/
+texlive/2019/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/local/texlive/
+2019/texmf-dist/fonts/type1/public/txfonts/t1xbtt.pfb></usr/local/texlive/2019/t
+exmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2019/texmf-di
+st/fonts/type1/public/newtx/txexs.pfb></usr/local/texlive/2019/texmf-dist/fonts/
+type1/public/txfonts/txmia.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/p
+ublic/newtx/txsys.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/times/
+utmri8a.pfb>
+Output written on TMM_intro_MSI.pdf (33 pages, 5124530 bytes).
 
-PDF statistics: 1605 PDF objects out of 1728 (max. 8388607)
- 1411 compressed objects within 15 object streams
- 908 named destinations out of 1000 (max. 131072)
- 163 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 1694 PDF objects out of 1728 (max. 8388607)
+ 1491 compressed objects within 15 object streams
+ 930 named destinations out of 1000 (max. 131072)
+ 171 words of extra memory for PDF output out of 10000 (max. 100000000)
 
