@@ -1,4 +1,4 @@
-This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  15 DEC 2020 15:32
+This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  15 DEC 2020 19:21
  restricted system commands enabled.
  file:line:error style messages enabled.
 **TMM_intro_MSI.tex
@@ -49,7 +49,7 @@ Inserting `luaotfload.aux.set_capheight' at position 3 in `luaotfload.patch_font
 '.
 Inserting `luaotfload.rewrite_fontname' at position 4 in `luaotfload.patch_font'
 .
-luaotfload | main : initialization completed in 0.070 seconds
+luaotfload | main : initialization completed in 0.069 seconds
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
@@ -1692,11 +1692,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1710.
 
 Here is how much of LuaTeX's memory you used:
  28494 strings out of 494291
- 195342,794899 words of node,token memory allocated
+ 195335,794899 words of node,token memory allocated
  5318 words of node memory still in use:
    6 hlist, 2 vlist, 2 rule, 2 glue, 659 kern, 1 glyph, 371 attribute, 67 glue_s
 pec, 371 attribute_list, 1 write, 4 pdf_action nodes
-   avail lists: 1:2,2:6608,3:314,4:1591,5:2688,6:71,7:9720,8:233,9:6309,10:21,11
+   avail lists: 1:2,2:6798,3:313,4:1635,5:2778,6:73,7:9936,8:233,9:6501,10:21,11
 :542
  30560 multiletter control sequences out of 65536+600000
  403 fonts using 29708199 bytes
@@ -1719,7 +1719,7 @@ st/fonts/type1/public/newtx/txexs.pfb></usr/local/texlive/2019/texmf-dist/fonts/
 type1/public/txfonts/txmia.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/p
 ublic/newtx/txsys.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/times/
 utmri8a.pfb>
-Output written on TMM_intro_MSI.pdf (33 pages, 5124530 bytes).
+Output written on TMM_intro_MSI.pdf (33 pages, 5124572 bytes).
 
 PDF statistics: 1694 PDF objects out of 1728 (max. 8388607)
  1491 compressed objects within 15 object streams

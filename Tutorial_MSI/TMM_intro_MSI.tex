@@ -1191,7 +1191,7 @@ Figure \ref{fig:c13_mobi} compares observed and modeled \delta\ce{^13C}. In gene
 
 %%%%%%%%%%%%%%%
 \subsection{Study 4: Using Transport Matrix to Caluclate Steady State Model Circulation Age}
-Here, we will breifly go over how to calculate steady state model circulation age anf radiocarbon distributions. For full mathematical details, refer to \citet{Khatiwala05} and  \citet{Khatiwala07}. 
+Here, we will breifly go over how to calculate steady state model circulation age and radiocarbon distributions. For full mathematical details, refer to \citet{Khatiwala05} and  \citet{Khatiwala07}. 
 
 In TMM, tracer vector \textbf{c} at timestep \textit{n+1} can be calculated from the concentration and the transport matrix \textbf{A} at time step \textit{n}:
 \begin{equation}
@@ -1232,7 +1232,7 @@ Figure \ref{fig:meanage_ecco} shows the mean age at four different depths obtain
 \end{equation}
 In other words, we compute \textbf{c} first then convert to  $\Delta^{14}\mathrm{C}$ via Equation (\ref{eq:eq_tmm5})).
 
-We can write Equation (\ref{eq:eq_tmm2}) as, 
+At steady state, we can write Equation (\ref{eq:eq_tmm2}) as, 
 \begin{equation}
    (\mathbf{A}_i^{I}\mathbf{A}_e^{I}-\lambda\mathbf{A}_i^{I}-\mathbf{I})\mathbf{c} =-\mathbf{A}_i^{I}\mathbf{B}_e\mathbf{c}_B - \mathbf{B}_i\mathbf{c}_B = -\mathbf{A}_i^{I}(\mathbf{B}_e\mathbf{c}_B+(\mathbf{A}_i^{I})^{-1}\mathbf{B}_i\mathbf{c}_B)   \label{eq:eq_tmm6}
 \end{equation}
@@ -1253,13 +1253,13 @@ Figure \ref{fig:c14_ecco} shows the modeled (left panel) and GLODAP-based $\Delt
 
 \item Radiocarbon $\Delta^{14}\mathrm{C}$ [Method 2]: Alternatively, we can impose the surface boundary condition where $\Delta^{14}\mathrm{C}$ is restored to 0 ($\mathbf{c} = \mathbf{100} $) with a wind speed-dependent timescale, as done in \cite{Khatiwala05} and \cite{Khatiwala07}. In this case, we can write Equation (\ref{eq:eq_tmm1}) as, 
 \begin{equation}
-   \mathbf{c}^{n+1}= \mathbf{A}_i^{n}(\mathbf{A}_e^{n}\mathbf{c}^{n} -k(\mathbf{c}-\mathbf{100}) - \lambda\mathbf{c})   \label{eq:eq_tmm9}
+   \mathbf{c}^{n+1}= \mathbf{A}_i^{n}(\mathbf{A}_e^{n}\mathbf{c}^{n} -k(\mathbf{c}^{n}-\mathbf{100}) - \lambda\mathbf{c}^{n})   \label{eq:eq_tmm9}
 \end{equation}
 where \textit{k} is the wind speed depdendent timescale following Equation (11) of \cite{Toggweiler89}:
 \begin{equation}
    k \ [\mathrm{days^{-1}}]= \frac{3.5\times(w-2) \ [\mathrm{mol\ m^{-2} \ yr^{-1}}]}{2.0 \ [\mathrm{mol\ m^{-3} }]\times DZ_1 \times 365 \ [\mathrm{days\ yr^{-1} }]  }\times 1.2   \label{eq:eq_tmm10}
 \end{equation}
-where \textit{w} is the spatially-variable wind speed in $\mathrm{m \ s^{-1}}$ and $DZ_1$ is the depth of the surface layer in meters (5 m in ECCO). Windspeed \ $w = 0$ when the grid box is completely covered by ice. Equation (\ref{eq:eq_tmm9}) can be rearranged and solved for \textbf{c} 
+where \textit{w} is the spatially-variable wind speed in $\mathrm{m \ s^{-1}}$ and $DZ_1$ is the depth of the surface layer in meters (5 m in ECCO). Windspeed \ $w = 0$ when the grid box is completely covered by ice. At steady state, Equation (\ref{eq:eq_tmm9}) can be rearranged and solved for \textbf{c} 
 \begin{equation}
    \mathbf{c} = -(\mathbf{A}_i^{I}\mathbf{A}_e^{I}-\lambda\mathbf{A}_i^{I}- k\mathbf{A}_i^{I}- \mathbf{I})^{-1}\mathbf{A}_i^{I}(\mathbf{100}k)   \label{eq:eq_tmm11}
 \end{equation}
