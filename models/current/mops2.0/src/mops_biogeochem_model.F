@@ -3,6 +3,7 @@ C$Name: mops-2_0 $
 
 CBOP
 C !ROUTINE: MODEL
+C !Edited by T.Tanioka to include READ_MARTINB, Dec 2020      
 
 C !INTERFACE: ==========================================================
       SUBROUTINE MOPS_BIOGEOCHEM_MODEL(Nrloc,DeltaT, 
@@ -11,6 +12,9 @@ C !INTERFACE: ==========================================================
 #endif     
      &                 thetaloc,saltloc,FIceloc,SWRADloc,TAUloc,
      &                 WINDloc,ATMOSPloc,dzloc,
+#ifdef READ_MARTINB
+     &                 MARTINBPloc,MARTINBCloc,
+#endif          
 #ifdef CARBON
      &                 localph,localco2flux,
 #endif     
@@ -37,6 +41,9 @@ C !INPUT PARAMETERS: ===================================================
       real*8 thetaloc(Nrloc),saltloc(Nrloc)
       real*8 FIceloc,SWRADloc,TAUloc,WINDloc,ATMOSPloc,dzloc(Nrloc)
       logical useSeparateBiogeochemTS
+#ifdef READ_MARTINB
+      real*8 MARTINBPloc,MARTINBCloc
+#endif
 C     Output variables
 #ifdef CARBON
       real*8 localph,localco2flux
@@ -51,6 +58,9 @@ C !LOCAL VARIABLES: ====================================================
       REAL*8 bgc_theta(bgc_ktotal),bgc_salt(bgc_ktotal)
 
       REAL*8 bgc_runoffvol(bgc_ktotal),bgc_globalrunoff
+#ifdef READ_MARTINB
+      REAL*8 bgc_martinbp,bgc_martinbc
+#endif
       
 C     Copy physics and geometry
       bgc_kloc=Nrloc
@@ -60,7 +70,10 @@ C     Copy physics and geometry
       bgc_wind=WINDloc
       bgc_atmosp=ATMOSPloc
       bgc_globalrunoff = globalrunoff
-
+#ifdef READ_MARTINB
+      bgc_martinbp=MARTINBPloc
+      bgc_martinbc=MARTINBCloc
+#endif
       DO k=1,Nrloc
         bgc_dz(k)=dzloc(k)
         bgc_theta(k)=thetaloc(k)
@@ -78,6 +91,9 @@ C	  alkgave=ALKglobalavg
 #endif
 
       CALL BGC_MODEL(bgc_kloc,bgc_dz,
+#ifdef READ_MARTINB
+     &               bgc_martinbp,bgc_martinbc,
+#endif
      &               bgc_runoffvol,bgc_globalrunoff,
      &               bgc_swr,bgc_tau,bgc_seaice,bgc_wind,bgc_atmosp,
      &               bgc_theta,bgc_salt)

@@ -28,6 +28,7 @@ C ORGCARBON     calculate organic carbon biogeochemistry (by T.Tanioka)
 C NOSED         instant reminerealization of detritus reaching ocean bottom (by T.Tanioka)      
 C NOSED_POC     instant reminerealization of POC reaching ocean bottom (by T.Tanioka)      
 C FLEXCP        Flexible C:P uptake of phytoplankton and zooplankton (by T.Tanioka)
+C READ_MARTINB  Flexible Martin b exponent for POP and POC (by T.Tanioka)
 
 C CALLED BY:	mops_biogeochem_model
 
@@ -49,6 +50,8 @@ C bgc_wind	wind speed [cm/hr]
 C bgc_atmosp	atmospheric pressure
 C bgc_theta()	temperature [degs C]
 C bgc_salt()	salinity [PSU]
+C bgc_martinbp  Martin b exponent for POP [-] (added by T.Tanioka)
+C bgc_martinbc  Martin b exponent for POC [-] (added by T.Tanioka)
 
 C INPUT/COMMON BLOCK
 C biogeochemical parameters. See BGC_PARAMS.h and BGC_INI.F.
@@ -69,7 +72,10 @@ C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
 C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 
 
-      SUBROUTINE BGC_MODEL(bgc_kloc,bgc_dz,     
+      SUBROUTINE BGC_MODEL(bgc_kloc,bgc_dz, 
+#ifdef READ_MARTINB
+     &            bgc_martinbp,bgc_martinbc,
+#endif          
      &            bgc_runoffvol,bgc_globalrunoff,
      &            bgc_swr,bgc_tau,bgc_seaice,bgc_wind,bgc_atmosp,
      &            bgc_theta,bgc_salt)
@@ -89,6 +95,12 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
       real*8 bgc_theta(bgc_ktotal),bgc_salt(bgc_ktotal)
       real*8 ciz(bgc_keuph)
       real*8 bgc_wind,bgc_atmosp,bgc_pco2atm
+
+! arrays related to Martin b exponent (add by T.Tanioka)
+      real*8 wdet_new(bgc_ktotal),wdet_c_new(bgc_ktotal)
+#ifdef READ_MARTINB
+      real*8 bgc_martinbp,bgc_martinbc
+#endif
 
 ! arrays to store the sms and other fluxes
       real*8 topo4(bgc_ktotal)
@@ -220,6 +232,20 @@ c      real*8 alkchem(bgc_ktotal)
 #ifdef ORGCARBON
       flux_bury_c = 0.0d0
 #endif      
+
+! Spatially variable Martin's b exponent for POP and POC flux
+        do k=1,bgc_kmax
+          wdet_new(k) = 0.0d0
+          wdet_c_new(k) = 0.0d0
+#ifdef READ_MARTINB   
+          wdet_new(k)=(wdet(k)-detwb)*detmartin/bgc_martinbp+detwb
+          wdet_c_new(k)=(wdet_c(k)-detwb_c)*detmartin_c/bgc_martinbc
+     &                 +detwb_c
+#else
+          wdet_new(k) = wdet(k)
+          wdet_c_new(k) = wdet_c(k)
+#endif
+        enddo
 
 C INTERNAL TIME LOOP FOR BGC
 
@@ -572,9 +598,9 @@ C INTERNAL TIME LOOP FOR BGC
 #endif        
 
         do k=1,bgc_kloc-1 !loop over all layers
-
           DET = MAX(bgc_tracer(k,idet)-alimit*alimit,0.0d0)
-          flux_l=wdet(k)*DET
+!          flux_l=wdet(k)*DET
+          flux_l=wdet_new(k)*DET
           flux_old = flux(k)
           fdiv_old = fdiv(k)
           flux(k)  = flux(k)+flux_u
@@ -583,7 +609,8 @@ C INTERNAL TIME LOOP FOR BGC
 #ifdef ORGCARBON
           POC = MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
           if (POC.gt.0.0d0 .AND. DET.gt.0.0d0) then       
-              flux_l_c=wdet_c(k)*POC
+!              flux_l_c=wdet_c(k)*POC
+              flux_l_c=wdet_c_new(k)*POC
               fluxc(k)  = fluxc(k)+flux_u_c
               fdivc(k) = fdivc(k)+(flux_u_c-flux_l_c)/bgc_dz(k)
               flux_u_c=flux_l_c

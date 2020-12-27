@@ -1,6 +1,7 @@
 /* $Header: /Users/ikriest/CVS/mops/mops_biogeochem.h,v 1.2 2015/11/17 14:18:51 ikriest Exp $ */
 /* $Name: mops-2_0 $ */
 /* T.Tanioka added fbgc8, fbgc9, fbgc10, fbgc 11 (Nov 2020) */
+/* T.Tanioka added READ_MARTINB (Dec 2020) */
 
 extern void mops_biogeochem_copy_data_(PetscInt *nzloc, PetscInt *itr, PetscScalar localTR[], PetscScalar localJTR[], 
                                 PetscScalar *DeltaT, PetscInt *direction);
@@ -23,6 +24,9 @@ extern void mops_biogeochem_model_(PetscInt *Nrloc, PetscScalar *DeltaT,
                                    PetscScalar localTs[],PetscScalar localSs[], 
                                    PetscScalar *localfice, PetscScalar *localswrad, PetscScalar *localstau,
                                    PetscScalar *localwind, PetscScalar *localatmosp, PetscScalar localdz[], 
+#ifdef READ_MARTINB
+                                   PetscScalar *localmartinbp, PetscScalar *localmartinbc,  
+#endif
 #ifdef CARBON                      
                                    PetscScalar *localph,
 				   PetscScalar *localco2airseaflux,
