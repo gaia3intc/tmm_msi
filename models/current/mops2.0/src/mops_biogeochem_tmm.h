@@ -25,7 +25,7 @@ extern void mops_biogeochem_model_(PetscInt *Nrloc, PetscScalar *DeltaT,
                                    PetscScalar *localfice, PetscScalar *localswrad, PetscScalar *localstau,
                                    PetscScalar *localwind, PetscScalar *localatmosp, PetscScalar localdz[], 
 #ifdef READ_MARTINB
-                                   PetscScalar *localmartinbp, PetscScalar *localmartinbc,  
+                                   PetscScalar *localmartinbc, PetscScalar drF[], PetscInt *nzmax,
 #endif
 #ifdef CARBON                      
                                    PetscScalar *localph,

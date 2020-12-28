@@ -52,7 +52,7 @@ PetscScalar *locallatitude;
 #endif
 
 #ifdef READ_MARTINB
-PetscScalar *localmartinbp, *localmartinbc;
+PetscScalar *localmartinbc;
 #endif
 
 
@@ -69,7 +69,7 @@ PeriodicArray localswradp;
 #endif
 
 #ifdef READ_MARTINB
-PeriodicArray localmartinbpp,localmartinbcp;
+PeriodicArray localmartinbcp;
 #endif
 
 PetscBool periodicBiogeochemForcing = PETSC_FALSE;
@@ -532,14 +532,6 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
   }
 
 #ifdef READ_MARTINB
-  ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localmartinbp);CHKERRQ(ierr);  
-  if (periodicBiogeochemForcing) {    
-    localmartinbpp.firstTime = PETSC_TRUE;
-    localmartinbpp.arrayLength = lNumProfiles;
-  } else {  
-    ierr = readProfileSurfaceScalarData("bp_mops.bin",localmartinbp,1);  
-  }
-
   ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localmartinbc);CHKERRQ(ierr);  
   if (periodicBiogeochemForcing) {    
     localmartinbcp.firstTime = PETSC_TRUE;
@@ -564,7 +556,6 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");   
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");					                              
 #ifdef READ_MARTINB
-    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbpp,"bp_mops_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
 #endif
 
@@ -792,7 +783,6 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");  
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");					                              
 #ifdef READ_MARTINB
-    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbpp,"bp_mops_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
 #endif
 
@@ -843,7 +833,7 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
 #endif
 			   &localTs[kl],&localSs[kl],&localfice[ip],&localswrad[ip],&localtau[ip],&localwind[ip],&localatmosp[ip],&localdz[kl],
 #ifdef READ_MARTINB
-			   &localmartinbp[ip],&localmartinbc[ip],
+			   &localmartinbc[ip],&drF[0],&nzmax,
 #endif
 #ifdef CARBON			   
 			   &localph[ip],&localco2airseaflux,
@@ -1227,7 +1217,6 @@ PetscErrorCode finalizeExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt n
 	ierr = destroyPeriodicArray(&localEmPp);CHKERRQ(ierr);
 #endif	
 #ifdef READ_MARTINB
-	ierr = destroyPeriodicArray(&localmartinbpp);CHKERRQ(ierr);
 	ierr = destroyPeriodicArray(&localmartinbcp);CHKERRQ(ierr);
 #endif
   }    
@@ -1335,7 +1324,6 @@ PetscErrorCode reInitializeExternalForcing(PetscScalar tc, PetscInt Iter, PetscI
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");	
 
 #ifdef READ_MARTINB
-    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbpp,"bp_mops_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
 #endif
 
