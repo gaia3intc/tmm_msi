@@ -1,5 +1,6 @@
 /* $Header: /Users/ikriest/CVS/mops/external_forcing_mops_biogeochem.c,v 1.3 2016/06/06 09:43:41 ikriest Exp $ */
 /* $Name: mops-2_0 $*/
+/* $Edited by T.Tanioka to include Flexible C:P related routines ORGCARBON and READ_MARTINB, Dec 2020 $ */
 
 #define EXTERNAL_FORCING
 
@@ -50,6 +51,11 @@ PetscScalar *localswrad, *localtau;
 PetscScalar *locallatitude;
 #endif
 
+#ifdef READ_MARTINB
+PetscScalar *localmartinbc;
+#endif
+
+
 PetscBool useSeparateBiogeochemTimeStepping = PETSC_FALSE;
 PetscInt numBiogeochemStepsPerOceanStep = 1;
 PetscInt nzmax,nzeuph;
@@ -60,6 +66,10 @@ PeriodicVec Tsp, Ssp;
 PeriodicArray localwindp,localficep,localatmospp;
 #ifdef READ_SWRAD
 PeriodicArray localswradp;
+#endif
+
+#ifdef READ_MARTINB
+PeriodicArray localmartinbcp;
 #endif
 
 PetscBool periodicBiogeochemForcing = PETSC_FALSE;
@@ -521,6 +531,16 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
     ierr = readProfileSurfaceScalarData("atmosp.bin",localatmosp,1);  
   }
 
+#ifdef READ_MARTINB
+  ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localmartinbc);CHKERRQ(ierr);  
+  if (periodicBiogeochemForcing) {    
+    localmartinbcp.firstTime = PETSC_TRUE;
+    localmartinbcp.arrayLength = lNumProfiles;
+  } else {  
+    ierr = readProfileSurfaceScalarData("bc_mops.bin",localmartinbc,1);  
+  }
+#endif  
+
 /* Initialize biogeochem model */
   myTime = DeltaT*Iter; /* Iter should start at 0 */
 
@@ -535,6 +555,10 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localfice,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localficep,"fice_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");   
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");					                              
+#ifdef READ_MARTINB
+    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
+#endif
+
 #ifdef CARBON
 	ierr = interpPeriodicProfileSurfaceScalarData(tc,localEmP,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localEmPp,"EmP_");                                                  
 #endif									              
@@ -758,6 +782,10 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localfice,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localficep,"fice_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");  
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");					                              
+#ifdef READ_MARTINB
+    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
+#endif
+
 #ifdef CARBON
 	ierr = interpPeriodicProfileSurfaceScalarData(tc,localEmP,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localEmPp,"EmP_");                                                      
 #endif
@@ -804,6 +832,9 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
 			   &DICemp,&ALKemp,&localEmP[ip],&pCO2atm,
 #endif
 			   &localTs[kl],&localSs[kl],&localfice[ip],&localswrad[ip],&localtau[ip],&localwind[ip],&localatmosp[ip],&localdz[kl],
+#ifdef READ_MARTINB
+			   &localmartinbc[ip],&drF[0],&nzmax,
+#endif
 #ifdef CARBON			   
 			   &localph[ip],&localco2airseaflux,
 #endif
@@ -1185,6 +1216,9 @@ PetscErrorCode finalizeExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt n
 #ifdef CARBON
 	ierr = destroyPeriodicArray(&localEmPp);CHKERRQ(ierr);
 #endif	
+#ifdef READ_MARTINB
+	ierr = destroyPeriodicArray(&localmartinbcp);CHKERRQ(ierr);
+#endif
   }    
 
 #ifdef CARBON
@@ -1288,6 +1322,11 @@ PetscErrorCode reInitializeExternalForcing(PetscScalar tc, PetscInt Iter, PetscI
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localfice,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localficep,"fice_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");   
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");	
+
+#ifdef READ_MARTINB
+    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
+#endif
+
 #ifdef CARBON
 	ierr = interpPeriodicProfileSurfaceScalarData(tc,localEmP,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localEmPp,"EmP_");                                                      
 #endif									              
