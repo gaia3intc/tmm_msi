@@ -1,4 +1,4 @@
-This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  15 DEC 2020 15:32
+This is LuaTeX, Version 1.10.0 (TeX Live 2019)  (format=lualatex 2019.5.8)  17 DEC 2020 14:35
  restricted system commands enabled.
  file:line:error style messages enabled.
 **TMM_intro_MSI.tex
@@ -49,7 +49,7 @@ Inserting `luaotfload.aux.set_capheight' at position 3 in `luaotfload.patch_font
 '.
 Inserting `luaotfload.rewrite_fontname' at position 4 in `luaotfload.patch_font'
 .
-luaotfload | main : initialization completed in 0.070 seconds
+luaotfload | main : initialization completed in 0.072 seconds
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
@@ -1554,99 +1554,92 @@ Package luatex.def Info: ./Figures_tutorial/D14C_ecco.pdf  used on input line 12
 (luatex.def)             Requested size: 438.4328pt x 378.40927pt.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
 (Font)              scaled to size 9.0pt on input line 1248.
-
-Overfull \hbox (5.74051pt too wide) in paragraph at lines 1252--1253
-\T1/ntxtlf/m/n/10 MSI. You would also need to copy the GLO-DAP sur-face bound-a
-ry con-di-tion file ``[]\T1/ntxtt/m/n/10 bkgc14_cdiac_regird.mat\T1/ntxtlf/m/n/
-10 ''
- []
-
-[24<./Figures_tutorial/D14C_ecco.pdf>] [25] [26]
-Overfull \hbox (0.63672pt too wide) in paragraph at lines 1452--1453
+ [24<./Figures_tutorial/D14C_ecco.pdf>] [25] [26]
+Overfull \hbox (0.63672pt too wide) in paragraph at lines 1454--1455
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][] 
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1460.
+(Font)              scaled to size 8.0pt on input line 1462.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1463.
+(Font)              scaled to size 8.0pt on input line 1465.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.2pt on input line 1463.
+(Font)              scaled to size 6.2pt on input line 1465.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
-(Font)              scaled to size 8.0pt on input line 1463.
+(Font)              scaled to size 8.0pt on input line 1465.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/b/n' will be
-(Font)              scaled to size 6.2pt on input line 1463.
-
-Underfull \vbox (badness 10000) detected at line 1468
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1479
- []
-
+(Font)              scaled to size 6.2pt on input line 1465.
 [27]
-Underfull \vbox (badness 10000) detected at line 1490
+Underfull \vbox (badness 10000) detected at line 1470
  []
 
 
-Overfull \hbox (1.80008pt too wide) in paragraph at lines 1492--1494
+Underfull \vbox (badness 10000) detected at line 1481
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1492
+ []
+
+
+Overfull \hbox (1.80008pt too wide) in paragraph at lines 1494--1496
 []\T1/ntxtlf/bx/n/10 mix-ing\T1/ntxtlf/m/n/10 : Vari-ables re-lated to mix-ing.
  Most of these de-clared in []\T1/ntxtt/m/n/10 $UVICESCMROOT/source/mom/UVic_ES
 CM.F
  []
 
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 8.0pt on input line 1501.
+(Font)              scaled to size 8.0pt on input line 1503.
 
-Underfull \vbox (badness 10000) detected at line 1511
+Underfull \vbox (badness 10000) detected at line 1513
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1536
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1565
+Underfull \vbox (badness 10000) detected at line 1538
  []
 
 [28]
-Underfull \vbox (badness 10000) detected at line 1585
+Underfull \vbox (badness 10000) detected at line 1567
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1593
+Underfull \vbox (badness 10000) detected at line 1587
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1604
+Underfull \vbox (badness 10000) detected at line 1595
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1613
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1620
+Underfull \vbox (badness 10000) detected at line 1606
  []
 
 [29]
-Underfull \vbox (badness 10000) detected at line 1626
+Underfull \vbox (badness 10000) detected at line 1615
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1634
+Underfull \vbox (badness 10000) detected at line 1622
  []
 
 
-Overfull \hbox (6.09569pt too wide) in paragraph at lines 1636--1637
+Underfull \vbox (badness 10000) detected at line 1628
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1636
+ []
+
+
+Overfull \hbox (6.09569pt too wide) in paragraph at lines 1638--1639
 \T1/ntxtlf/m/n/10 OSU-[]CEOAS-[]Schmittner/UVicMOBI_fct_npzd_o2_n_fe_ca_caco3_c
 13_n15/blob/master/updates/npzd_src.F$[][] 
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1660
+Underfull \vbox (badness 10000) detected at line 1662
  []
 
 [30] [31] (./TMM_intro_MSI.bbl
@@ -1676,28 +1669,28 @@ warning  (pdf backend): ignoring duplicate destination with the name 'cite.Somes
 warning  (pdf backend): ignoring duplicate destination with the name 'cite.Yamam
 oto15'
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1710.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1712.
  [33
 Missing character: There is no “ (U+201C) in font ntx-Regular-tlf-t1!
 Missing character: There is no ” (U+201D) in font ntx-Regular-tlf-t1!
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1710.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1712.
  (./TMM_intro_MSI.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1710.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1710.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1712.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1712.
 Package rerunfilecheck Info: File `TMM_intro_MSI.out' has not changed.
 (rerunfilecheck)             Checksum: 54088B862DD0CB3F065B77B09EA0B482;1717.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1710.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1712.
 )
 
 Here is how much of LuaTeX's memory you used:
  28494 strings out of 494291
- 195342,794899 words of node,token memory allocated
- 5318 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 659 kern, 1 glyph, 371 attribute, 67 glue_s
-pec, 371 attribute_list, 1 write, 4 pdf_action nodes
-   avail lists: 1:2,2:6608,3:314,4:1591,5:2688,6:71,7:9720,8:233,9:6309,10:21,11
-:542
+ 244175,794899 words of node,token memory allocated
+ 5351 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 664 kern, 1 glyph, 373 attribute, 67 glue_s
+pec, 373 attribute_list, 1 write, 4 pdf_action nodes
+   avail lists: 1:2,2:8099,3:313,4:2010,5:3400,6:90,7:10327,8:233,9:7893,10:21,1
+1:466
  30560 multiletter control sequences out of 65536+600000
  403 fonts using 29708199 bytes
  48i,20n,78p,1047b,1346s stack positions out of 5000i,500n,10000p,200000b,100000s
@@ -1719,7 +1712,7 @@ st/fonts/type1/public/newtx/txexs.pfb></usr/local/texlive/2019/texmf-dist/fonts/
 type1/public/txfonts/txmia.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/p
 ublic/newtx/txsys.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/times/
 utmri8a.pfb>
-Output written on TMM_intro_MSI.pdf (33 pages, 5124530 bytes).
+Output written on TMM_intro_MSI.pdf (33 pages, 5124725 bytes).
 
 PDF statistics: 1694 PDF objects out of 1728 (max. 8388607)
  1491 compressed objects within 15 object streams
