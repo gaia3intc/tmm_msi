@@ -1,6 +1,9 @@
 This is Tatsuro Tanioka's forked version of TMM where he puts his code modifications 
 to the TMM source codes. There is also a Tutorial document for MSI users 
 (at the University of Minnesota) in the folder ("Tutorial_MSI").
+The codes are archived in Zenodo
+[![DOI](https://zenodo.org/badge/258632470.svg)](https://zenodo.org/badge/latestdoi/258632470)
+
 
 %%------------------------------------------------------------------------
 %% From Samar's Original README
