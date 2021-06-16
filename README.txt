@@ -3,6 +3,8 @@ to the TMM source codes. There is also a Tutorial document for MSI users
 (at the University of Minnesota) in the folder ("Tutorial_MSI").
 The codes are archived in Zenodo (10.5281/zenodo.4960404)
 
+To use MOPS with new organic carbon module, please refer to
+"tanio003/tmm/models/current/mops2.0/README.txt" in the branch TT_Release
 
 %%------------------------------------------------------------------------
 %% From Samar's Original README
