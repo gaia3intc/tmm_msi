@@ -1,7 +1,6 @@
 TT, 2020-11-11
 This file documents MOPS-CP which added 4 new tracers related to organic carbon chemistry (DOC, POC, Phyto C, and ZOO C). 
 C:P uptake ratio of phytoplankton and zooplankton are flexible and are modeled using power-law formulation. It was developed from MOPS Ver2.0.
-Full documentation of SMS terms of the new tracers is currently being prepared. 
 To use  MOPS-CP:
 
 (1) Fork all the files from T. Tanioka's github TMM branch called TT_Release. src, Matlab code, MakeFile, runscripts have all been updated.
