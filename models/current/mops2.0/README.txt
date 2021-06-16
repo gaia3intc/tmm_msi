@@ -1,6 +1,7 @@
 TT, 2021-06-16
 This file documents MOPS-CP which added 4 new tracers related to organic carbon chemistry (DOC, POC, Phyto C, and ZOO C). 
-C:P uptake ratio of phytoplankton and zooplankton are flexible and are modeled using power-law formulation. It was developed from MOPS Ver2.0. Related publication is currently under review. 
+C:P uptake ratio of phytoplankton and zooplankton are flexible and are modeled using power-law formulation. It was developed from MOPS Ver2.0. 
+Related publication is currently under review. 
 
 To use  MOPS-CP:
 
