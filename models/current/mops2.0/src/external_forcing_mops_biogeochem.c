@@ -1,5 +1,6 @@
 /* $Header: /Users/ikriest/CVS/mops/external_forcing_mops_biogeochem.c,v 1.3 2016/06/06 09:43:41 ikriest Exp $ */
 /* $Name: mops-2_0 $*/
+/* $Edited by T.Tanioka to include Flexible C:P related routines ORGCARBON and READ_MARTINB, Dec 2020 $ */
 
 #define EXTERNAL_FORCING
 
@@ -50,6 +51,11 @@ PetscScalar *localswrad, *localtau;
 PetscScalar *locallatitude;
 #endif
 
+#ifdef READ_MARTINB
+PetscScalar *localmartinbc;
+#endif
+
+
 PetscBool useSeparateBiogeochemTimeStepping = PETSC_FALSE;
 PetscInt numBiogeochemStepsPerOceanStep = 1;
 PetscInt nzmax,nzeuph;
@@ -60,6 +66,10 @@ PeriodicVec Tsp, Ssp;
 PeriodicArray localwindp,localficep,localatmospp;
 #ifdef READ_SWRAD
 PeriodicArray localswradp;
+#endif
+
+#ifdef READ_MARTINB
+PeriodicArray localmartinbcp;
 #endif
 
 PetscBool periodicBiogeochemForcing = PETSC_FALSE;
@@ -329,13 +339,17 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
 
     if (!atmAppendOutput) {
       ierr = PetscFOpen(PETSC_COMM_WORLD,atmOutTimeFile,"w",&atmfptime);CHKERRQ(ierr);  
-      ierr = PetscFPrintf(PETSC_COMM_WORLD,atmfptime,"%d   %10.5f\n",Iter0,time0);CHKERRQ(ierr);     
-      ierr = PetscPrintf(PETSC_COMM_WORLD,"Writing atmospheric output at time %10.5f, step %d\n", tc,Iter);CHKERRQ(ierr);  
-      ierr = writeBinaryScalarData("pCO2atm_output.bin",&pCO2atm,1,PETSC_FALSE);
-      ierr = writeBinaryScalarData("Foceanint_output.bin",&Focean,1,PETSC_FALSE);
+	  if (Iter0==atmWriteTimer.startTimeStep) { /* note: startTimeStep is ABSOLUTE time step */
+		ierr = PetscFPrintf(PETSC_COMM_WORLD,atmfptime,"%d   %10.5f\n",Iter0,time0);CHKERRQ(ierr);     
+		ierr = PetscPrintf(PETSC_COMM_WORLD,"Writing atmospheric output at time %10.5f, step %d\n", tc,Iter);CHKERRQ(ierr);  
+		ierr = writeBinaryScalarData("pCO2atm_output.bin",&pCO2atm,1,PETSC_FALSE);
+		ierr = writeBinaryScalarData("Foceanint_output.bin",&Focean,1,PETSC_FALSE);
+	  }	
     } else {
       ierr = PetscFOpen(PETSC_COMM_WORLD,atmOutTimeFile,"a",&atmfptime);CHKERRQ(ierr);  
-      ierr = PetscPrintf(PETSC_COMM_WORLD,"Atmospheric model output will be appended. Initial condition will NOT be written\n");CHKERRQ(ierr);      
+	  if (Iter0==atmWriteTimer.startTimeStep) { /* note: startTimeStep is ABSOLUTE time step */      
+		ierr = PetscPrintf(PETSC_COMM_WORLD,"Atmospheric model output will be appended. Initial condition will NOT be written\n");CHKERRQ(ierr);      
+	  }	
     }
 
     atmModelDeltaT = DeltaT/secondsPerYear; /* time step in years */
@@ -521,6 +535,16 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
     ierr = readProfileSurfaceScalarData("atmosp.bin",localatmosp,1);  
   }
 
+#ifdef READ_MARTINB
+  ierr = PetscMalloc(lNumProfiles*sizeof(PetscScalar),&localmartinbc);CHKERRQ(ierr);  
+  if (periodicBiogeochemForcing) {    
+    localmartinbcp.firstTime = PETSC_TRUE;
+    localmartinbcp.arrayLength = lNumProfiles;
+  } else {  
+    ierr = readProfileSurfaceScalarData("bc_mops.bin",localmartinbc,1);  
+  }
+#endif  
+
 /* Initialize biogeochem model */
   myTime = DeltaT*Iter; /* Iter should start at 0 */
 
@@ -535,6 +559,10 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localfice,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localficep,"fice_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");   
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");					                              
+#ifdef READ_MARTINB
+    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
+#endif
+
 #ifdef CARBON
 	ierr = interpPeriodicProfileSurfaceScalarData(tc,localEmP,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localEmPp,"EmP_");                                                  
 #endif									              
@@ -610,8 +638,8 @@ PetscErrorCode iniExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt numTra
   ierr = PetscOptionsHasName(NULL,NULL,"-calc_diagnostics",&calcDiagnostics);CHKERRQ(ierr);
   if (calcDiagnostics) {    
 /*Data for diagnostics */
-    ierr = iniStepTimer("diag_", Iter0, &diagTimer);CHKERRQ(ierr);
-	ierr = PetscPrintf(PETSC_COMM_WORLD,"Diagnostics will be computed starting at (and including) time step: %d\n", diagTimer.startTimeStep);CHKERRQ(ierr);	
+    ierr = iniStepTimer("diag_", Iter0+1, &diagTimer);CHKERRQ(ierr);
+	ierr = PetscPrintf(PETSC_COMM_WORLD,"Diagnostics will be computed starting at and including (absolute) time step: %d\n", diagTimer.startTimeStep);CHKERRQ(ierr);	
 	ierr = PetscPrintf(PETSC_COMM_WORLD,"Diagnostics will be computed over %d time steps\n", diagTimer.numTimeSteps);CHKERRQ(ierr);	
 
 	for (idiag=0; idiag<numDiag; idiag++) {
@@ -758,6 +786,10 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localfice,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localficep,"fice_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");  
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");					                              
+#ifdef READ_MARTINB
+    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
+#endif
+
 #ifdef CARBON
 	ierr = interpPeriodicProfileSurfaceScalarData(tc,localEmP,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localEmPp,"EmP_");                                                      
 #endif
@@ -804,6 +836,9 @@ PetscErrorCode calcExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt iLoop
 			   &DICemp,&ALKemp,&localEmP[ip],&pCO2atm,
 #endif
 			   &localTs[kl],&localSs[kl],&localfice[ip],&localswrad[ip],&localtau[ip],&localwind[ip],&localatmosp[ip],&localdz[kl],
+#ifdef READ_MARTINB
+			   &localmartinbc[ip],&drF[0],&nzmax,
+#endif
 #ifdef CARBON			   
 			   &localph[ip],&localco2airseaflux,
 #endif
@@ -1020,20 +1055,26 @@ PetscErrorCode writeExternalForcing(PetscScalar tc, PetscInt iLoop, PetscInt num
 #ifdef CARBON
   if (useAtmModel) {
 /* write instantaneous atmos model state */
-	if (Iter0+iLoop>=atmWriteTimer.startTimeStep) { /* note: startTimeStep is ABSOLUTE time step */
-	  if (atmWriteTimer.count<=atmWriteTimer.numTimeSteps) {
+	if (Iter0+iLoop>atmWriteTimer.startTimeStep) { /* note: startTimeStep is ABSOLUTE time step */
+	  if (atmWriteTimer.count<atmWriteTimer.numTimeSteps) {
 		atmWriteTimer.count++;
 	  }
-	  if (atmWriteTimer.count==atmWriteTimer.numTimeSteps) { /* time to write out */
+	}
+
+	if (Iter0+iLoop>=atmWriteTimer.startTimeStep) { /* note: startTimeStep is ABSOLUTE time step */
+      if ((atmWriteTimer.count==atmWriteTimer.numTimeSteps) || (Iter0+iLoop==atmWriteTimer.startTimeStep)) { /* time to write out */
+
 		ierr = PetscPrintf(PETSC_COMM_WORLD,"Writing atmospheric model output at time %10.5f, step %d\n", tc, Iter0+iLoop);CHKERRQ(ierr);
 		ierr = PetscFPrintf(PETSC_COMM_WORLD,atmfptime,"%d   %10.5f\n",Iter0+iLoop,tc);CHKERRQ(ierr);           
 		ierr = writeBinaryScalarData("pCO2atm_output.bin",&pCO2atm,1,PETSC_TRUE);
 		ierr = writeBinaryScalarData("Foceanint_output.bin",&Foceanint,1,PETSC_TRUE);
 		Foceanint = 0.0;
-
-		ierr = updateStepTimer("atm_write_", Iter0+iLoop, &atmWriteTimer);CHKERRQ(ierr);
-
+		
       }
+
+      if (atmWriteTimer.count==atmWriteTimer.numTimeSteps) {
+		ierr = updateStepTimer("atm_write_", Iter0+iLoop, &atmWriteTimer);CHKERRQ(ierr);
+	  }
     }
   }
 #endif
@@ -1050,7 +1091,7 @@ PetscErrorCode writeExternalForcing(PetscScalar tc, PetscInt iLoop, PetscInt num
   if (calcDiagnostics) {  
 	if (Iter0+iLoop>=diagTimer.startTimeStep) { /* start time averaging (note: startTimeStep is ABSOLUTE time step) */  
   
-	  if (diagTimer.count<=diagTimer.numTimeSteps) { /* still within same averaging block so accumulate */
+	  if (diagTimer.count<diagTimer.numTimeSteps) { /* still within same averaging block so accumulate */
 		ierr = VecAXPY(fbgc1avg,one,fbgc1);CHKERRQ(ierr);
 		ierr = VecAXPY(fbgc2avg,one,fbgc2);CHKERRQ(ierr);
 		ierr = VecAXPY(fbgc3avg,one,fbgc3);CHKERRQ(ierr);
@@ -1185,6 +1226,9 @@ PetscErrorCode finalizeExternalForcing(PetscScalar tc, PetscInt Iter, PetscInt n
 #ifdef CARBON
 	ierr = destroyPeriodicArray(&localEmPp);CHKERRQ(ierr);
 #endif	
+#ifdef READ_MARTINB
+	ierr = destroyPeriodicArray(&localmartinbcp);CHKERRQ(ierr);
+#endif
   }    
 
 #ifdef CARBON
@@ -1288,6 +1332,11 @@ PetscErrorCode reInitializeExternalForcing(PetscScalar tc, PetscInt Iter, PetscI
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localfice,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localficep,"fice_");
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localwind,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localwindp,"wind_");   
     ierr = interpPeriodicProfileSurfaceScalarData(tc,localatmosp,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localatmospp,"atmosp_");	
+
+#ifdef READ_MARTINB
+    ierr = interpPeriodicProfileSurfaceScalarData(tc,localmartinbc,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localmartinbcp,"bc_mops_");   
+#endif
+
 #ifdef CARBON
 	ierr = interpPeriodicProfileSurfaceScalarData(tc,localEmP,biogeochemTimer.cyclePeriod,biogeochemTimer.numPerPeriod,biogeochemTimer.tdp,&localEmPp,"EmP_");                                                      
 #endif									              

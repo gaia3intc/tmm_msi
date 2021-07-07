@@ -102,10 +102,10 @@ c added by T.Tanioka (Nov 2020)
      &       par_bio_temp_ref,par_bio_light_ref,
      &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
      &       maxcp,mincp,
-     &       par_zoo_cp_hom
+     &       par_zoo_cp_hom,par_excrtodoc
       COMMON/BGCPLPARAMS/par_bio_pc0,par_bio_po4_ref,par_bio_no3_ref,
      &       par_bio_temp_ref,par_bio_light_ref,
      &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
      &       maxcp,mincp,
-     &       par_zoo_cp_hom,
+     &       par_zoo_cp_hom,par_excrtodoc,
      &       cp_option

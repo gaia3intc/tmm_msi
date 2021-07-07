@@ -28,6 +28,7 @@ C ORGCARBON     calculate organic carbon biogeochemistry (by T.Tanioka)
 C NOSED         instant reminerealization of detritus reaching ocean bottom (by T.Tanioka)      
 C NOSED_POC     instant reminerealization of POC reaching ocean bottom (by T.Tanioka)      
 C FLEXCP        Flexible C:P uptake of phytoplankton and zooplankton (by T.Tanioka)
+C READ_MARTINB  Flexible Martin b exponent for POC (by T.Tanioka)
 
 C CALLED BY:	mops_biogeochem_model
 
@@ -49,6 +50,8 @@ C bgc_wind	wind speed [cm/hr]
 C bgc_atmosp	atmospheric pressure
 C bgc_theta()	temperature [degs C]
 C bgc_salt()	salinity [PSU]
+C bgc_martinbp  Martin b exponent for POP [-] (added by T.Tanioka)
+C bgc_martinbc  Martin b exponent for POC [-] (added by T.Tanioka)
 
 C INPUT/COMMON BLOCK
 C biogeochemical parameters. See BGC_PARAMS.h and BGC_INI.F.
@@ -69,7 +72,10 @@ C flux_bury	burial in sediment in this call to BGC_MODEL [mmol P/m2]
 C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 
 
-      SUBROUTINE BGC_MODEL(bgc_kloc,bgc_dz,     
+      SUBROUTINE BGC_MODEL(bgc_kloc,bgc_dz, 
+#ifdef READ_MARTINB
+     &            bgc_martinbc,bgc_zu,
+#endif          
      &            bgc_runoffvol,bgc_globalrunoff,
      &            bgc_swr,bgc_tau,bgc_seaice,bgc_wind,bgc_atmosp,
      &            bgc_theta,bgc_salt)
@@ -89,6 +95,9 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
       real*8 bgc_theta(bgc_ktotal),bgc_salt(bgc_ktotal)
       real*8 ciz(bgc_keuph)
       real*8 bgc_wind,bgc_atmosp,bgc_pco2atm
+#ifdef READ_MARTINB
+      real*8 bgc_martinbc,bgc_zu(bgc_ktotal+1)
+#endif
 
 ! arrays to store the sms and other fluxes
       real*8 topo4(bgc_ktotal)
@@ -221,6 +230,17 @@ c      real*8 alkchem(bgc_ktotal)
       flux_bury_c = 0.0d0
 #endif      
 
+#ifdef READ_MARTINB   
+! Spatially variable Martin's b exponent for POC flux
+        if(bgc_martinbc.gt.0.7d0 .AND. bgc_martinbc.lt.1.6d0) then   
+          detwa_c = detlambda/bgc_martinbc 
+          do k=1,bgc_kmax
+            wdet_c(k) = 0.0d0
+            wdet_c(k) = detwb_c + (bgc_zu(k)+bgc_zu(k+1))*0.5d0*detwa_c
+          enddo
+        endif
+#endif
+
 C INTERNAL TIME LOOP FOR BGC
 
       do it=1,bgc_timesteps
@@ -286,6 +306,15 @@ C INTERNAL TIME LOOP FOR BGC
 !      CALL CAR_CHEMISTRY(...,dicchem,alkchem)
 
 #endif
+
+#ifdef FASTGAS
+! For Surface CO2 to be in equilibtrium with atmosphere
+! added by T.Tanioka, Dec 2020
+      co2airseaflux = co2airseaflux - co2gasex*bgc_dt  ! undo old gas exchange
+      co2gasex = co2gasex*bgc_dz(1)/bgc_dt
+      co2airseaflux = co2airseaflux + co2gasex*bgc_dt  ! new exchange
+#endif      
+
 
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
 ! EUPHOTIC ZONE  AND ITS EXPORT TO DEEPER LAYERS 
@@ -532,18 +561,18 @@ C INTERNAL TIME LOOP FOR BGC
         todoc(k)= graztodop*(1.0d0-ACeff)*grazc
      &           +graztodop*(phycexu+zoocloss)
      &           +phycloss
-     &           +zoocrel*graztodop
+     &           +zoocrel*par_excrtodoc
         tophyc(k)= phycgrow-grazc-phycexu-phycloss
         tozooc(k)=  ACeff*grazc-zoocexu-zoocloss
      &           -zoocrel    
         topoc(k) = (1.0d0-graztodop)*(1.0d0-ACeff)*grazc
      &           + (1.0d0-graztodop)*(phycexu+zoocloss)
-     &           + zoocrel*(1.0d0-graztodop) 
+     &           + zoocrel*(1.0d0-par_excrtodoc) 
         ! Adjustments on P content of zooplankton and DOP and POP 
         if(zooprel.gt.0.0d0) then 
            tozoo(k) = tozoo(k) - zooprel
-           todop(k) = todop(k) + zooprel*graztodop
-           todet(k) = todet(k) + zooprel*(1.0d0-graztodop)
+           todop(k) = todop(k) + zooprel*par_excrtodoc
+           todet(k) = todet(k) + zooprel*(1.0d0-par_excrtodoc)
         endif
 
         ! Store C:P Uptake for Phytoplankton and Zooplankton
@@ -563,7 +592,6 @@ C INTERNAL TIME LOOP FOR BGC
 #endif        
 
         do k=1,bgc_kloc-1 !loop over all layers
-
           DET = MAX(bgc_tracer(k,idet)-alimit*alimit,0.0d0)
           flux_l=wdet(k)*DET
           flux_old = flux(k)

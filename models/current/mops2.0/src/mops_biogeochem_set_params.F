@@ -42,6 +42,7 @@ c Paramters related to C:P Power-law
          par_bio_spc_t = parvec(20)       ! s_P:C^T
 c Parameter related to C:P of Zooplankton 
          par_zoo_cp_hom = parvec(21)      ! Homeostatic Parameter (0 = Completely homeostatic, 1: C:P Zoo = C:P of prey)       
+         par_excrtodoc = parvec (22)      ! Fraction of excreted organic carbon by adjustment going to DOC
 #endif
         
       RETURN

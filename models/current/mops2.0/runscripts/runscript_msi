@@ -41,7 +41,7 @@ mpirun -np 24 ./mops_cp \
         -time_avg -avg_start_time_step 2159281 -avg_time_steps 60 \
         -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc,docavg.petsc,pocavg.petsc,phycavg.petsc,zoocavg.petsc \
         -bgc_params_file biogem_params.txt \
-        -num_bgc_params 21 \
+        -num_bgc_params 22 \
         -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \
         -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,fbgc7.petsc,fbgc8.petsc,fbgc9.petsc,fbgc10.petsc,fbgc11.petsc \
         > log
