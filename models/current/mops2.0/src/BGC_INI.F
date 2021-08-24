@@ -13,6 +13,8 @@ C   - detmartin, ro2ut, nfix, subdin,  ACkbaco2, ACkbacdin
 C T.Tanioka added new parameters related to flexible C:P (Nov 2020)      
 C T.Tanioka added new parameters related to Organic C FLux attenuation (Nov 2020)      
 
+C K. Matsumoto add second PFT (July 2021)
+	
 C Basis for air-sea gas exchange of O2: MIT source code, 
 C modified by Samar Khatiwala, then by Iris Kriest (Aug-Nov 2010)
 
@@ -116,16 +118,31 @@ c       subdin = 4.0d0 !no denitrification below this level
 		              !a rather high value acc. to Mulholland (2007)
 
 ! Phytoplankton parameters
-        TempB = 15.65d0 !ref. temperature for T-dependent growth
-        ACmuphy = 0.6d0 !max. growth rate [1/day]
-        ACik = 9.653d0 !Light half-saturation constant [W/m2]
-        ACkpo4 = 0.4995d0 !half-saturation constant for PO4 uptake [mmol P/m3]
-        ACkchl  = 0.03d0*rnp !att. of Phy [1/(m*mmol P/m3)]
-        ACkw = 0.04d0 !attenuation of water [1/m]
-        AClambda = 0.03d0      !exudation rate [1/day]
-        AComni = 0.0d0      !density dep. loss rate [m3/(mmol P * day)]
-        plambda = 0.01d0 !phytoplankton mortality
-
+	
+	TempB = 15.65d0	        !ref. temperature for T-dependent growth
+        ACmuphy = 0.6d0		!max. growth rate [1/day]
+	ACik = 9.653d0	        !Light half-saturation constant [W/m2]
+        ACkpo4 = 0.4995d0	!half-saturation constant for PO4 uptake [mmol P/m3]
+        ACkchl  = 0.03d0*rnp	!att. of Phy [1/(m*mmol P/m3)]
+	ACkw = 0.04d0		!attenuation of water [1/m]
+        AClambda = 0.03d0	!exudation rate [1/day]
+        AComni = 0.0d0		!density dep. loss rate [m3/(mmol P * day)]
+        plambda = 0.01d0	!phytoplankton mortality
+	
+! PFT specific parameters for vectorized arrays; others are the same for all PFTs (KM 8/2021)	
+#ifdef PFT
+        ACmuphy(1)  = 0.1d0	!PFT1 max. growth rate [1/day] for PFT1 = eukaryote
+        ACmuphy(2)  = 1.0d0	!PFT2 = cyanobacteria
+        ACkpo4(1)   = 0.50d0	!PFT1 half-saturation constant for PO4 uptake [mmol P/m3] 
+        ACkpo4(2)   = 0.05d0	!PFT2
+        AClambda(1) = 0.03d0    !PFT1 exudation rate [1/day]
+        AClambda(2) = 0.03d0    !PFT2
+        AComni(1)   = 0.0d0	!PFT1 density dep. loss rate [m3/(mmol P * day)]
+        AComni(2)   = 0.0d0	!PFT2
+        plambda(1)  = 0.01d0	!PFT1 phytoplankton mortality
+        plambda(2)  = 0.01d0	!PFT2
+#endif	
+	
 ! Zooplankton parameters
         ACmuzoo=1.893d0 !max. grazing rate [1/d]
         ACkphy=SQRT(ACmuzoo/1.0d0)/rnp !zoo half-saturation constant [mmol P]
