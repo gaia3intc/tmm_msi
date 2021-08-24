@@ -233,30 +233,30 @@ ckm#endif
 
 #ifdef ORGCARBON
 #ifndef FLEXCP
-        print*, 'MOPS + (CARBON) + ORGCARBON'
+        !print*, 'MOPS + (CARBON) + ORGCARBON'
         f9_out(k)=0.0d0
 #else
-        print*, 'MOPS + (CARBON) + ORGCARBON + FLEXCP'
+        !print*, 'MOPS + (CARBON) + ORGCARBON + FLEXCP'
         f9_out(k)=0.0d0
         f10_out(k)=0.0d0
         f11_out(k)=0.0d0
 #endif
 #else 
-        print*, 'MOPS'
+        !print*, 'MOPS + (CARVON)'
 #endif        
         
 #else
 
 #ifndef ORGCARBON      
-        print*, 'MOPS + PFT'
+        !print*, 'MOPS + PFT'
         f9_out(k)=0.0d0
 #else
 #ifndef FLEXCP      
-        print*, 'MOPS + (CARBON) + ORGCARBON + PFT'
+        !print*, 'MOPS + (CARBON) + ORGCARBON + PFT'
         f9_out(k)=0.0d0
         f10_out(k)=0.0d0
 #else
-        print*, 'MOPS + (CARBON) + ORGCARBON + PFT + FLEXCP'
+        !print*, 'MOPS + (CARBON) + ORGCARBON + PFT + FLEXCP'
         f9_out(k)=0.0d0
         f10_out(k)=0.0d0
         f11_out(k)=0.0d0

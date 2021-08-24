@@ -208,6 +208,36 @@ C beside sinking and remineralization might play a role in the euphotic zone.
 
 #endif
 
+ 
+! KM: prints out so many times...but good to check during debugging
+#ifndef PFT
+
+#ifdef ORGCARBON
+#ifndef FLEXCP
+        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON'
+#else
+        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON + FLEXCP'
+#endif
+#else 
+        print*, 'in BGC_INI: MOPS + (CARBON)'
+#endif        
+        
+#else
+
+#ifndef ORGCARBON      
+        print*, 'in BGC_INI: MOPS + PFT'
+#else
+#ifndef FLEXCP      
+        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON + PFT'
+#else
+        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON + PFT + FLEXCP'
+#endif
+#endif
+        
+#endif
+	
+	
+	
       return
       end
 
