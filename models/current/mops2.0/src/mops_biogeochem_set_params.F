@@ -56,6 +56,34 @@ C Second PFT (CYANOBACTERIA), use the same C:P model, bounds, ref ratio values a
          par_bio_spc_t(2) = parvec(28)       ! s_P:C^T
 #endif
 #endif         
+ 
+         print*,'KM: in mops_x_set_params: npar, npft: ',npar, npft
+          
+#ifndef PFT
+
+#ifdef ORGCARBON
+#ifndef FLEXCP
+        print*, 'Model config: MOPS + (CARBON) + ORGCARBON'
+#else
+        print*, 'Model config: MOPS + (CARBON) + ORGCARBON + FLEXCP'
+#endif
+#else 
+        print*, 'Model config: MOPS + (CARBON)'
+#endif        
+        
+#else
+
+#ifndef ORGCARBON      
+        print*, 'Model config: MOPS + PFT'
+#else
+#ifndef FLEXCP   
+        print*, 'Model config: MOPS + (CARBON) + ORGCARBON + PFT'
+#else
+        print*, 'Model config: MOPS + (CARBON) + ORGCARBON + PFT + FLEXCP'
+#endif
+#endif
+        
+#endif
 
          
 ckm#ifdef ORGCARBON        

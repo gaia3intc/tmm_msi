@@ -205,6 +205,8 @@ ckm      real*8 rcp_det_ez(maxpft),rcp_zoo    ! moved to BGC_PARAMS.h
 
 #endif
     
+!      print*,'KM: in BGC_MODEL A, npft: ', npft
+      
 ! Reset the diagnostic fluxes per ocean time step.
 
       bgc_keuphloc = INT(MIN(bgc_kloc,bgc_keuph))
@@ -306,6 +308,8 @@ ckm#endif
         endif
 #endif
 
+!        print*,'KM: in BGC_MODEL B, npft: ',npft
+        
 C INTERNAL TIME LOOP FOR BGC
 
       do it=1,bgc_timesteps
@@ -428,7 +432,9 @@ ckm        tophyc(k)=0.0d0
       pbiomass(2) = PHY2
       cbiomass(2) = PHYC2
 #endif
-            
+
+      print*,' if FLEXCP: PHY and p/cbiomass: ', PHY,pbiomass,cbiomass
+
       ! Calculate C:P Phytoplankton
       if(PO4.gt.vsafe .AND. DIN.gt.vsafe) then
           CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(k),bgc_theta(k),
@@ -468,7 +474,9 @@ ckm            cp_phyto(i) = PHYC/PHY
       rcp_det_ez = rcp
       rcp_zoo = rcp
 #endif      
-      
+
+!      print*,'KM: in BGC_MODEL C...after CALC_CP_ZOO'
+!      print*,' what keuphloc and npft? ',bgc_keuphloc,npft
       
 ! Biogeochemical fluxes in euphotic zone and their export
 ! Take care of negative tracer concentrations.
@@ -481,28 +489,34 @@ ckm            cp_phyto(i) = PHYC/PHY
 ckm       PHY(1)=MAX(bgc_tracer(k,iphy)-alimit*alimit,0.0d0)
        ZOO=MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
 ckm       attlim=MAX(PHY,0.0d0)
-    
+       pbiomass = PHY
+       
 #ifdef ORGCARBON     
        DOC=MAX(bgc_tracer(k,idoc)-alimit*alimit*117.0d0,0.0d0)
        POC=MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
        DIC=MAX(bgc_tracer(k,idic)-alimit*alimit*117.0d0,0.0d0)
        PHYC=MAX(bgc_tracer(k,iphyc)-alimit*alimit*rcp_det_ez(1),0.0d0)
        ZOOC=MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp_zoo,0.0d0)
+       cbiomass = PHYC
 #endif       
 
 #ifdef PFT
        PHY2 =MAX(bgc_tracer(k,iphy2) -alimit*alimit,0.0d0)
+       pbiomass(2) = PHY2
        grazt   = 0.0d0
        phygrow = 0.0d0
        phyexu  = 0.0d0
        phyloss = 0.0d0       
 #ifdef ORGCARBON
        PHYC2=MAX(bgc_tracer(k,iphyc2)-alimit*alimit*rcp_det_ez(2),0.0d0)
+       cbiomass = PHYC2
        grazct = 0.0d0
 #endif
 #endif       
 
        attlim=MAX(MAXVAL(pbiomass),0.0d0)
+
+!       print*,' what is pbiomass: ', pbiomass
        
        DO i=1,npft  
           
@@ -584,6 +598,7 @@ ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
 
         endif !PHY
 
+!        print*,'KM: in BGC_MODEL D...after PHY>0)'
         
         if (i.eq.npft) then
         
@@ -722,6 +737,12 @@ ckm     &        + (1.0d0-graztodop)*(phyexu+zooloss)
         todet(k)=todet(k) + (1.0d0-graztodop)*(1.0d0-ACeff)*graz 
      &        + (1.0d0-graztodop)*(phyexu(i)+zooloss)
 
+!        print*,'KM: in BGC_MODEL E'
+!        print*,'phygrow, zooexu: ',phygrow, zooexu
+!        print*,'graz,phyexu: ',graz,phyexu
+!        print*,'phyloss,zooloss: ',phyloss,zooloss
+!        stop
+        
         
 ! Collect all the carbon terms in the euphotic zone
 

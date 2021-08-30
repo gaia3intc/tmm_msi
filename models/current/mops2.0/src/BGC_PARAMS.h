@@ -107,6 +107,7 @@ c the air-sea gas exchange constants
       real*8 sox1,sox2,sox3,sox4,oA0,oA1,oA2,oA3,oA4,oA5,
      &       oB0,oB1,oB2,oB3,oC0
 
+      COMMON/PFTPARAMS/ npft
       COMMON/BGCZ/wdet
       COMMON/BGCPARAMS/rcp,rnp,ro2ut,subox,tempB,
      &       acmuphy,acik,ackpo4,ackchl,ackw,aclambda,acomni,
