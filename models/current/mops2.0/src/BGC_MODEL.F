@@ -205,7 +205,7 @@ ckm      real*8 rcp_det_ez(maxpft),rcp_zoo    ! moved to BGC_PARAMS.h
 
 #endif
     
-!      print*,'KM: in BGC_MODEL A, npft: ', npft
+      print*,'KM TOP, npft, bgc_timesteps: ', npft,bgc_timesteps
       
 ! Reset the diagnostic fluxes per ocean time step.
 
@@ -306,13 +306,14 @@ ckm#endif
             wdet_c(k) = detwb_c + (bgc_zu(k)+bgc_zu(k+1))*0.5d0*detwa_c
           enddo
         endif
+
+        print*,' wdet_c: ',wdet_c
 #endif
 
-!        print*,'KM: in BGC_MODEL B, npft: ',npft
         
 C INTERNAL TIME LOOP FOR BGC
 
-      do it=1,bgc_timesteps
+      do 9999 it=1,bgc_timesteps
       
 ! Reset fluxes.
 
@@ -475,13 +476,12 @@ ckm            cp_phyto(i) = PHYC/PHY
       rcp_zoo = rcp
 #endif      
 
-!      print*,'KM: in BGC_MODEL C...after CALC_CP_ZOO'
-!      print*,' what keuphloc and npft? ',bgc_keuphloc,npft
+      print*,' rcp_det_ez, rcp_zoo: ',rcp_det_ez, rcp_zoo
       
 ! Biogeochemical fluxes in euphotic zone and their export
 ! Take care of negative tracer concentrations.
 
-      DO K=1,bgc_keuphloc
+      DO 1000 K=1,bgc_keuphloc
 
        PO4=MAX(bgc_tracer(k,ipo4)-alimit*alimit,0.0d0)
        DIN=MAX(bgc_tracer(k,idin)-alimit*alimit,0.0d0)
@@ -490,7 +490,18 @@ ckm       PHY(1)=MAX(bgc_tracer(k,iphy)-alimit*alimit,0.0d0)
        ZOO=MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
 ckm       attlim=MAX(PHY,0.0d0)
        pbiomass = PHY
-       
+
+#ifdef PFT
+       PHY2 =MAX(bgc_tracer(k,iphy2) -alimit*alimit,0.0d0)
+       pbiomass(2) = PHY2
+#endif
+
+       attlim=MAX(MAXVAL(pbiomass),0.0d0)
+
+       print*,'eutrophic processes...bgc_keuphloc, PO4: ',k, PO4
+       print*,' DIN, PHY: ',DIN, PHY
+       print*,' ZOO, attlim: ',ZOO, attlim
+
 #ifdef ORGCARBON     
        DOC=MAX(bgc_tracer(k,idoc)-alimit*alimit*117.0d0,0.0d0)
        POC=MAX(bgc_tracer(k,ipoc)-alimit*alimit*117.0d0,0.0d0)
@@ -498,27 +509,25 @@ ckm       attlim=MAX(PHY,0.0d0)
        PHYC=MAX(bgc_tracer(k,iphyc)-alimit*alimit*rcp_det_ez(1),0.0d0)
        ZOOC=MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp_zoo,0.0d0)
        cbiomass = PHYC
-#endif       
 
 #ifdef PFT
-       PHY2 =MAX(bgc_tracer(k,iphy2) -alimit*alimit,0.0d0)
-       pbiomass(2) = PHY2
+       PHYC2=MAX(bgc_tracer(k,iphyc2)-alimit*alimit*rcp_det_ez(2),0.0d0)
+       cbiomass(2) = PHYC2
+#endif
+
+       print*,' DOC, POC: ',DOC,POC
+       print*,' DIC, PHYC: ',DIC, PHYC
+       print*,' ZOOC: ',ZOOC
+#endif       
+
+       ! KM: Reset for each euphotic zone layer K (before npft loop)
        grazt   = 0.0d0
        phygrow = 0.0d0
        phyexu  = 0.0d0
        phyloss = 0.0d0       
-#ifdef ORGCARBON
-       PHYC2=MAX(bgc_tracer(k,iphyc2)-alimit*alimit*rcp_det_ez(2),0.0d0)
-       cbiomass = PHYC2
-       grazct = 0.0d0
-#endif
-#endif       
-
-       attlim=MAX(MAXVAL(pbiomass),0.0d0)
-
-!       print*,' what is pbiomass: ', pbiomass
+       grazct  = 0.0d0
        
-       DO i=1,npft  
+       DO 1100 i=1,npft  
           
 ! Temperature dependence of phytoplankton growth (Eppley)
 ! this affects the light-half-saturation constant via acik=acmuphy/alpha
@@ -526,7 +535,10 @@ ckm       attlim=MAX(PHY,0.0d0)
 ckm        TACmuphy = ACmuphy*tempscale
         TACmuphy = ACmuphy(i)*tempscale
         TACik = ACik*tempscale       
-       
+
+        print*,' NPFT loop: ',i
+        print*,' tempscale, TACmuphy, TACik: ',tempscale,TACmuphy,TACik
+
 ! The light limitation function of phytoplankton.
 ! This function corresponds to Evans and Garcon, 1997.
 ! Note that the initial slope of the P-I curve, alpha, is ACMuPhy/ACIk
@@ -536,22 +548,27 @@ ckm        TACmuphy = ACmuphy*tempscale
         glbygd = 2.0d0*ciz(k)/(TACik*bgc_tau)   ! 2 * G_L/G_D of EG97
         flightlim = bgc_tau/atten*(phi(glbygd)-phi(glbygd*exp(-atten)))
 
+        print*,' atten, glbygd, flightlim: ',atten,glbygd,flightlim
+        
 ckm       if(PHY.gt.0.0d0) then                      
         if(pbiomass(i).gt.0.0d0) then                      
 
            limnut = MIN(PO4,DIN/rnp) 
 
            if(limnut.gt.vsafe) then
+             print*,' limnut: ',limnut
 
 ! The nutrient limitation of phytoplankton
 ckm           fnutlim = limnut/(ackpo4+limnut)
              fnutlim = limnut/(ackpo4(i)+limnut)
+             print*,' fnutlim: ',fnutlim
 
 ! The growth rate of phytoplankton: light*nutrient limitation.
 ckm           phygrow0 = TACmuphy*PHY*MIN(flightlim,fnutlim)
 ckm           mu = phygrow0/PHY ! Growth rate in d-1 (Tata 200715)
              phygrow0 = TACmuphy*pbiomass(i)*MIN(flightlim,fnutlim)
              mu = phygrow0/pbiomass(i) ! Growth rate in d-1 (Tata 200715)
+             print*,' phygrow0, mu: ',phygrow0, mu
 
 ! Make sure not to take up more nutrients than available.
 ckm             phygrow = MIN(limnut,phygrow0*bgc_dt)/bgc_dt
@@ -563,6 +580,7 @@ ckm             phygrow=0.0d0
              phygrow(i)=0.0d0
 
            endif !limnut
+           print*,' phygrow: ',phygrow
 
 ! The exudation of phytoplankton
 ckm         phyexu = AClambda * PHY
@@ -571,6 +589,7 @@ ckm         phyexu = AClambda * PHY
 ! Other losses of phytoplankton       
 ckm         phyloss = AComni * PHY * PHY
            phyloss(i) = AComni(i) * pbiomass(i) * pbiomass(i)
+           print*,' phyexu, phyloss: ',phyexu, phyloss
 
            if(ZOO.gt.0.0d0) then                     
 
@@ -587,6 +606,7 @@ ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
               graz=0.0d0
 
            endif !ZOO
+           print*,' graz0, graz: ',graz0, graz
 
         else !PHY < 0
 
@@ -598,8 +618,6 @@ ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
 
         endif !PHY
 
-!        print*,'KM: in BGC_MODEL D...after PHY>0)'
-        
         if (i.eq.npft) then
         
            if(ZOO.gt.0.0d0) then              
@@ -621,7 +639,10 @@ ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
         endif
 
         grazt  = grazt + graz   ! add grazing fluxes from the 2 PFTs
-        
+
+        print*,' zooexu, zooloss: ',zooexu,zooloss
+        print*,' grazt: ',grazt
+
 ! Relaxation of N:P to Redfield values (mimick cyanobacteria)
 ! KM do this only once for the last i index
 ckm        if(PO4.gt.vsafe) then
@@ -638,6 +659,8 @@ ckm        if(PO4.gt.vsafe) then
            nfixation = 0.0d0  
 
         endif 
+        print*,' nfixtfac, dinlim: ',nfixtfac,dinlim
+        print*,' nfixnfac, nfixation: ',nfixnfac, nfixation
 
 ! Phytoplankton C fluxes = P fluxes * rcp_det_ez
 #ifdef ORGCARBON
@@ -665,6 +688,9 @@ ckm               grazc = PHYC/bgc_dt
         endif
 
         grazct = grazct + grazc ! add grazing fluxes from the 2 PFTs          
+        print*,' phycgrow, phycexu: ',phycgrow,phycexu
+        print*,' phycloss, grazc: ',phycloss, grazc
+        print*,' grazct: ',grazct
 
 ! Zooplankton C fluxes = P fluxes * rcp_zoo
 ckm        if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
@@ -694,6 +720,8 @@ ckm           zooprel = ACeff*(graz - grazc/rcp_zoo) ! Excess P is released to D
             zooloss = 0.0d0
             graz = 0.0d0
         endif
+
+       print*,' zoocrel, zooprel: ',zoocrel, zooprel
 #endif       
 
 
@@ -737,12 +765,10 @@ ckm     &        + (1.0d0-graztodop)*(phyexu+zooloss)
         todet(k)=todet(k) + (1.0d0-graztodop)*(1.0d0-ACeff)*graz 
      &        + (1.0d0-graztodop)*(phyexu(i)+zooloss)
 
-!        print*,'KM: in BGC_MODEL E'
-!        print*,'phygrow, zooexu: ',phygrow, zooexu
-!        print*,'graz,phyexu: ',graz,phyexu
-!        print*,'phyloss,zooloss: ',phyloss,zooloss
-!        stop
-        
+        print*,' k, topo4, todop: ',k, topo4(k),todop(k)
+        print*,' tooxy, todin: ', tooxy(k),todin(k)
+        print*,' tophy, tozoo: ', tophy(k,i),tozoo(k)
+        print*,' todet: ',todet(k)
         
 ! Collect all the carbon terms in the euphotic zone
 
@@ -770,7 +796,11 @@ ckm     &           + zoocrel*(1.0d0-par_excrtodoc)
         topoc(k) =topoc(k) + (1.0d0-graztodop)*(1.0d0-ACeff)*grazc
      &           + (1.0d0-graztodop)*(phycexu(i)+zoocloss)
      &           + zoocrel*(1.0d0-par_excrtodoc) 
-        
+
+        print*,'todic, todoc: ',todic(k),todoc(k)
+        print*,'tophyc, tozooc: ', tophyc(k),tozooc(k)
+        print*,'topoc: ',topoc(k)
+
 ! Adjustments on P content of zooplankton and DOP and POP 
 ckm        if(zooprel.gt.0.0d0) then 
 ckm           tozoo(k) = tozoo(k) - zooprel
@@ -807,31 +837,9 @@ ckm        f11_out(k) = rcp_zoo
                 
 #endif        
        
-       ENDDO !loop over PFTs (npft)
-
-      if (k.eq.3) then
-         print*,'model after npft loop: k, i:,', k,i
-         print*,' PHY: ', PHY
-         print*,' plambda: ', plambda
-         print*,' ACkpo4: ', ACkpo4
-         print*,' AComni: ', AComni
-         print*,' AClambda: ', AClambda
-         print*,' ACmuphy: ', ACmuphy
-         print*,' tophy(k,:): ', tophy(k,:)
-         print*,' phygrow: ', phygrow
-         print*,' phyexu: ', phyexu
-         print*,' phyloss: ', phyloss
-#ifdef ORGCARBON
-         print*,' PHYC: ', PHYC
-#endif
-#ifdef FLEXCP         
-         print*,' cp_phyto: ', cp_phyto
-
-#endif
+ 1100  ENDDO                     !loop over PFTs (npft)
          
-      endif
-     
-      ENDDO                     !loop over euphotic zone (bgc_keuphloc)
+ 1000 ENDDO                      !loop over euphotic zone (bgc_keuphloc)
 
 
 ! Explicit sinking of detritus in seperate loop. 
@@ -957,15 +965,18 @@ ckm        f11_out(k) = rcp_zoo
 !  PROCESSES AFFECTING THE ENTIRE WATER COLUMN
 !  PROCESSES AFFECTING THE ENTIRE WATER COLUMN
  
-      DO K=1,bgc_kloc
+      DO 7000 K=1,bgc_kloc
  
         DOP  = MAX(bgc_tracer(k,idop)-alimit*alimit,0.0d0)
         PHY  = MAX(bgc_tracer(k,iphy)-alimit*alimit,0.0d0)
         ZOO  = MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
         DET  = MAX(bgc_tracer(k,idet)-alimit*alimit,0.0d0)
+
+        pbiomass = PHY
  
 #ifdef PFT
         PHY2 = MAX(bgc_tracer(k,iphy2)-alimit*alimit,0.0d0)
+        pbiomass(2) = PHY2
 #endif
  
 #ifdef ORGCARBON
@@ -974,10 +985,13 @@ ckm        f11_out(k) = rcp_zoo
         PHYC = MAX(bgc_tracer(k,iphyc)
      &               -alimit*alimit*rcp_det_ez(1),0.0d0)
         ZOOC = MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp_zoo,0.0d0)
+
+        cbiomass = PHYC
+
 #ifdef PFT
         PHYC2= MAX(bgc_tracer(k,iphyc2)
      &               -alimit*alimit*rcp_det_ez(2),0.0d0)
-        
+        cbiomass(2) = PHYC2        
 #endif
 #endif
       
@@ -1078,74 +1092,83 @@ c restrict anaerobic processes to regions with low oxygen concentration
 c  In original MOPS phymort and zoomort were included inside SMS equation      
 c  Now mortality terms are explicity written  
  
-      do i=1,npft
-         if(pbiomass(i).gt.0.0d0) then
-            phymort(i) = plambda(i)*pbiomass(i)
-         else
-            phymort(i) = 0.0d0
-         endif
-      enddo
+        do i=1,npft
+ckm        if(PHY.gt.0.0d0) then
+           if(pbiomass(i).gt.0.0d0) then
+              phymort(i) = plambda(i)*pbiomass(i)
+           else
+              phymort(i) = 0.0d0
+           endif
+        enddo
               
-      if(ZOO.gt.0.0d0) then
-         zoomort = zlambda*ZOO
-      else
-         zoomort = 0.0d0
-      endif
- 
+        if(ZOO.gt.0.0d0) then
+           zoomort = zlambda*ZOO
+        else
+           zoomort = 0.0d0
+        endif
+
+        print*,'water column processes...'
+        print*,' bgc_kloc, phymort, zoomort: ',k,phymort,zoomort
+
 #ifdef ORGCARBON
-      do i=1,npft
-         if(pbiomass(i).gt.0.0d0 .AND. cbiomass(i).gt.0.0d0) then
-            phycmort(i) = phymort(i)*(cbiomass(i)/pbiomass(i))
-         else                   ! PHY < 0.0 and/or PHYC < 0.0 
-            phycmort(i) = 0.0d0
-            phymort(i) = 0.0d0
-         endif
-      enddo
+        do i=1,npft
+ckm        if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then
+           if(pbiomass(i).gt.0.0d0 .AND. cbiomass(i).gt.0.0d0) then
+              phycmort(i) = phymort(i)*(cbiomass(i)/pbiomass(i))
+           else                 ! PHY < 0.0 and/or PHYC < 0.0 
+              phycmort(i) = 0.0d0
+              phymort(i) = 0.0d0
+           endif
+        enddo
       
-      if(ZOO.gt. 0.0d0 .AND. ZOOC.gt.0.0d0) then
-         zoocmort = zoomort*(ZOOC/ZOO)
-      else ! PHY < 0.0 and/or ZOOC < 0.0d0
-         zoocmort = 0.0d0
-         zoomort = 0.0d0
-      endif
+        if(ZOO.gt. 0.0d0 .AND. ZOOC.gt.0.0d0) then
+           zoocmort = zoomort*(ZOOC/ZOO)
+        else                    ! PHY < 0.0 and/or ZOOC < 0.0d0
+           zoocmort = 0.0d0
+           zoomort = 0.0d0
+        endif
+        print*,'  phycmort, zoocmort: ',phycmort,zoocmort
 #endif
 
+        !stop
+      
 ! ----------------------------------------------------------------
 ! Putting all the terms together to calculate SMS     
       
-      topo4(k)=topo4(k)+remindop+remindet+denitdop+denitdet  
-      todop(k)=todop(k)-remindop-denitdop                    
+        topo4(k)=topo4(k)+remindop+remindet+denitdop+denitdet  
+        todop(k)=todop(k)-remindop-denitdop                    
 ckm     &                 +phymort      
      &                 +sum(phymort)      
      &                 +zoomort
-      tooxy(k)=tooxy(k)-(remindop+remindet)*ro2ut            
+        tooxy(k)=tooxy(k)-(remindop+remindet)*ro2ut            
 ckm      tophy(k)=tophy(k)-phymort
-      do i=1,npft
-         tophy(k,i)=tophy(k,i)-phymort(i)
-      enddo      
-      tozoo(k)=tozoo(k)-zoomort
-      todet(k)=todet(k)-remindet-denitdet                              
-      todin(k)=todin(k)+(remindop+remindet)*rnp               
+        do i=1,npft
+           tophy(k,i)=tophy(k,i)-phymort(i)
+        enddo      
+        tozoo(k)=tozoo(k)-zoomort
+        todet(k)=todet(k)-remindet-denitdet                              
+        todin(k)=todin(k)+(remindop+remindet)*rnp               
      &                 -(denitdop+denitdet)*rhno3ut             
  
 #ifdef ORGCARBON
-      todic(k) =todic(k)+remindoc+reminpoc+denitdoc+denitpoc
-      todoc(k) = todoc(k)-remindoc-denitdoc
+        todic(k) =todic(k)+remindoc+reminpoc+denitdoc+denitpoc
+        todoc(k) = todoc(k)-remindoc-denitdoc
 ckm     &                 +phycmort
      &                 +sum(phycmort)
      &                 +zoocmort      
-      do i=1,npft
-         tophyc(k,i)=tophyc(k,i)-phycmort(i)     
-      enddo
-      tozooc(k)=tozooc(k)-zoocmort    
-      topoc(k)=topoc(k)-reminpoc-denitpoc
+        do i=1,npft
+           tophyc(k,i)=tophyc(k,i)-phycmort(i)     
+        enddo
+        tozooc(k)=tozooc(k)-zoocmort    
+        topoc(k)=topoc(k)-reminpoc-denitpoc
 #endif
  
-      f4_out(k) = f4_out(k) + (remindop+remindet)*bgc_dt
-      f7_out(k) = f7_out(k) + (denitdop+denitdet)*rhno3ut*bgc_dt
-    
-      ENDDO
- 
+        f4_out(k) = f4_out(k) + (remindop+remindet)*bgc_dt
+        f7_out(k) = f7_out(k) + (denitdop+denitdet)*rhno3ut*bgc_dt
+        
+ 7000 ENDDO
+
+      
 ! RESUPPLY OF BURIED MATTER VIA RIVER RUNOFF OR VIA SURFACE
 ! RESUPPLY OF BURIED MATTER VIA RIVER RUNOFF OR VIA SURFACE
 ! RESUPPLY OF BURIED MATTER VIA RIVER RUNOFF OR VIA SURFACE
@@ -1174,7 +1197,7 @@ ckm     &                 +phycmort
 ! UPDATE MASS CONCENTRATIONS 
 ! UPDATE MASS CONCENTRATIONS 
 
-      DO K=1,bgc_kloc
+      DO 8000 K=1,bgc_kloc
  
 ! Update tracer concentrations, by adding the fluxes scaled by 
 ! time step length.
@@ -1208,7 +1231,8 @@ ckm     &     tophy(k)*bgc_dt
          bgc_tracer(k,ialk)= bgc_tracer(k,ialk)  +
      &       0.0d0
 #endif      
- 
+
+         
 #ifdef ORGCARBON
          bgc_tracer(k,idic)= bgc_tracer(k,idic)  +
      &        todic(k)*bgc_dt + rcp*runoff(k)*bgc_dt
@@ -1234,7 +1258,7 @@ ckm     &     tophyc(k)*bgc_dt
      &        + rcp*runoff(k)*bgc_dt 
 #endif
  
-      ENDDO ! end update tracer concentrations
+ 8000 ENDDO                     ! end update tracer concentrations
  
       bgc_tracer(1,ioxy)= bgc_tracer(1,ioxy) +   
      &     o2gasex/bgc_dz(1)*bgc_dt              
@@ -1255,8 +1279,15 @@ ckm     &     tophyc(k)*bgc_dt
 !      &       alkchem(k)*bgc_dt    
 !       enddo
 #endif
-      ENDDO                     !internal time loop
- 
+
+      print*,'updating tracer conc...bgc_kloc: ',bgc_kloc
+      print*,' bgc_tracer(bgc_kloc,1:bgc_ntracer): '
+      print*, bgc_tracer(bgc_kloc,1:bgc_ntracer)
+
+
+ 9999 ENDDO                     !internal time loop
+
+      
 ! For now, I am happy to take tracer concentration at the end of each time loop
 ! for computation of misfit; I might as well sum it up and divide by the number
 ! of time steps
