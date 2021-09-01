@@ -27,10 +27,10 @@ c the indices of tracers
 #ifndef CARBON
 
 #ifndef PFT
-      ! MOPS (P-based, 7 tracers)
+      ! MOPS (P-based, 7 tracers...this non-C MOPS was never run)
       PARAMETER(bgc_ntracer=7)
 #else
-      ! MOPS + PFT (still P-based)
+      ! MOPS + PFT (still P-based...again never run)
       INTEGER iphy2=8
       PARAMETER(bgc_ntracer=8)
 #endif
@@ -39,9 +39,11 @@ c the indices of tracers
 #else
 ! else CARBON
       
-      ! MOPS + CARBON
-      INTEGER idic,ialk,iphyc,izooc
-      PARAMETER(idic=8,ialk=9,iphyc=10,izooc=11)
+      ! MOPS + CARBON (just mops...Kriest always had CARBON and called it MOPS)
+      ! INTEGER idic,ialk,iphyc,izooc
+      ! PARAMETER(idic=8,ialk=9,iphyc=10,izooc=11)
+      INTEGER idic,ialk
+      PARAMETER(idic=8,ialk=9)
       ! connect carbon exchange and P-based BGC
       real*8 ocmip_alkfac,ocmip_silfac
       COMMON/CO2SURFACE/ocmip_alkfac,ocmip_silfac
@@ -49,12 +51,14 @@ c the indices of tracers
 #ifndef ORGCARBON
       
 #ifndef PFT
-      ! MOPS + CARBON
-      PARAMETER(bgc_ntracer=11)
+      ! MOPS + CARBON (again just mops of Kriest)
+      PARAMETER(bgc_ntracer=9)
 #else
-      ! MOPS + CARBON + PFT
-      INTEGER iphy2,iphyc2
-      PARAMETER(bgc_ntracer=13)
+      ! MOPS + CARBON + PFT (my PFT-enabled mops)
+      ! INTEGER iphy2,iphyc2
+      ! PARAMETER(bgc_ntracer=13)
+      INTEGER iphy2
+      PARAMETER(bgc_ntracer=10)
 #endif
 ! ends PFT      
 
@@ -62,15 +66,15 @@ c the indices of tracers
 ! else ORGCARBON
       
 #ifndef PFT
-      ! MOPS + CARBON + ORGCARBON
+      ! MOPS + CARBON + ORGCARBON (TT's MOPS w/ typically flexible C:P, mops_cp)
       PARAMETER(bgc_ntracer=13)
-      INTEGER idoc,ipoc
-      PARAMETER(idoc=12,ipoc=13)
+      INTEGER idoc,ipoc,iphyc,izooc
+      PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13)
 #else
-      ! MOPS + CARBON + ORGCARBON + PFT
+      ! MOPS + CARBON + ORGCARBON + PFT (my PFT-enabled mops_cp; ORDER SHOULD MATCH THE RUNSCRIPT!)
       PARAMETER(bgc_ntracer=15)
-      INTEGER idoc,ipoc,iphy2,iphyc2
-      PARAMETER(idoc=12,ipoc=13,iphy2=14,iphyc2=15)
+      INTEGER idoc,ipoc,iphyc,izooc,iphy2,iphyc2
+      PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13,iphy2=14,iphyc2=15)
 #endif
       
 #endif

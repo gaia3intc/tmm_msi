@@ -92,12 +92,14 @@ C     Copy physics and geometry
 
 C Assign the tracers in "wet" grid boxes
 #ifdef CARBON
-	  sph=localph
-	  emp=localEmP
-	  pco2atm=localpCO2atm
-	  dicgave=DICglobalavg
-C	  alkgave=ALKglobalavg
+      sph=localph
+      emp=localEmP
+      pco2atm=localpCO2atm
+      dicgave=DICglobalavg
+C     alkgave=ALKglobalavg
 #endif
+
+!      print*,'KM: calling BGC_MODEL, npft: ', npft
 
       CALL BGC_MODEL(bgc_kloc,bgc_dz,
 #ifdef READ_MARTINB
