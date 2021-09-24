@@ -84,7 +84,8 @@ PetscInt numBGCParams = 0;
 char bgcParamsFile[PETSC_MAX_PATH_LEN];
 
 #ifdef ASCIIPARAMS
-PetscScalar bgcparams[20];
+/* KM PetscScalar bgcparams[20]; */
+PetscScalar bgcparams[28];
 FILE *fpparams;
 #else
 PetscScalar *bgcparams;

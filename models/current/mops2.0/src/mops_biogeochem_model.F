@@ -99,8 +99,9 @@ C Assign the tracers in "wet" grid boxes
 C     alkgave=ALKglobalavg
 #endif
 
-!      print*,'KM: calling BGC_MODEL, npft: ', npft
-
+!      print*,'mops_bgc_model...npft, Nrloc: ', npft,Nrloc
+!      Nrloc <16 for MIT2.8... # of wet grid boxes in the vertical at each location?
+      
       CALL BGC_MODEL(bgc_kloc,bgc_dz,
 #ifdef READ_MARTINB
      &               bgc_martinbc,bgc_zu,

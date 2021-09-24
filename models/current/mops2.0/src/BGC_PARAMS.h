@@ -5,7 +5,8 @@ C EVERYTHING RELATED TO THE MAIN BGC TRACER ARRAY, ITS INDICES AND TYPES
 
 c a dummy for the nominal number of vertical layers
       INTEGER bgc_ktotal
-      PARAMETER(bgc_ktotal=100)
+ckm      PARAMETER(bgc_ktotal=100) k=15 in mit2.8 and k=23 in ecco
+      PARAMETER(bgc_ktotal=25)
 
 c the total number of bgc tracers
       INTEGER bgc_ntracer
@@ -31,17 +32,15 @@ c the indices of tracers
       PARAMETER(bgc_ntracer=7)
 #else
       ! MOPS + PFT (still P-based...again never run)
-      INTEGER iphy2=8
+      INTEGER iphy2
+      PARAMETER(iphy2=8)
       PARAMETER(bgc_ntracer=8)
 #endif
 ! ends PFT
       
 #else
 ! else CARBON
-      
       ! MOPS + CARBON (just mops...Kriest always had CARBON and called it MOPS)
-      ! INTEGER idic,ialk,iphyc,izooc
-      ! PARAMETER(idic=8,ialk=9,iphyc=10,izooc=11)
       INTEGER idic,ialk
       PARAMETER(idic=8,ialk=9)
       ! connect carbon exchange and P-based BGC
@@ -55,9 +54,8 @@ c the indices of tracers
       PARAMETER(bgc_ntracer=9)
 #else
       ! MOPS + CARBON + PFT (my PFT-enabled mops)
-      ! INTEGER iphy2,iphyc2
-      ! PARAMETER(bgc_ntracer=13)
       INTEGER iphy2
+      PARAMETER(iphy2=10)
       PARAMETER(bgc_ntracer=10)
 #endif
 ! ends PFT      
@@ -67,14 +65,14 @@ c the indices of tracers
       
 #ifndef PFT
       ! MOPS + CARBON + ORGCARBON (TT's MOPS w/ typically flexible C:P, mops_cp)
-      PARAMETER(bgc_ntracer=13)
       INTEGER idoc,ipoc,iphyc,izooc
       PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13)
+      PARAMETER(bgc_ntracer=13)
 #else
       ! MOPS + CARBON + ORGCARBON + PFT (my PFT-enabled mops_cp; ORDER SHOULD MATCH THE RUNSCRIPT!)
-      PARAMETER(bgc_ntracer=15)
       INTEGER idoc,ipoc,iphyc,izooc,iphy2,iphyc2
       PARAMETER(idoc=10,ipoc=11,iphyc=12,izooc=13,iphy2=14,iphyc2=15)
+      PARAMETER(bgc_ntracer=15)
 #endif
       
 #endif
@@ -149,7 +147,7 @@ c added by T.Tanioka (Nov 2020)
 ckm      real*8 par_bio_pc0,par_bio_po4_ref,par_bio_no3_ref,
       real*8 par_bio_pc0(maxpft),par_bio_po4_ref,par_bio_no3_ref,
      &       par_bio_temp_ref,par_bio_light_ref,
-c     &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
+ckm     &       par_bio_spc_p,par_bio_spc_n,par_bio_spc_i,par_bio_spc_t,
      &       par_bio_spc_p(maxpft),par_bio_spc_n(maxpft),
      &       par_bio_spc_i(maxpft),par_bio_spc_t(maxpft),
      &       maxcp,mincp,

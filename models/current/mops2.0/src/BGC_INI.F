@@ -131,25 +131,30 @@ c       subdin = 4.0d0 !no denitrification below this level
 	
 ! PFT specific parameters for vectorized arrays; others are the same for all PFTs (KM 8/2021)	
 #ifdef PFT
-	if (npft .eq. 2) then
-	   ACmuphy(1)  = 0.1d0	!PFT1 max. growth rate [1/day] for PFT1 = eukaryote
-	   ACmuphy(2)  = 1.0d0	!PFT2 = cyanobacteria
-	   ACkpo4(1)   = 0.50d0	!PFT1 half-saturation constant for PO4 uptake [mmol P/m3] 
-	   ACkpo4(2)   = 0.05d0	!PFT2
-	   AClambda(1) = 0.03d0	!PFT1 exudation rate [1/day]
-	   AClambda(2) = 0.03d0	!PFT2
-	   AComni(1)   = 0.0d0	!PFT1 density dep. loss rate [m3/(mmol P * day)]
-	   AComni(2)   = 0.0d0	!PFT2
-	   plambda(1)  = 0.01d0	!PFT1 phytoplankton mortality
-	   plambda(2)  = 0.01d0	!PFT2
-	endif
+ckm	if (npft .eq. 2) then   (km: weird that npft=0 here even after biogem_params.txt is read)
+
+!          ACmuphy(1)  = 0.1d0	
+!	   ACmuphy(1)  = 1.0d0	
+!	   ACkpo4(1)   = 0.5d0	!PFT1 half-saturation constant for PO4 uptake [mmol P/m3] 
+!	   AClambda(1) = 0.03d0	!PFT1 exudation rate [1/day]
+!	   AComni(1)   = 0.0d0	!PFT1 density dep. loss rate [m3/(mmol P * day)]
+!	   plambda(1)  = 0.01d0	!PFT1 phytoplankton mortality
+
+	   ACmuphy(2)  = 0.2d0	
+	   ACkpo4(2)   = 0.1d0
+!	   AClambda(2) = 0.03d0	!PFT2
+!	   AComni(2)   = 0.0d0	!PFT2
+!          plambda(2)  = 0.01d0	!PFT2
+	   
+ckm	endif
 #endif	
 
-!	print*,'ACmuphy: ',ACmuphy
-!	print*,'ACkpo4: ',ACkpo4
-!	print*,'AClambda: ',AClambda
-!	print*,'AComni: ', AComni
-!	print*,'plambda: ',plambda
+!	print*,'BGC_INI...what is npft? ',npft
+!	print*,' ACmuphy: ',ACmuphy
+!	print*,' ACkpo4: ',ACkpo4
+!	print*,' AClambda: ',AClambda
+!	print*,' AComni: ', AComni
+!	print*,' plambda: ',plambda
 !	stop
 	
 ! Zooplankton parameters
@@ -216,35 +221,6 @@ C beside sinking and remineralization might play a role in the euphotic zone.
       enddo
 
 #endif
-
- 
-!! KM: prints out so many times...but good to check during debugging
-!#ifndef PFT
-!
-!#ifdef ORGCARBON
-!#ifndef FLEXCP
-!        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON'
-!#else
-!        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON + FLEXCP'
-!#endif
-!#else 
-!        print*, 'in BGC_INI: MOPS + (CARBON)'
-!#endif        
-!        
-!#else
-!
-!#ifndef ORGCARBON      
-!        print*, 'in BGC_INI: MOPS + PFT'
-!#else
-!#ifndef FLEXCP      
-!        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON + PFT'
-!#else
-!        print*, 'in BGC_INI: MOPS + (CARBON) + ORGCARBON + PFT + FLEXCP'
-!#endif
-!#endif
-!        
-!#endif
-	
 	
 	
       return

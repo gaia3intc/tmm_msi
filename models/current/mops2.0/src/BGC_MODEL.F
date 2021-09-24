@@ -104,7 +104,6 @@ C flux_bury_c   burial of C in sediment [mmol C/m2] (by T.Tanioka)
 
 ! arrays to store the sms and other fluxes
       real*8 topo4(bgc_ktotal)
-ckm      real*8 tophy(bgc_ktotal)
       real*8 tophy(bgc_ktotal,maxpft)
       real*8 tozoo(bgc_ktotal)
       real*8 todop(bgc_ktotal)
@@ -118,7 +117,6 @@ ckm      real*8 tophy(bgc_ktotal)
       real*8 fluxc(bgc_ktotal)
       real*8 fdivc(bgc_ktotal)
       real*8 todoc(bgc_ktotal),topoc(bgc_ktotal)                    
-ckm      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)                  
       real*8 tophyc(bgc_ktotal,maxpft),tozooc(bgc_ktotal)                  
 #endif
     
@@ -131,8 +129,6 @@ ckm      real*8 tophyc(bgc_ktotal),tozooc(bgc_ktotal)
 ! coefficients for biology; maxpft array'ed by KM (8/2021)
       real*8 attlim,atten,flight,flightlim,limnut,fnutlim,parfrac
       real*8 PO4,DOP,OXY,PHY,ZOO,DET,DIN
-ckm      real*8 PO4,DOP,OXY,PHY(maxpft),ZOO,DET,DIN
-ckm      real*8 phygrow0,phygrow,phyexu,phyloss,detloss
       real*8 phygrow0,detloss
       real*8 phygrow(maxpft),phyexu(maxpft),phyloss(maxpft)
       real*8 graz0,graz,zooexu,zooloss
@@ -153,7 +149,6 @@ ckm      real*8 phygrow0,phygrow,phyexu,phyloss,detloss
 
 ! New coefficiets for biology
 ! Added by T.Tanioka (Nov 2020)
-ckm      real*8 phymort,zoomort 
       real*8 phymort(maxpft),zoomort 
       real*8 flux_old,fdiv_old 
       real*8 mu                
@@ -174,9 +169,7 @@ ckm      real*8 phymort,zoomort
 ! organic carbon with flexible CNP 
 ! Added by T.Tanioka (Nov 2020)      
 #ifdef ORGCARBON   
-ckm      real*8 phycmort,zoocmort 
       real*8 phycmort(maxpft),zoocmort 
-ckm      real*8 phycexu,phycloss,phycgrow
       real*8 phycexu(maxpft),phycloss(maxpft),phycgrow(maxpft)
       real*8 grazc,grazc0 
       real*8 zoocrel,zooprel                 
@@ -191,14 +184,11 @@ ckm      real*8 phycexu,phycloss,phycgrow
       real*8 PHYC2
 #endif
 #endif
-      real*8 grazt, grazct
       
 ! Flexible C:P of Phytoplankton and Zooplankton
 ! Added by T.Tanioka (Nov 2020); modified by KM (8/2021)      
 #ifdef FLEXCP
-ckm      real*8 rcp_phyto,cp_phyto
       real*8 rcp_phyto(maxpft),cp_phyto(maxpft)
-ckm      real*8 rcp_det_ez(maxpft),rcp_zoo    ! moved to BGC_PARAMS.h
 #ifdef PFT
       real*8 cp_phyto_aggregate
 #endif
@@ -221,44 +211,35 @@ ckm      real*8 rcp_det_ez(maxpft),rcp_zoo    ! moved to BGC_PARAMS.h
         f6_out(k)=0.0d0 
         f7_out(k)=0.0d0
         f8_out(k)=0.0d0
-ckm#ifdef ORGCARBON
-ckm        f9_out(k)=0.0d0
-ckm        f10_out(k)=0.0d0
-ckm        f11_out(k)=0.0d0
-ckm#endif
-ckm#ifdef PFT
-ckm        f12_out(k)=0.0d0
-ckm        f13_out(k)=0.0d0
-ckm#endif
 
 #ifndef PFT
 
 #ifdef ORGCARBON
 #ifndef FLEXCP
-        !print*, 'MOPS + (CARBON) + ORGCARBON'
+        ! MOPS + (CARBON) + ORGCARBON
         f9_out(k)=0.0d0
 #else
-        !print*, 'MOPS + (CARBON) + ORGCARBON + FLEXCP'
+        ! MOPS + (CARBON) + ORGCARBON + FLEXCP
         f9_out(k)=0.0d0
         f10_out(k)=0.0d0
         f11_out(k)=0.0d0
 #endif
 #else 
-        !print*, 'MOPS + (CARVON)'
+        ! MOPS + (CARBON)
 #endif        
         
 #else
 
 #ifndef ORGCARBON      
-        !print*, 'MOPS + PFT'
+        ! MOPS + PFT
         f9_out(k)=0.0d0
 #else
 #ifndef FLEXCP      
-        !print*, 'MOPS + (CARBON) + ORGCARBON + PFT'
+        ! MOPS + (CARBON) + ORGCARBON + PFT
         f9_out(k)=0.0d0
         f10_out(k)=0.0d0
 #else
-        !print*, 'MOPS + (CARBON) + ORGCARBON + PFT + FLEXCP'
+        ! MOPS + (CARBON) + ORGCARBON + PFT + FLEXCP
         f9_out(k)=0.0d0
         f10_out(k)=0.0d0
         f11_out(k)=0.0d0
@@ -306,8 +287,6 @@ ckm#endif
             wdet_c(k) = detwb_c + (bgc_zu(k)+bgc_zu(k+1))*0.5d0*detwa_c
           enddo
         endif
-
-        !print*,' wdet_c: ',wdet_c
 #endif
 
         
@@ -322,7 +301,6 @@ C INTERNAL TIME LOOP FOR BGC
         topo4(k)=0.0d0
         todop(k)=0.0d0
         tooxy(k)=0.0d0
-ckm        tophy(k)=0.0d0
         tophy(k,:)=0.0d0
         tozoo(k)=0.0d0
         todet(k)=0.0d0
@@ -333,7 +311,6 @@ ckm        tophy(k)=0.0d0
         todic(k)=0.0d0
         todoc(k)=0.0d0
         topoc(k)=0.0d0
-ckm        tophyc(k)=0.0d0
         tophyc(k,:)=0.0d0
         tozooc(k)=0.0d0
         fdivc(k) = 0.0d0
@@ -413,7 +390,10 @@ ckm        tophyc(k)=0.0d0
         ciz(k)=ciz(k-1)*exp(-atten)
         f8_out(k) = ciz(k)
 
+        !print*,' k inside loop: ', k
+
       ENDDO
+      !print*,' k after loop: ', k...wow k increments by 1 after the last  k...didn't know that
 
 ! Calculating C:P of Phytoplankton and Zooplankton at k = 1
 ! Assumes C:P is constant in the euphotic zone
@@ -424,33 +404,40 @@ ckm        tophyc(k)=0.0d0
       DIN = bgc_tracer(1,idin)
       PHY = MAX(bgc_tracer(1,iphy) -alimit*alimit,0.0d0)
       PHYC= MAX(bgc_tracer(1,iphyc)-alimit*alimit*117.0d0,0.0d0)
-      pbiomass(1) = PHY
-      cbiomass(1) = PHYC
+      pbiomass = PHY
+      cbiomass = PHYC
 
 #ifdef PFT
-      PHY2 =MAX(bgc_tracer(k,iphy2) -alimit*alimit,0.0d0)
-      PHYC2=MAX(bgc_tracer(k,iphyc2)-alimit*alimit*117.0d0,0.0d0)
+      PHY2 =MAX(bgc_tracer(1,iphy2) -alimit*alimit,0.0d0)
+      PHYC2=MAX(bgc_tracer(1,iphyc2)-alimit*alimit*117.0d0,0.0d0)
       pbiomass(2) = PHY2
       cbiomass(2) = PHYC2
 #endif
 
-      !print*,' if FLEXCP: PHY and p/cbiomass: ', PHY,pbiomass,cbiomass
+      !print*,''
+      !print*,'eutrophic processes...pbiomass: ', pbiomass
+      !print*,' cbiomass: ', cbiomass
 
       ! Calculate C:P Phytoplankton
       if(PO4.gt.vsafe .AND. DIN.gt.vsafe) then
-          CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(k),bgc_theta(k),
+ckm          CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(k),bgc_theta(k),
+ckm     &        rcp_phyto)
+          CALL CALC_CP_PHYTO(cp_option,PO4,DIN,ciz(1),bgc_theta(1),
      &        rcp_phyto)
       else
           rcp_phyto = rcp
       endif
       rcp_det_ez = rcp_phyto
-      
+
+     
+      !print*,' rcp_phyto: ',rcp_phyto
+
       do i=1,npft
-      
 ckm         if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then
          if(pbiomass(i).gt.0.0d0 .AND. cbiomass(i).gt.0.0d0) then
 ckm            cp_phyto(i) = PHYC/PHY
             cp_phyto(i) = cbiomass(i)/pbiomass(i)
+            
             if(cp_phyto(i).gt.maxcp) then
                cp_phyto(i) = maxcp
             elseif(cp_phyto(i).lt.mincp) then
@@ -459,8 +446,8 @@ ckm            cp_phyto(i) = PHYC/PHY
          else
             cp_phyto(i) = rcp
          endif
-
       enddo
+      !print*,' cp_phyto for zoo_cp: ',cp_phyto
            
       ! Calculate C:P Zooplankton      
 #ifndef PFT
@@ -468,6 +455,7 @@ ckm            cp_phyto(i) = PHYC/PHY
 #else
       ! KM: normalize by PHYC which is closer to biomass than PHY
       cp_phyto_aggregate = sum(cp_phyto*cbiomass)/sum(cbiomass)   
+      !print*,' cp_phyto_aggregate: ',cp_phyto_aggregate
       CALL CALC_CP_ZOO(cp_phyto_aggregate,rcp_zoo)
 #endif
 
@@ -476,7 +464,7 @@ ckm            cp_phyto(i) = PHYC/PHY
       rcp_zoo = rcp
 #endif      
 
-      !print*,' rcp_det_ez, rcp_zoo: ',rcp_det_ez, rcp_zoo
+      !print*,' rcp_zoo: ',rcp_zoo
       
 ! Biogeochemical fluxes in euphotic zone and their export
 ! Take care of negative tracer concentrations.
@@ -486,20 +474,21 @@ ckm            cp_phyto(i) = PHYC/PHY
        PO4=MAX(bgc_tracer(k,ipo4)-alimit*alimit,0.0d0)
        DIN=MAX(bgc_tracer(k,idin)-alimit*alimit,0.0d0)
        PHY=MAX(bgc_tracer(k,iphy)-alimit*alimit,0.0d0)
-ckm       PHY(1)=MAX(bgc_tracer(k,iphy)-alimit*alimit,0.0d0)
        ZOO=MAX(bgc_tracer(k,izoo)-alimit*alimit,0.0d0)
-ckm       attlim=MAX(PHY,0.0d0)
        pbiomass = PHY
+
+       !print*,' k level, PO4: ',k, PO4
+       !print*,' DIN, PHY: ',DIN, PHY
 
 #ifdef PFT
        PHY2 =MAX(bgc_tracer(k,iphy2) -alimit*alimit,0.0d0)
        pbiomass(2) = PHY2
+       !print*,' PHY2: ',PHY2
 #endif
 
        attlim=MAX(MAXVAL(pbiomass),0.0d0)
 
-       !print*,'eutrophic processes...bgc_keuphloc, PO4: ',k, PO4
-       !print*,' DIN, PHY: ',DIN, PHY
+       !print*,' pbiomass: ',pbiomass
        !print*,' ZOO, attlim: ',ZOO, attlim
 
 #ifdef ORGCARBON     
@@ -510,32 +499,33 @@ ckm       attlim=MAX(PHY,0.0d0)
        ZOOC=MAX(bgc_tracer(k,izooc)-alimit*alimit*rcp_zoo,0.0d0)
        cbiomass = PHYC
 
-#ifdef PFT
-       PHYC2=MAX(bgc_tracer(k,iphyc2)-alimit*alimit*rcp_det_ez(2),0.0d0)
-       cbiomass(2) = PHYC2
-#endif
-
        !print*,' DOC, POC: ',DOC,POC
        !print*,' DIC, PHYC: ',DIC, PHYC
        !print*,' ZOOC: ',ZOOC
-#endif       
 
+#ifdef PFT
+       PHYC2=MAX(bgc_tracer(k,iphyc2)-alimit*alimit*rcp_det_ez(2),0.0d0)
+       cbiomass(2) = PHYC2
+       !print*,' PHYC2: ',PHYC2
+#endif
+#endif       
+       
        ! KM: Reset for each euphotic zone layer K (before npft loop)
-       grazt   = 0.0d0
-       phygrow = 0.0d0
+       phygrow = 0.0d0   ! probably not needed
        phyexu  = 0.0d0
-       phyloss = 0.0d0       
-       grazct  = 0.0d0
+       phyloss = 0.0d0
+       
+       nfixation = 0.0d0 ! probably not needed
        
        DO 1100 i=1,npft  
           
 ! Temperature dependence of phytoplankton growth (Eppley)
 ! this affects the light-half-saturation constant via acik=acmuphy/alpha
         tempscale = EXP(bgc_theta(k)/TempB)
-ckm        TACmuphy = ACmuphy*tempscale
         TACmuphy = ACmuphy(i)*tempscale
         TACik = ACik*tempscale       
 
+        !print*,''
         !print*,' NPFT loop: ',i
         !print*,' tempscale, TACmuphy, TACik: ',tempscale,TACmuphy,TACik
 
@@ -556,45 +546,36 @@ ckm       if(PHY.gt.0.0d0) then
            limnut = MIN(PO4,DIN/rnp) 
 
            if(limnut.gt.vsafe) then
-             !print*,' limnut: ',limnut
+              !print*,' limnut: ',limnut
 
 ! The nutrient limitation of phytoplankton
-ckm           fnutlim = limnut/(ackpo4+limnut)
-             fnutlim = limnut/(ackpo4(i)+limnut)
-             !print*,' fnutlim: ',fnutlim
+              fnutlim = limnut/(ackpo4(i)+limnut)
+              !print*,' ackpo4(i),fnutlim: ',ackpo4(i),fnutlim
 
 ! The growth rate of phytoplankton: light*nutrient limitation.
-ckm           phygrow0 = TACmuphy*PHY*MIN(flightlim,fnutlim)
-ckm           mu = phygrow0/PHY ! Growth rate in d-1 (Tata 200715)
-             phygrow0 = TACmuphy*pbiomass(i)*MIN(flightlim,fnutlim)
-             mu = phygrow0/pbiomass(i) ! Growth rate in d-1 (Tata 200715)
-             !print*,' phygrow0, mu: ',phygrow0, mu
+              phygrow0 = TACmuphy*pbiomass(i)*MIN(flightlim,fnutlim)
+              mu = phygrow0/pbiomass(i) ! Growth rate in d-1 (Tata 200715)
+              !print*,' phygrow0, mu: ',phygrow0, mu
 
 ! Make sure not to take up more nutrients than available.
-ckm             phygrow = MIN(limnut,phygrow0*bgc_dt)/bgc_dt
-             phygrow(i) = MIN(limnut,phygrow0*bgc_dt)/bgc_dt
+              phygrow(i) = MIN(limnut,phygrow0*bgc_dt)/bgc_dt
 
            else !limnut < vsafe
 
-ckm             phygrow=0.0d0
-             phygrow(i)=0.0d0
+              phygrow(i)=0.0d0
 
            endif !limnut
            !print*,' phygrow: ',phygrow
 
 ! The exudation of phytoplankton
-ckm         phyexu = AClambda * PHY
            phyexu(i) = AClambda(i) * pbiomass(i)
          
 ! Other losses of phytoplankton       
-ckm         phyloss = AComni * PHY * PHY
            phyloss(i) = AComni(i) * pbiomass(i) * pbiomass(i)
-           !print*,' phyexu, phyloss: ',phyexu, phyloss
 
            if(ZOO.gt.0.0d0) then                     
 
 ! Grazing of zooplankton, Holling III
-ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
               graz0=ACmuzoo*pbiomass(i)*pbiomass(i)
      &             /(ACkphy*ACkphy+pbiomass(i)*pbiomass(i))*ZOO
 
@@ -606,7 +587,6 @@ ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
               graz=0.0d0
 
            endif !ZOO
-           !print*,' graz0, graz: ',graz0, graz
 
         else !PHY < 0
 
@@ -617,6 +597,9 @@ ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
            mu        = 0.0d0 
 
         endif !PHY
+        !print*,' phyexu: ',phyexu
+        !print*,' phyloss: ',phyloss
+        !print*,' graz: ', graz
 
         if (i.eq.npft) then
         
@@ -637,15 +620,13 @@ ckm           graz0=ACmuzoo*PHY*PHY/(ACkphy*ACkphy+PHY*PHY)*ZOO
            zooloss = 0.0d0   
            
         endif
+        !print*,' zooexu, zooloss: ',zooexu,zooloss
 
         grazt  = grazt + graz   ! add grazing fluxes from the 2 PFTs
-
-        !print*,' zooexu, zooloss: ',zooexu,zooloss
         !print*,' grazt: ',grazt
 
 ! Relaxation of N:P to Redfield values (mimick cyanobacteria)
 ! KM do this only once for the last i index
-ckm        if(PO4.gt.vsafe) then
         if(i.eq.npft .AND. PO4.gt.vsafe) then
 
            ttemp = bgc_theta(k)
@@ -653,25 +634,22 @@ ckm        if(PO4.gt.vsafe) then
            dinlim = MAX(0.0d0,DIN)
            nfixnfac = MAX(0.0d0, 1.0d0-dinlim/(PO4*rnp))   ! original
            nfixation = nfixtfac*nfixnfac*nfix
+           !print*,' nfixtfac, dinlim: ',nfixtfac,dinlim
 
         else
 
            nfixation = 0.0d0  
 
-        endif 
-        !print*,' nfixtfac, dinlim: ',nfixtfac,dinlim
-        !print*,' nfixnfac, nfixation: ',nfixnfac, nfixation
+        endif
+        !print*,' nfixation: ',nfixation
 
 ! Phytoplankton C fluxes = P fluxes * rcp_det_ez
 #ifdef ORGCARBON
-ckm        if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then   
         if(pbiomass(i).gt.0.0d0 .AND. cbiomass(i).gt.0.0d0) then   
            phycgrow(i) = phygrow(i)*rcp_det_ez(i)
            phycexu(i)  = phyexu(i) *rcp_det_ez(i)
            phycloss(i) = phyloss(i)*rcp_det_ez(i)
            grazc       = graz      *rcp_det_ez(i)
-ckm           if(grazc.gt.PHYC/bgc_dt) then    
-ckm               grazc = PHYC/bgc_dt
            if(grazc.gt.cbiomass(i)/bgc_dt) then    
                grazc = cbiomass(i)/bgc_dt
                graz  = grazc/rcp_det_ez(i)
@@ -688,21 +666,19 @@ ckm               grazc = PHYC/bgc_dt
         endif
 
         grazct = grazct + grazc ! add grazing fluxes from the 2 PFTs          
-        !print*,' phycgrow, phycexu: ',phycgrow,phycexu
+        !print*,' phycgrow: ',phycgrow
+        !print*,' phycexu: ',phycexu
         !print*,' phycloss, grazc: ',phycloss, grazc
         !print*,' grazct: ',grazct
 
 ! Zooplankton C fluxes = P fluxes * rcp_zoo
-ckm        if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
-        if(i.eq.npft .AND. ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
+        if(ZOO.gt.0.0d0 .AND. ZOOC.gt.0.0d0) then   
 ! Flux adjustment for zooplankton due to consumer and predator grazing C flux mismatch
-!    - When food C:P > C:P Zoo (P-limited), cancel mismatch by adding extra C back to DOC and POC
-!    - When food C:P < C:P Zoo (C-limited), cancel mismatch by adding extra P back to DOP and POP
-ckm           grazc0 = ACeff*(grazc - graz*rcp_zoo)  ! Calculate C-demand deficit
-           grazc0 = ACeff*(grazt - grazt*rcp_zoo)  ! Calculate C-demand deficit
+!    - When food C:P > C:P Zoo (P-limited), cancel mismatch by Zoo releasing extra C back to DOC and POC
+!    - When food C:P < C:P Zoo (C-limited), cancel mismatch by Zoo releasing extra P back to DOP and POP
+           grazc0 = ACeff*(grazc - graz*rcp_zoo)  ! Calculate C-demand deficit
            zoocrel = grazc0                       ! Excess C is released to DOC pool 
-ckm           zooprel = ACeff*(graz - grazc/rcp_zoo) ! Excess P is released to DOP pool 
-           zooprel = ACeff*(grazt - grazct/rcp_zoo) ! Excess P is released to DOP pool 
+           zooprel = ACeff*(graz - grazc/rcp_zoo) ! Excess P is released to DOP pool 
            if(grazc0.le.0.0d0) then 
               zoocrel = 0.0d0       ! C-limited, No excess DOC release
            else
@@ -721,49 +697,33 @@ ckm           zooprel = ACeff*(graz - grazc/rcp_zoo) ! Excess P is released to D
             graz = 0.0d0
         endif
 
-       !print*,' zoocrel, zooprel: ',zoocrel, zooprel
+        !print*,' zoocexu, zoocloss: ',zooexu,zooloss
+        !print*,' zoocrel, zooprel: ',zoocrel, zooprel
 #endif       
 
-
 ! Photosynthesis, grazing, N-fixation stored in this array for diagnostic purposes only.
-ckm        f1_out(k) = f1_out(k)+phygrow*bgc_dt
-ckm        f2_out(k) = f2_out(k)+graz*bgc_dt
-ckm        f6_out(k) = f6_out(k)+nfixation*bgc_dt
-
         if (i.eq.1) then
-           f1_out(k) = f1_out(k) +phygrow(i)*bgc_dt
+           f1_out(k) = f1_out(k) + phygrow(i)*bgc_dt
 #ifdef PFT
         elseif (i.eq.2) then
-           f9_out(k) = f9_out(k)+phygrow(i)*bgc_dt
+           f9_out(k) = f9_out(k) + phygrow(i)*bgc_dt
 #endif
         endif
-        
-        f2_out(k)  = f2_out(k) +graz*bgc_dt
-        f6_out(k)  = f6_out(k) +nfixation*bgc_dt
-          
+
+        f2_out(k)  = f2_out(k) + graz*bgc_dt
+        f6_out(k)  = f6_out(k) + nfixation*bgc_dt
         
 ! Collect all euphotic zone fluxes in these arrays.
-ckm        topo4(k)=-phygrow+zooexu
-ckm        todop(k)= graztodop*(1.0d0-ACeff)*graz     
-ckm     &           +graztodop*(phyexu+zooloss)
-ckm     &           +phyloss                           
-ckm        tooxy(k)= tooxy(k)+(phygrow-zooexu)*ro2ut   
-ckm        todin(k)=topo4(k)*rnp + nfixation            
-ckm        tophy(k)= phygrow-graz-phyexu-phyloss
-ckm        tozoo(k)= ACeff*graz-zooexu-zooloss         
-ckm        todet(k) = (1.0d0-graztodop)*(1.0d0-ACeff)*graz 
-ckm     &        + (1.0d0-graztodop)*(phyexu+zooloss)
-
         topo4(k)=topo4(k) - phygrow(i)+zooexu
         todop(k)=todop(k) + graztodop*(1.0d0-ACeff)*graz     
-     &           +graztodop*(phyexu(i)+zooloss)
-     &           +phyloss(i)                           
+     &                    + graztodop*(phyexu(i)+zooloss)
+     &                    + phyloss(i)                           
         tooxy(k)=tooxy(k) + (phygrow(i)-zooexu)*ro2ut   
-        todin(k)=topo4(k)*rnp + nfixation            
+        todin(k)=todin(k) + (-phygrow(i)+zooexu)*rnp + nfixation
         tophy(k,i)= phygrow(i)-graz-phyexu(i)-phyloss(i)
-        tozoo(k)= ACeff*graz-zooexu-zooloss         
+        tozoo(k)=tozoo(k) +  ACeff*graz-zooexu-zooloss         
         todet(k)=todet(k) + (1.0d0-graztodop)*(1.0d0-ACeff)*graz 
-     &        + (1.0d0-graztodop)*(phyexu(i)+zooloss)
+     &                    + (1.0d0-graztodop)*(phyexu(i)+zooloss)
 
         !print*,' k, topo4, todop: ',k, topo4(k),todop(k)
         !print*,' tooxy, todin: ', tooxy(k),todin(k)
@@ -773,51 +733,27 @@ ckm     &        + (1.0d0-graztodop)*(phyexu+zooloss)
 ! Collect all the carbon terms in the euphotic zone
 
 #ifdef ORGCARBON
-ckm        todic(k)=-phycgrow+zoocexu
-ckm        todoc(k)= graztodop*(1.0d0-ACeff)*grazc
-ckm     &           +graztodop*(phycexu+zoocloss)
-ckm     &           +phycloss
-ckm     &           +zoocrel*par_excrtodoc
-ckm        tophyc(k)= phycgrow-grazc-phycexu-phycloss
-ckm        tozooc(k)=  ACeff*grazc-zoocexu-zoocloss
-ckm     &           -zoocrel    
-ckm        topoc(k) = (1.0d0-graztodop)*(1.0d0-ACeff)*grazc
-ckm     &           + (1.0d0-graztodop)*(phycexu+zoocloss)
-ckm     &           + zoocrel*(1.0d0-par_excrtodoc) 
-
         todic(k)=todic(k) - phycgrow(i)+zoocexu
         todoc(k)=todoc(k) + graztodop*(1.0d0-ACeff)*grazc
-     &           +graztodop*(phycexu(i)+zoocloss)
-     &           +phycloss(i)
-     &           +zoocrel*par_excrtodoc
+     &                    + graztodop*(phycexu(i)+zoocloss)
+     &                    + phycloss(i)
+     &                    + zoocrel*par_excrtodoc
         tophyc(k,i)= phycgrow(i)-grazc-phycexu(i)-phycloss(i)
-        tozooc(k)=  ACeff*grazc-zoocexu-zoocloss
-     &           -zoocrel    
+        tozooc(k)=tozooc(k) + ACeff*grazc-zoocexu-zoocloss
+     &                      - zoocrel    
         topoc(k) =topoc(k) + (1.0d0-graztodop)*(1.0d0-ACeff)*grazc
-     &           + (1.0d0-graztodop)*(phycexu(i)+zoocloss)
-     &           + zoocrel*(1.0d0-par_excrtodoc) 
+     &                     + (1.0d0-graztodop)*(phycexu(i)+zoocloss)
+     &                     + zoocrel*(1.0d0-par_excrtodoc) 
 
-        !print*,'todic, todoc: ',todic(k),todoc(k)
-        !print*,'tophyc, tozooc: ', tophyc(k),tozooc(k)
-        !print*,'topoc: ',topoc(k)
+        !print*,' todic, todoc: ',todic(k),todoc(k)
+        !print*,' tophyc, tozooc: ', tophyc(k,i),tozooc(k)
+        !print*,' topoc: ',topoc(k)
 
 ! Adjustments on P content of zooplankton and DOP and POP 
-ckm        if(zooprel.gt.0.0d0) then 
-ckm           tozoo(k) = tozoo(k) - zooprel
-ckm           todop(k) = todop(k) + zooprel*par_excrtodoc
-ckm           todet(k) = todet(k) + zooprel*(1.0d0-par_excrtodoc)
-ckm        endif
-ckm
-ckm        ! Store C:P Uptake for Phytoplankton and Zooplankton
-ckm        f10_out(k) = rcp_det_ez
-ckm        f11_out(k) = rcp_zoo
-
-        if (i.eq.npft) then
-           if(zooprel.gt.0.0d0) then 
-              tozoo(k) = tozoo(k) - zooprel
-              todop(k) = todop(k) + zooprel*par_excrtodoc
-              todet(k) = todet(k) + zooprel*(1.0d0-par_excrtodoc)
-           endif
+        if(zooprel.gt.0.0d0) then 
+           tozoo(k) = tozoo(k) - zooprel
+           todop(k) = todop(k) + zooprel*par_excrtodoc
+           todet(k) = todet(k) + zooprel*(1.0d0-par_excrtodoc)
         endif
 
 ! Store C:P Uptake for Phytoplankton and Zooplankton
@@ -830,7 +766,7 @@ ckm        f11_out(k) = rcp_zoo
         endif
         f13_out(k) = rcp_zoo              ! C:P of ZOO
 #else
-        f10_out(k) = rcp_det_ez(i)        ! C:P of PFT 1
+        f10_out(k) = rcp_det_ez(i)        ! C:P of PFT
         f11_out(k) = rcp_zoo              ! C:P of ZOO
 #endif
 #endif
@@ -940,6 +876,7 @@ ckm        f11_out(k) = rcp_zoo
 !  Store flux for diagnostic purposes.
  
       f3_out(1)  = flux_bury
+      
 #ifdef ORGCARBON
 #ifndef PFT
       f9_out(1)  = flux_bury_c
@@ -947,6 +884,7 @@ ckm        f11_out(k) = rcp_zoo
       f10_out(1) = flux_bury_c
 #endif
 #endif
+      
       do k=2,bgc_kloc
          f3_out(k) = f3_out(k)+flux(k)*bgc_dt
 #ifdef ORGCARBON
@@ -1093,7 +1031,6 @@ c  In original MOPS phymort and zoomort were included inside SMS equation
 c  Now mortality terms are explicity written  
  
         do i=1,npft
-ckm        if(PHY.gt.0.0d0) then
            if(pbiomass(i).gt.0.0d0) then
               phymort(i) = plambda(i)*pbiomass(i)
            else
@@ -1107,12 +1044,12 @@ ckm        if(PHY.gt.0.0d0) then
            zoomort = 0.0d0
         endif
 
+        !print*,''
         !print*,'water column processes...'
         !print*,' bgc_kloc, phymort, zoomort: ',k,phymort,zoomort
 
 #ifdef ORGCARBON
         do i=1,npft
-ckm        if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then
            if(pbiomass(i).gt.0.0d0 .AND. cbiomass(i).gt.0.0d0) then
               phycmort(i) = phymort(i)*(cbiomass(i)/pbiomass(i))
            else                 ! PHY < 0.0 and/or PHYC < 0.0 
@@ -1129,8 +1066,6 @@ ckm        if(PHY.gt.0.0d0 .AND. PHYC.gt.0.0d0) then
         endif
         !print*,'  phycmort, zoocmort: ',phycmort,zoocmort
 #endif
-
-        !stop
       
 ! ----------------------------------------------------------------
 ! Putting all the terms together to calculate SMS     
@@ -1220,8 +1155,12 @@ ckm     &     tophy(k)*bgc_dt
      &        todin(k)*bgc_dt + rnp*runoff(k)*bgc_dt
  
 #ifdef PFT
-         bgc_tracer(k,iphy2)= bgc_tracer(k,iphy2)  +
+         if (npft.eq.1) then
+            bgc_tracer(k,iphy2)=0.0d0
+         else
+            bgc_tracer(k,iphy2)= bgc_tracer(k,iphy2)  +
      &        tophy(k,2)*bgc_dt
+         endif
 #endif
  
 #ifdef CARBON
@@ -1248,8 +1187,12 @@ ckm     &     tophyc(k)*bgc_dt
      &        tozooc(k)*bgc_dt
  
 #ifdef PFT
-         bgc_tracer(k,iphyc2)= bgc_tracer(k,iphyc2)  +
+         if (npft.eq.1) then
+            bgc_tracer(k,iphyc2)= 0.0d0
+         else
+            bgc_tracer(k,iphyc2)= bgc_tracer(k,iphyc2)  +
      &        tophyc(k,2)*bgc_dt
+         endif
 #endif
  
 #elif CARBON
@@ -1280,9 +1223,11 @@ ckm     &     tophyc(k)*bgc_dt
 !       enddo
 #endif
 
+      !print*,''
       !print*,'updating tracer conc...bgc_kloc: ',bgc_kloc
       !print*,' bgc_ntracer, bgc_tracer(bgc_kloc,1:bgc_ntracer): '
       !print*, bgc_ntracer, bgc_tracer(bgc_kloc,1:bgc_ntracer)
+
 
  9999 ENDDO                     !internal time loop
 

@@ -43,11 +43,16 @@ C cp_phyto     C:P of Phytoplankton [molar]
 
 #include "BGC_PARAMS.h"
       integer Option, i
-ckm      real*8 PO4,DIN,Light,Temp,cp_phyto
       real*8 PO4,DIN,Light,Temp,cp_phyto(maxpft)
-ckm      real*8 rpc_det,rcp_det
       real*8 rpc_det(maxpft),rcp_det(maxpft)
 
+      !print*,'CALC_CP_PHYTO'
+      !print*,' par_bio_pc0: ',par_bio_pc0
+      !print*,' par_bio_spc_p: ',par_bio_spc_p
+      !print*,' par_bio_spc_n: ',par_bio_spc_n
+      !print*,' par_bio_spc_t: ',par_bio_spc_t
+      !print*,' par_bio_spc_i: ',par_bio_spc_i
+      
       do i=1,npft
       
          ! Calculate C:P          
@@ -66,13 +71,17 @@ ckm      real*8 rpc_det,rcp_det
              rcp_det(i) = rcp             
          endif
 
+         !print*,'CALC_CP_PHYTO: i, rcp_det: ',i,rcp_det(i)
+
          ! Imposing Maximum and Minimum C:P
          if(rcp_det(i).gt.maxcp) then
              rcp_det(i) = maxcp
          elseif(rcp_det(i).lt.mincp) then
              rcp_det(i) = mincp
          endif
-          
+
+         !print*,' max, min rcp_det in calc_cp: ',rcp_det(i)
+         
          ! Output         
          cp_phyto(i) = rcp_det(i)
 

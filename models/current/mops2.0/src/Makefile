@@ -1,5 +1,6 @@
 # Set the environment variable TMMROOT to point to the top level of the TMM code
-#
+# make with "-n" for dryrun compilation
+# use -g  -traceback -check for debugging...can run it under gdb or not (see email w/ MSI 9/21/2021)
 
 TMMBASE = ${TMMROOT}/driver/current
 MODELBASE = ${TMMROOT}/models/current/mops2.0/src
@@ -137,6 +138,7 @@ OBJFMODEL = $(SRF90MODEL:.F90=.o) $(SRFMODEL:.F=.o)
 
 $(OBJCMODEL) $(OBJFMODEL): $(OPTFILE)
 
+# normal...w/o the debgging option
 %.o %.mod: %.F90
 	$(FC) $(INCLUDEPATHS) $(FC_FLAGS) $(FFLAGS) $(FCPPFLAGS) -c -o $$(echo $@ | sed -e 's/mod$$/o/') $(FC_MODULE_OUTPUT_FLAG) $(dir $@) $<
 
@@ -145,6 +147,17 @@ $(OBJCMODEL) $(OBJFMODEL): $(OPTFILE)
 
 %.o: %.c
 	$(CC) $(INCLUDEPATHS) $(PCC_FLAGS) $(CFLAGS) $(CCPPFLAGS) -c -o $@ $<
+
+## KM for debugging...add the -g option
+#%.o %.mod: %.F90
+#	$(FC) $(INCLUDEPATHS) $(FC_FLAGS) -g -traceback -check all $(FFLAGS) $(FCPPFLAGS) -c -o $$(echo $@ | sed -e 's/mod$$/o/') $(FC_MODULE_OUTPUT_FLAG) $(dir $@) $<
+#
+#%.o: %.F
+#	$(FC) $(INCLUDEPATHS) $(FC_FLAGS) -g -traceback -check all $(FFLAGS) $(FCPPFLAGS) -c -o $@ $<
+#
+#%.o: %.c
+#	$(CC) $(INCLUDEPATHS) $(PCC_FLAGS) -g -traceback -check=uninit $(CFLAGS) $(CCPPFLAGS) -c -o $@ $<
+
 
 $(PROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
@@ -175,6 +188,24 @@ $(PROGRAM_PFT): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 
 $(FNSEDPROGRAM_PFT): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+# for debugging mops_cp_pft
+#$(FNSEDPROGRAM_PFT): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+#	-$(CLINKER) -g -traceback -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+.PHONY: sayflags
+sayflags:
+	echo FC CC $(FC) $(CC)
+	echo INCLUDEPATHS $(INCLUDEPATHS)
+	echo FC_FLAGS $(FC_FLAGS)
+	echo PCC_FLAGS $(PCC_FLAGS)
+	echo FFLAGS $(FFLAGS)
+	echo CFLAGS $(CFLAGS)
+	echo FCPPFLAGS $(FCPPFLAGS)
+	echo CCPPFLAGS $(CCPPFLAGS)
+	echo OPTFILE $(OPTFILE)
+	echo CPPFLAGS+ $(CPPFLAGS+)
+	echo FPPFLAG $(FPPFLAG)
 
 cleanall:
 	make clean
