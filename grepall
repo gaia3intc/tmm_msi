@@ -1,0 +1,25 @@
+#!/bin/bash
+#greps tmm driver and model src code (.c, .h, and .F files)
+
+STRING=$1
+echo grepping $STRING
+
+grep -i $STRING \
+     d*/c*/*.c d*/c*/*.h \
+     m*/c*/i*/src/*.c m*/c*/i*/src/*.h m*/c*/i*/src/*.F \
+     m*/c*/m*/src/*.c m*/c*/m*/src/*.h m*/c*/m*/src/*.F \
+     m*/c*/o*/src/*.c m*/c*/o*/src/*.h m*/c*/o*/src/*.F \
+     m*/c*/t*/src/*.c m*/c*/t*/src/*.h m*/c*/t*/src/*.F \
+     m*/c*/u*/src/*.c m*/c*/u*/src/*.h m*/c*/u*/src/*.F \
+     > /home/matsumot/katsumi/TMM2/tmm/xblah
+
+less -I +/$STRING /home/matsumot/katsumi/TMM2/tmm/xblah
+rm -f /home/matsumot/katsumi/TMM2/tmm/xblah
+
+
+
+
+
+
+
+

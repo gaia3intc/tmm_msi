@@ -70,6 +70,7 @@ C Initialize the tracers
         bgc_dz(k)=0.d0
       ENDDO
 
+!      print*,'KM: mops_biogem_chem_ini is repeated so many times? Initialization should be once'
       CALL BGC_INI(bgc_zu,setDefaults)
 
 #ifdef CARBON

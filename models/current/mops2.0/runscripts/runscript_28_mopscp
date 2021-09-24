@@ -2,28 +2,33 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --mem-per-cpu=2gb
-#SBATCH --time=08:00:00
+#SBATCH --time=01:20:00
 #SBATCH --mail-type=ALL  
-#SBATCH --mail-user=tatsurobkkuk@gmail.com
+#SBATCH --mail-user=katsumi@umn.edu
 #SBATCH -p small
 #SBATCH --output=%j.out
+#SBATCH -e error.%j
 
 cd $SLURM_SUBMIT_DIR
 
+echo "Dir in slurm: " $PWD
+
+module purge
 module load intel
 module load impi/intel
 module load cmake
+module list
 
 # 360 days per year with a time step of 2 steps per day:
-mpirun -np 24 ./mops_cp \
+mpirun -np 24  ./mops_cp \
         -numtracers 13 \
         -i po4ini.petsc,dopini.petsc,oxyini.petsc,phyini.petsc,zooini.petsc,detini.petsc,no3ini.petsc,dicini.petsc,alkini.petsc,docini.petsc,pocini.petsc,phycini.petsc,zoocini.petsc \
         -me Ae \
         -mi Ai \
         -t0 0.0 -iter0 0 \
         -deltat_clock 0.0013888888888889 \
-        -max_steps 2160000 \
-        -write_time_steps 72000 \
+        -max_steps 72000 \
+        -write_time_steps 7200 \
         -o po4out.petsc,dopout.petsc,oxyout.petsc,phyout.petsc,zooout.petsc,detout.petsc,no3out.petsc,dicout.petsc,alkout.petsc,docout.petsc,pocout.petsc,phycout.petsc,zoocout.petsc \
         -external_forcing \
         -use_profiles \
@@ -38,18 +43,10 @@ mpirun -np 24 ./mops_cp \
         -periodic_biogeochem_cycle_period 1.0 -periodic_biogeochem_num_per_period 12 \
         -num_biogeochem_steps_per_ocean_step 8 \
         -separate_biogeochem_time_stepping \
-        -time_avg -avg_start_time_step 2159281 -avg_time_steps 60 \
+        -time_avg -avg_start_time_step 71281 -avg_time_steps 60 \
         -avg_files po4avg.petsc,dopavg.petsc,oxyavg.petsc,phyavg.petsc,zooavg.petsc,detavg.petsc,no3avg.petsc,dicavg.petsc,alkavg.petsc,docavg.petsc,pocavg.petsc,phycavg.petsc,zoocavg.petsc \
         -bgc_params_file biogem_params.txt \
-        -num_bgc_params 21 \
-        -calc_diagnostics -diag_start_time_step 2159281 -diag_time_steps 60 \
+        -num_bgc_params 23 \
+        -calc_diagnostics -diag_start_time_step 71281 -diag_time_steps 60 \
         -diag_files fbgc1.petsc,fbgc2.petsc,fbgc3.petsc,fbgc4.petsc,fbgc5.petsc,fbgc6.petsc,fbgc7.petsc,fbgc8.petsc,fbgc9.petsc,fbgc10.petsc,fbgc11.petsc \
-        > log
-# driver options:
-#  I/O:
-#   -pickup_out pickup.petsc \
-#   -time_file output_time.txt \
-#  circulation-specific options:
-#   add this option for configurations in which the forcing is rescaled because of a time-varying free surface:
-#    -rescale_forcing_file Rfs \
-# model-specific options:
+        > log_28_mopscp

@@ -1,5 +1,7 @@
 # Set the environment variable TMMROOT to point to the top level of the TMM code
-#
+# make with "-n" for dryrun compilation
+# use -g  -traceback -check for debugging...can run it under gdb or not (see email w/ MSI 9/21/2021)
+
 TMMBASE = ${TMMROOT}/driver/current
 MODELBASE = ${TMMROOT}/models/current/mops2.0/src
 
@@ -39,11 +41,17 @@ RPROGRAM = rmops
 IPROGRAM = imops
 IRPROGRAM = irmops
 FNSEDPROGRAM = mops_cp
+FNSEDGASPROGRAM = mops_cp_fastgas
+FNSEDMARTINPROGRAM = mops_cp_martin
+FNSEDMARTINGASPROGRAM = mops_cp_martin_fastgas
+PROGRAM_PFT = mops_pft
+FNSEDPROGRAM_PFT = mops_cp_pft
 
 SRCTMM = tmm_main.c tmm_forward_step.c tmm_write.c tmm_forcing_utils.c \
         tmm_profile_utils.c tmm_timer.c petsc_signal_utils.c petsc_matvec_utils.c
 
 SRCMODEL = tmm_external_bc.c tmm_monitor.c misfit_mops_biogeochem.c external_forcing_mops_biogeochem.c
+
 SRFMODEL = 	BGC_MODEL.F \
 	BGC_INI.F \
     CAR_CHEM.F \
@@ -73,7 +81,10 @@ endif
 # option -DNOSED to instantly remineralize detritus reaching ocean bottom
 # option -DNOSED_POC to instantly remineralize POC reaching ocean bottom
 # option -DFLEXCP for dynamic C:P stoichiometry
+# option -DFASTGAS for fast equilibration of DIC
 # option -DASCIIPARAMS to use ASCII parameter file as default
+# option -DREAD_MARTINB for spatially variable Martin b exponent for POC and POP
+# option -DPFT for multiple PFTs
 
 # use surface supply of buried P
 $(PROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON
@@ -95,13 +106,39 @@ $(IRPROGRAM): CPPFLAGS+=-DRUNOFF -DIMPRO -DASCIIPARAMS -DCARBON
 $(FNSEDPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON \
 	 $(FPPFLAG)-DFLEXCP
 $(FNSEDPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DFLEXCP
-	
+
+# mops with flexible C:P and equilibrated CO2
+$(FNSEDGASPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON \
+	 $(FPPFLAG)-DFLEXCP $(FPPFLAG)-DFASTGAS
+$(FNSEDGASPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DFLEXCP -DFASTGAS
+
+# mops with flexible C:P and spatially variable Martin b exponent
+$(FNSEDMARTINPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON \
+	 $(FPPFLAG)-DFLEXCP $(FPPFLAG)-DREAD_MARTINB
+$(FNSEDMARTINPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DFLEXCP -DREAD_MARTINB
+
+# mops with flexible C:P and spatially variable Martin b exponent and equilibrated CO2
+$(FNSEDMARTINGASPROGRAM): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON \
+	 $(FPPFLAG)-DFLEXCP $(FPPFLAG)-DREAD_MARTINB $(FPPFLAG)-DFASTGAS
+$(FNSEDMARTINGASPROGRAM): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DFLEXCP -DREAD_MARTINB -DFASTGAS
+
+
+# MOPS + PFT (C and C:P not activated)
+$(PROGRAM_PFT): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DPFT
+$(PROGRAM_PFT): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DPFT
+
+# MOPS + ORGCARBON + FLEXCP + PFT
+$(FNSEDPROGRAM_PFT): FPPFLAGS+=$(FPPFLAG)-DASCIIPARAMS $(FPPFLAG)-DCARBON $(FPPFLAG)-DORGCARBON \
+	 $(FPPFLAG)-DFLEXCP $(FPPFLAG)-DPFT
+$(FNSEDPROGRAM_PFT): CPPFLAGS+=-DASCIIPARAMS -DCARBON -DORGCARBON -DFLEXCP -DPFT
+
 OBJTMM = $(SRCTMM:.c=.o)
 OBJCMODEL = $(SRCMODEL:.c=.o)
 OBJFMODEL = $(SRF90MODEL:.F90=.o) $(SRFMODEL:.F=.o)
 
 $(OBJCMODEL) $(OBJFMODEL): $(OPTFILE)
 
+# normal...w/o the debgging option
 %.o %.mod: %.F90
 	$(FC) $(INCLUDEPATHS) $(FC_FLAGS) $(FFLAGS) $(FCPPFLAGS) -c -o $$(echo $@ | sed -e 's/mod$$/o/') $(FC_MODULE_OUTPUT_FLAG) $(dir $@) $<
 
@@ -110,6 +147,17 @@ $(OBJCMODEL) $(OBJFMODEL): $(OPTFILE)
 
 %.o: %.c
 	$(CC) $(INCLUDEPATHS) $(PCC_FLAGS) $(CFLAGS) $(CCPPFLAGS) -c -o $@ $<
+
+## KM for debugging...add the -g option
+#%.o %.mod: %.F90
+#	$(FC) $(INCLUDEPATHS) $(FC_FLAGS) -g -traceback -check all $(FFLAGS) $(FCPPFLAGS) -c -o $$(echo $@ | sed -e 's/mod$$/o/') $(FC_MODULE_OUTPUT_FLAG) $(dir $@) $<
+#
+#%.o: %.F
+#	$(FC) $(INCLUDEPATHS) $(FC_FLAGS) -g -traceback -check all $(FFLAGS) $(FCPPFLAGS) -c -o $@ $<
+#
+#%.o: %.c
+#	$(CC) $(INCLUDEPATHS) $(PCC_FLAGS) -g -traceback -check=uninit $(CFLAGS) $(CCPPFLAGS) -c -o $@ $<
+
 
 $(PROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
@@ -125,6 +173,39 @@ $(IRPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 
 $(FNSEDPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
 	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(FNSEDGASPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(FNSEDMARTINPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(FNSEDMARTINGASPROGRAM): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(PROGRAM_PFT): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+$(FNSEDPROGRAM_PFT): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+	-$(CLINKER) -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+# for debugging mops_cp_pft
+#$(FNSEDPROGRAM_PFT): $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL)
+#	-$(CLINKER) -g -traceback -o $@ $(OBJTMM) $(OBJCMODEL) $(OBJFMODEL) $(PETSC_MAT_LIB)
+
+.PHONY: sayflags
+sayflags:
+	echo FC CC $(FC) $(CC)
+	echo INCLUDEPATHS $(INCLUDEPATHS)
+	echo FC_FLAGS $(FC_FLAGS)
+	echo PCC_FLAGS $(PCC_FLAGS)
+	echo FFLAGS $(FFLAGS)
+	echo CFLAGS $(CFLAGS)
+	echo FCPPFLAGS $(FCPPFLAGS)
+	echo CCPPFLAGS $(CCPPFLAGS)
+	echo OPTFILE $(OPTFILE)
+	echo CPPFLAGS+ $(CPPFLAGS+)
+	echo FPPFLAG $(FPPFLAG)
 
 cleanall:
 	make clean

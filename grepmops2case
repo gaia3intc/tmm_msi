@@ -1,0 +1,20 @@
+#!/bin/bash
+#greps MOPS2.0 code
+
+STRING=$1
+echo grepping $STRING
+
+grep $STRING \
+     m*/c*/mops2.0/src/* > /home/matsumot/katsumi/TMM2/tmm/xblah
+
+less -I +/$STRING /home/matsumot/katsumi/TMM2/tmm/xblah
+#less /home/matsumot/katsumi/TMM2/tmm/xblah
+rm -f /home/matsumot/katsumi/TMM2/tmm/xblah
+
+
+
+
+
+
+
+

@@ -1,14 +1,14 @@
-1.39
-173.7
-0.00119
-15.8
-1.01
-32.0
-0.001
-1.39
-0
+1.46
+151.1
+0.00229
+16.0
+1.07
+23.1
+0.01
+1.46
+1
 250.0
-50.0
+117.0
 8.547
 0.57
 5.7
@@ -18,13 +18,14 @@
 0.0
 0.0
 -3.6
-1.0
+0.08
+0.0
 
 # Parameters above are: 
 # 1-6 = Calibrated parameters from Table 1 of Kriest et al. 2020, BG, 17(12)
 # 7 = Minimum value for degradation of PHY and DOP
 # 8 = Martin b paramete for POC (-DORGCABON)
-# 9-21 = Parameters for flexible C:P (-DFLEXCP) 
+# 9-22 = Parameters for flexible C:P (-DFLEXCP) 
 #
 #Line Number/Variable Name in MOPS/Description/[Default Values]
 #01. detmartin = Exponent for Martin Curve of Detritus (=POP)                   [1.39 for MIT2.8, 1.46 for ECCO]
@@ -48,3 +49,4 @@
 #19. par_bio_spc_i = s_P:C^I for power-law                                      [0.0]
 #20. par_bio_spc_t = s_P:C^T for power-law                                      [-3.6]
 #21. par_zoo_cp_hom = Homeostatic parameter for Zooplankton (0-1)               [0.08]
+#22. par_excrtodoc = Fraction of zooplankton adjustment flux going to DOC (0-1) [0.15]

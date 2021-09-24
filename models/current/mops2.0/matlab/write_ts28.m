@@ -1,8 +1,11 @@
-function petsc2netcdf(netcdfFileName);
+function write_ts28(netcdfFileName);
+%function petsc2netcdf(netcdfFileName);
 %%%% Functions for making monthly mean Temperature and Salinity into net cdf
 % By Tatsuro Tanioka (2020-01-28)
 % To run this script, type in MATLAB command line
 % > n7physics('test.nc')
+
+['write_ts28']
 
 base_path='~/TMM2/MITgcm_2.8deg';
 %base_path='~/TMM2/MITgcm_ECCO';

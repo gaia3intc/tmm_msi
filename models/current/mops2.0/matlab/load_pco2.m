@@ -3,13 +3,15 @@
 % co2 air sea flux is in mmolC/m2/timestep (postive flux means CO2 is going into Sea from Air)
 % Note that pco2.nc will not be created when doing a constant pco2 run
 
+['load_pco2']
+
 %basepath='~/TMM2/MITgcm_ECCO';
 basepath='~/TMM2/MITgcm_2.8deg';
 addpath(genpath('~/TMM2/tmm_matlab_code'));
 oceanCarbonBasePath='~/TMM2/OceanCarbon';
 %---------------------------------------------------------------------------
 % Option to get pco2 based on Prescibed CO2 (useTimeVaryingPrescribed=1) or otherwise (useTimeVaryingPrescribed=0)
-useTimeVaryingPrescribedCO2=1
+useTimeVaryingPrescribedCO2=0
 
 % Available options: 'historical', 'RCP3PD', 'RCP45', 'RCP6' and 'RCP85'
 co2Scenario='historical';
@@ -58,6 +60,8 @@ if exist('pCO2atm','var') == 1; %
 end
 % Making co2 airsea flux 2D data 
 if exist('time_average_output_time.txt', 'file') == 2;
+   ['writing co2airseaflux.nc']
+
    avg_timeFile='time_average_output_time.txt';
    [hdravg,diagnostic_output_time]=hdrload(avg_timeFile);
    Tavg = diagnostic_output_time(:,2);
