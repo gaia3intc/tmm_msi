@@ -1,0 +1,66 @@
+1.39
+173.7
+0.00119
+15.8
+1.01
+32.0
+0.001
+1
+1.39
+0
+250.0
+50.0
+11.6
+0.57
+5.7
+18.0
+70.0
+0.58
+0.0
+0.0
+0.0
+0.08
+0.0
+6.30
+0.28
+0.0
+0.0
+-8.0
+
+# Parameters above are: 
+# 1-6 = Calibrated parameters from Table 1 of Kriest et al. 2020, BG, 17(12)
+# 7 = Minimum value for degradation of PHY and DOP
+# 8 = number of PFT (KM: 1 for original MOPS)
+# 9 = Martin b paramete for POC (-DORGCABON)
+# 10-23 = Parameters for flexible C:P (-DFLEXCP)
+# 24-27 = Parameters for flexible C:P (-DFLEXCP -DPFT)
+#
+#Line Number/Variable Name in MOPS/Description/[Default Values]
+#01. detmartin = Exponent for Martin Curve of Detritus (=POP)                   [1.39 for MIT2.8, 1.46 for ECCO]
+#02. ro2ut = Refield -O2:P                                                      [173.7, 151.1]
+#03. nfix = Max growth rate (1/d) of N-fixers                                   [0.00119, 0.00229]
+#04. subdin = No denitrification below this level of DIN (mmol/m3)              [15.8, 16.0]
+#05. ACkbaco2 = Half sat-constant for oxic degradation (mmol/m3)                [1.01, 1.07]
+#06. ACkbacdin = Half sat-constant for suboxic degradation                      [32.0, 23.1]
+#07. alimit = A minimum value for the degradation of PHY and DOP (mmol/m3)      [0.001 for mops, 0.01 for mops_cp]
+#08. npft = number of PFT     	      		     	     	 		[1 for mops, 2+ for multiple PFTs]
+#09. detmartin_c = Exponent for Martin Curve of POC                             [1.39 for MIT2.8, 1.46 for ECCO]
+#10. cp_option (1 = Power-law, 2: Galbraith and Martiny, 0: Redfield)
+#11. maxcp = upper bound C:P                                                    [250.0]
+#12. mincp = lower bound C:P                                                    [50.0]
+#13. par_bio_pc0 = Reference P:C (permil) for power-law                         [11.6 eukary]
+#14. par_bio_po4_ref = Reference PO4 (mmolP/m3) for power-law                   [0.57]
+#15. par_bio_no3_ref = Reference NO3 (mmolN/m3) for power-law                   [5.7]
+#16. par_bio_temp_ref = Reference Temp (deg C) for power-law                    [18.0]
+#17. par_bio_light_ref = Reference Irradiance (W/m2) for power-law              [70.0]
+#18. par_bio_spc_p = s_P:C^PO4 for power-law                                    [0.58 eukary]
+#19. par_bio_spc_n = s_P:C^NO3 for power-law                                    [0.00 eukary]
+#20. par_bio_spc_i = s_P:C^I for power-law                                      [0.00 eukary]
+#21. par_bio_spc_t = s_P:C^T for power-law                                      [0.00 eukary]
+#22. par_zoo_cp_hom = Homeostatic parameter for Zooplankton (0-1)               [0.08]
+#23. par_excrtodoc = Fraction of zooplankton adjustment flux going to DOC (0-1) [0.15]
+#24. par_bio_pc0 = Reference P:C (permil) for power-law                         [6.30 cyano]
+#25. par_bio_spc_p = s_P:C^PO4 for power-law (PFT2)                             [0.28 cyano]
+#26. par_bio_spc_n = s_P:C^NO3 for power-law (PFT2)                             [0.00 cyano]
+#27. par_bio_spc_i = s_P:C^I for power-law (PFT2)                               [0.00 cyano]
+#28. par_bio_spc_t = s_P:C^T for power-law (PFT2)                               [-8.0 cyano]
